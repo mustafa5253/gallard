@@ -1,21 +1,11 @@
 {
-  "name": "@coreui/coreui-free-angular-admin-template",
+  "name": "Gallard Steel",
   "version": "2.2.0",
-  "description": "CoreUI Free Angular 2+ Admin Template",
+  "description": "",
   "author": {
-    "name": "Łukasz Holeczek",
-    "url": "http://holeczek.pl",
-    "github": "https://github.com/mrholek",
-    "twitter": "https://twitter.com/lukaszholeczek"
+    "name": "Mustafa Bagwala",
+    "github": "https://github.com/mustafa5253"
   },
-  "contributors": [
-    {
-      "name": "Andrzej Kopański",
-      "url": "https://github.com/xidedix"
-    }
-  ],
-  "homepage": "https://coreui.io/angular",
-  "copyright": "Copyright 2018 creativeLabs Łukasz Holeczek",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
