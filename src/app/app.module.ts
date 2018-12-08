@@ -1,71 +1,107 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterModule, Routes } from '@angular/router';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
+import { MatButtonModule, MatIconModule } from '@angular/material';
+import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
+import { TranslateModule } from '@ngx-translate/core';
+import 'hammerjs';
 
-import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
-import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
+import { FuseModule } from '@fuse/fuse.module';
+import { FuseSharedModule } from '@fuse/shared.module';
+import { FuseProgressBarModule, FuseSidebarModule, FuseThemeOptionsModule } from '@fuse/components';
 
-const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
-  suppressScrollX: true
-};
+import { fuseConfig } from 'app/fuse-config';
 
-import { AppComponent } from './app.component';
+import { FakeDbService } from 'app/fake-db/fake-db.service';
+import { AppComponent } from 'app/app.component';
+import { AppStoreModule } from 'app/store/store.module';
+import { LayoutModule } from 'app/layout/layout.module';
+import { APP_RESOLVER_PROVIDERS } from "app/app.resolver";
+import { WindowRef } from "@agm/core/utils/browser-globals";
+import { ServiceModule } from "app/services/service.module";
 
-// Import containers
-import { DefaultLayoutComponent } from './containers';
-
-import { P404Component } from './views/error/404.component';
-import { P500Component } from './views/error/500.component';
-import { LoginComponent } from './views/login/login.component';
-import { RegisterComponent } from './views/register/register.component';
-
-const APP_CONTAINERS = [
-  DefaultLayoutComponent
+const appRoutes: Routes = [
+    {
+        path        : 'apps',
+        loadChildren: './main/apps/apps.module#AppsModule'
+    },
+    {
+        path        : 'pages',
+        loadChildren: './main/pages/pages.module#PagesModule'
+    },
+    {
+        path        : 'ui',
+        loadChildren: './main/ui/ui.module#UIModule'
+    },
+    {
+        path        : 'documentation',
+        loadChildren: './main/documentation/documentation.module#DocumentationModule'
+    },
+    {
+        path        : 'angular-material-elements',
+        loadChildren: './main/angular-material-elements/angular-material-elements.module#AngularMaterialElementsModule'
+    },
+    // {
+    //     path      : '**',
+    //     redirectTo: 'apps/dashboards/analytics'
+    // },
+    {
+        path        : '**',
+        loadChildren: './indent-purchases/indent.module#IndentModule'
+    },
 ];
 
-import {
-  AppAsideModule,
-  AppBreadcrumbModule,
-  AppHeaderModule,
-  AppFooterModule,
-  AppSidebarModule,
-} from '@coreui/angular';
-
-// Import routing module
-import { AppRoutingModule } from './app.routing';
-
-// Import 3rd party components
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { TabsModule } from 'ngx-bootstrap/tabs';
-import { ChartsModule } from 'ng2-charts/ng2-charts';
-
+// Application wide providers
+const APP_PROVIDERS = [
+  ...APP_RESOLVER_PROVIDERS,
+  // { provide: APP_BASE_HREF, useValue: './' }
+];
 @NgModule({
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    AppAsideModule,
-    AppBreadcrumbModule.forRoot(),
-    AppFooterModule,
-    AppHeaderModule,
-    AppSidebarModule,
-    PerfectScrollbarModule,
-    BsDropdownModule.forRoot(),
-    TabsModule.forRoot(),
-    ChartsModule
-  ],
-  declarations: [
-    AppComponent,
-    ...APP_CONTAINERS,
-    P404Component,
-    P500Component,
-    LoginComponent,
-    RegisterComponent
-  ],
-  providers: [{
-    provide: LocationStrategy,
-    useClass: HashLocationStrategy
-  }],
-  bootstrap: [ AppComponent ]
+    declarations: [
+        AppComponent
+    ],
+    imports     : [
+        BrowserModule,
+        BrowserAnimationsModule,
+        HttpClientModule,
+        RouterModule.forRoot(appRoutes, {useHash: false, onSameUrlNavigation: 'reload'}),
+
+        TranslateModule.forRoot(),
+        InMemoryWebApiModule.forRoot(FakeDbService, {
+            delay             : 0,
+            passThruUnknownUrl: true
+        }),
+
+        // Material moment date module
+        MatMomentDateModule,
+
+        // Material
+        MatButtonModule,
+        MatIconModule,
+
+        // Fuse modules
+        FuseModule.forRoot(fuseConfig),
+        FuseProgressBarModule,
+        FuseSharedModule,
+        FuseSidebarModule,
+        FuseThemeOptionsModule,
+
+        // App modules
+        LayoutModule,
+        AppStoreModule,
+        ServiceModule.forRoot()
+    ],
+    bootstrap   : [
+        AppComponent
+    ],
+    providers: [
+        APP_PROVIDERS,
+        WindowRef
+    ]
 })
-export class AppModule { }
+export class AppModule
+{
+}

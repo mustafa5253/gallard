@@ -1,0 +1,38 @@
+<div class="page-layout simple fullwidth">
+
+    <!-- HEADER -->
+    <div class="header accent p-24" fxLayout="row" fxLayoutAlign="start center">
+        <h2>Indent</h2>
+    </div>
+    <!-- / HEADER -->
+
+    <!-- CONTENT -->
+    <div class="content p-24">
+       <form class="example-form" [formGroup]="productForm">
+            <!-- <mat-form-field class="example-full-width">
+                <input type="text" placeholder="Material Name" matInput formControlName="name" [matAutocomplete]="auto">
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                    {{option.name}}
+                </mat-option>
+                </mat-autocomplete>
+            </mat-form-field> -->
+
+            <!-- <mat-form-field class="example-full-width">
+                <input type="text" placeholder="Assignee" aria-label="Assignee" matInput [formControl]="myControl" [matAutocomplete]="auto">
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                    {{option.name}}
+                </mat-option>
+                </mat-autocomplete>
+            </mat-form-field> -->
+
+            <mat-form-field>
+                <input matInput placeholder="Metrial Name" formControlName="name">
+            </mat-form-field>
+        </form>
+        
+    </div>
+    <!-- / CONTENT -->
+
+</div>
