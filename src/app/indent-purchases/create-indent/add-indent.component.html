@@ -8,28 +8,85 @@
 
     <!-- CONTENT -->
     <div class="content p-24">
-       <form class="example-form" [formGroup]="productForm">
-            <!-- <mat-form-field class="example-full-width">
-                <input type="text" placeholder="Material Name" matInput formControlName="name" [matAutocomplete]="auto">
-                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-                <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                    {{option.name}}
-                </mat-option>
-                </mat-autocomplete>
-            </mat-form-field> -->
+       <form class="example-form mat-card content p-24" [formGroup]="indentForm">
+            <div class="h2 mb-12">Add Indent</div>
 
-            <!-- <mat-form-field class="example-full-width">
-                <input type="text" placeholder="Assignee" aria-label="Assignee" matInput [formControl]="myControl" [matAutocomplete]="auto">
-                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-                <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                    {{option.name}}
-                </mat-option>
-                </mat-autocomplete>
-            </mat-form-field> -->
 
-            <mat-form-field>
-                <input matInput placeholder="Metrial Name" formControlName="name">
-            </mat-form-field>
+            <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
+
+                <mat-form-field  fxFlex="50" class="pr-24">
+                    <mat-label>Date of Requirment</mat-label>
+                    <input matInput [matDatepicker]="datePicker" placeholder="Date">
+                    <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #datePicker></mat-datepicker>
+                </mat-form-field>
+        
+                <mat-form-field  fxFlex="50" class="pr-24">
+                    <input type="text" placeholder="Material Name" matInput formControlName="rawMaterial" [matAutocomplete]="materialList">
+                    <mat-autocomplete #materialList="matAutocomplete">
+                        <mat-option *ngFor="let option of materialFilter | async" [value]="option.name">
+                        {{option.name}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+
+                <mat-form-field  fxFlex="50" class="pr-24">
+                    <input type="text" placeholder="Category" matInput formControlName="category" [matAutocomplete]="categoryList">
+                    <mat-autocomplete #categoryList="matAutocomplete">
+                        <mat-option *ngFor="let option of categoryFilter | async" [value]="option.name">
+                        {{option.name}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+
+            <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
+
+                <mat-form-field   fxFlex="50" class="pr-24">
+                        <input type="text" placeholder="Quantity" matInput formControlName="quantity">
+                </mat-form-field>
+                <mat-form-field   fxFlex="50" class="pr-24">
+                    <input type="text" placeholder="Stock Unit" matInput formControlName="unit" [matAutocomplete]="unitList">
+                    <mat-autocomplete #unitList="matAutocomplete">
+                        <mat-option *ngFor="let option of unitFilter | async" [value]="option.name">
+                        {{option.name}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+
+                <mat-form-field   fxFlex="50" class="pr-24">
+                        <input type="text" placeholder="HSN Code" matInput formControlName="hsnCode">
+                </mat-form-field>
+            </div>
+                <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
+
+                <mat-form-field fxFlex="50" class="pr-24">
+                        <input type="text" placeholder="StkUID" matInput formControlName="stkid" [disabled]="true">
+                </mat-form-field>
+
+                <mat-form-field fxFlex="50" class="pr-24">
+                    <mat-select placeholder="GST" formControlName="gst" name="gst">
+                        <mat-option *ngFor="let gst of gstList" [value]="gst">
+                        {{gst}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field fxFlex="50" class="pr-24">
+                        <mat-select placeholder="Priority" formControlName="priority" name="priority">
+                            <mat-option *ngFor="let item of priority" [value]="item">
+                            {{item}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+            </div>
+            <div fxLayout="row" fxLayoutAlign="start center">
+                <button mat-raised-button type="button" color="accent" (click)="showToaster()">
+                    Save
+                </button>
+            </div>
+
         </form>
         
     </div>

@@ -1,4 +1,4 @@
-<div id="products" class="page-layout carded fullwidth inner-scroll">
+<div id="products" class="page-layout carded fullwidth inner-scroll mb-48">
 
     <!-- TOP BACKGROUND -->
     <div class="top-bg accent"></div>
@@ -28,15 +28,10 @@
                     <input #filter placeholder="Search Indent">
                 </div>
             </div>
-            <!-- / SEARCH -->
-
-            <!-- ADD BUTTON -->
-            <button mat-raised-button
-                    [routerLink]="'/apps/e-commerce/products/new'"
-                    class="add-product-button fuse-white mt-24 mt-md-0">
-                <span>ADD NEW</span>
+            <button mat-raised-button type="button">
+                    Generate Order
             </button>
-            <!-- / ADD BUTTON -->
+            <!-- / SEARCH -->
 
         </div>
         <!-- / HEADER -->
@@ -51,16 +46,16 @@
                        fusePerfectScrollbar>
 
                 <ng-container matColumnDef="selected">
-                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
-                    <mat-cell *matCellDef="let product">
+                    <mat-header-cell *matHeaderCellDef [style.width.percentage]="5"></mat-header-cell>
+                    <mat-cell *matCellDef="let product" [style.width.percentage]="5">
                         <mat-checkbox [(ngModel)]="product.selected">
                         </mat-checkbox>
                     </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="IndentDate">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Date</mat-header-cell>
-                    <mat-cell *matCellDef="let product">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header [style.width.percentage]="10">Date</mat-header-cell>
+                    <mat-cell *matCellDef="let product" [style.width.percentage]="10">
                         <p class="text-truncate">{{product.IndentDate}}</p>
                     </mat-cell>
                 </ng-container>
@@ -91,16 +86,16 @@
                 <ng-container matColumnDef="priority">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Priority</mat-header-cell>
                     <mat-cell *matCellDef="let product">
-                        <p class="category text-truncate">
+                        <p class="category text-truncate" [ngClass]="{'text-danger': product.priority === 'Urgent'}">
                             {{product.priority}}
                         </p>
                     </mat-cell>
                 </ng-container>
 
 
-                <ng-container matColumnDef="action">
-                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
-                    <mat-cell *matCellDef="let product">
+                <ng-container matColumnDef="action" >
+                    <mat-header-cell *matHeaderCellDef [style.width.px]="50"></mat-header-cell>
+                    <mat-cell *matCellDef="let product" [style.width.px]="50">
                         <div fxFlex="row" fxLayoutAlign="end center">
                             <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
                                     (click)="$event.stopPropagation();">

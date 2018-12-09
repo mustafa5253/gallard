@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@an
 import { MatPaginator, MatSort, MatSnackBar } from '@angular/material';
 import { DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject, fromEvent, merge, Observable, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, startWith } from 'rxjs/operators';
 
 import { fuseAnimations } from '@fuse/animations';
 import { FuseUtils } from '@fuse/utils';
@@ -13,6 +13,30 @@ import { FormBuilder, FormGroup } from "@angular/forms";
 import { Product } from "app/main/apps/e-commerce/product/product.model";
 
 
+export const materialList = [
+    { name: 'Material 1', id: 1},
+    { name: 'Material 2', id: 2},
+    { name: 'Material 3', id: 3},
+    { name: 'Material 4', id: 4},
+]
+
+export const categoryList = [
+    { name: 'Production', id: 1},
+    { name: 'Consumption', id: 2},
+    { name: 'Maintainance', id: 3},
+    { name: 'Capital Expenditure', id: 4},
+]
+
+export const unitList = [
+    {name: 'piece', uniqueName: 'pcs'},
+    {name: 'number', uniqueName: 'number'},
+    {name: 'kilogram', uniqueName: 'kgs'},
+    {name: 'litre', uniqueName: 'ltr'},
+
+];
+
+export const gstList = [0, 5, 12, 18, 28];
+export const priority = ['normal', 'urgent'];
 
 @Component({
     selector     : 'add-indent',
@@ -25,12 +49,15 @@ export class AddIndentComponent implements OnInit
 {
     product: Product;
     pageType: string;
-    productForm: FormGroup;
-    materialList :any[] = [
-        {name: 'Mary'},
-        {name: 'Shelley'},
-        {name: 'Igor'}
-    ];
+    indentForm: FormGroup;
+    materialList = materialList;
+    categoryList = categoryList;
+    unitList = unitList;
+    gstList = gstList;
+    priority = priority;
+    materialFilter: Observable<any>;
+    categoryFilter: Observable<any>;
+    unitFilter: Observable<any>;
 
     // Private
     private _unsubscribeAll: Subject<any>;
@@ -56,7 +83,24 @@ export class AddIndentComponent implements OnInit
      */
     ngOnInit(): void
     {
-        this.productForm = this.createProductForm();   
+        this.indentForm = this.createProductForm();   
+        this.materialFilter = this.indentForm.get('rawMaterial').valueChanges
+        .pipe(
+          startWith(''),
+          map(value => this._filter(value))
+        );
+
+        this.categoryFilter = this.indentForm.get('category').valueChanges
+        .pipe(
+          startWith(''),
+          map(value => this._categoryFilter(value))
+        );
+
+        this.unitFilter = this.indentForm.get('unit').valueChanges
+        .pipe(
+          startWith(''),
+          map(value => this._unitFilter(value))
+        );
     }
 
     createProductForm(): FormGroup
@@ -72,6 +116,29 @@ export class AddIndentComponent implements OnInit
             gst: [''],
             priority: ['']
         });
+    }
+
+    showToaster() {
+        this._matSnackBar.open('Indent added succesfully', '', {
+            duration: 1000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+          });
+    }
+
+    private _filter(value: string) {
+        const filterValue = value.toLowerCase();
+        return this.materialList.filter( (option: any) => option.name.toLowerCase().includes(filterValue));
+    }
+
+    private _categoryFilter(value: string) {
+        const filterValue = value.toLowerCase();
+        return this.categoryList.filter( (option: any) => option.name.toLowerCase().includes(filterValue));
+    }
+
+    private _unitFilter(value: string) {
+        const filterValue = value.toLowerCase();
+        return this.unitList.filter( (option: any) => option.name.toLowerCase().includes(filterValue));
     }
     
     /**
