@@ -9,7 +9,7 @@ import { FuseUtils } from '@fuse/utils';
 
 import { EcommerceProductsService } from 'app/main/apps/e-commerce/products/products.service';
 import { takeUntil } from 'rxjs/internal/operators';
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Product } from "app/main/apps/e-commerce/product/product.model";
 
 
@@ -107,14 +107,14 @@ export class AddIndentComponent implements OnInit
     {
         return this._formBuilder.group({
             date: [''],
-            rawMaterial: [''],
-            category: [''],
-            quantity: [''],
-            stkid: [''],
-            unit: [''],
+            rawMaterial: ['', [Validators.required]],
+            category: ['', [Validators.required]],
+            quantity: ['', [Validators.required]],
+            stkid: [{value: '', disabled: true}],
+            unit: ['', [Validators.required]],
             hsnCode: [''],
             gst: [''],
-            priority: ['']
+            priority: ['', [Validators.required]]
         });
     }
 
