@@ -16,7 +16,7 @@
 
                 <mat-form-field  fxFlex="50" class="pr-24">
                     <mat-label>Date of Requirment</mat-label>
-                    <input matInput [matDatepicker]="datePicker" placeholder="Date">
+                    <input matInput [matDatepicker]="datePicker" placeholder="Date" formControlName="date">
                     <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
                     <mat-datepicker #datePicker></mat-datepicker>
                 </mat-form-field>
@@ -28,6 +28,9 @@
                         {{option.name}}
                         </mat-option>
                     </mat-autocomplete>
+                    <button mat-icon-button [disabled]="!indentForm.get('rawMaterial').value" matSuffix>
+                    <mat-icon  (click)="addRawMaterial()">add_circle_outline</mat-icon>
+                    </button>
                 </mat-form-field>
 
                 <mat-form-field  fxFlex="50" class="pr-24">
@@ -37,6 +40,11 @@
                         {{option.name}}
                         </mat-option>
                     </mat-autocomplete>
+
+                    <button mat-icon-button [disabled]="!indentForm.get('category').value" matSuffix>
+                    <mat-icon  (click)="addCategory()">add_circle_outline</mat-icon>
+                    </button>
+
                 </mat-form-field>
             </div>
 
@@ -52,6 +60,11 @@
                         {{option.name}}
                         </mat-option>
                     </mat-autocomplete>
+
+                    <button mat-icon-button [disabled]="!indentForm.get('unit').value" matSuffix>
+                    <mat-icon  (click)="addUnit()">add_circle_outline</mat-icon>
+                    </button>
+
                 </mat-form-field>
 
                 <mat-form-field   fxFlex="50" class="pr-24">
@@ -65,7 +78,7 @@
                 </mat-form-field>
 
                 <mat-form-field fxFlex="50" class="pr-24">
-                    <mat-select placeholder="GST" formControlName="gst" name="gst">
+                    <mat-select placeholder="GST %" formControlName="gst" name="gst">
                         <mat-option *ngFor="let gst of gstList" [value]="gst">
                         {{gst}}
                         </mat-option>
@@ -82,7 +95,7 @@
 
             </div>
             <div fxLayout="row" fxLayoutAlign="start center">
-                <button mat-raised-button type="button" color="accent" (click)="showToaster()">
+                <button mat-raised-button type="button" color="accent" (click)="addNewIndent()" [disabled]="!indentForm.valid">
                     Save
                 </button>
             </div>

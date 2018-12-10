@@ -7,11 +7,16 @@ import { Router } from '@angular/router';
 import { HttpWrapperService } from './httpWrapper.service';
 import { LOGIN_API } from './apiurls/login.api';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { config } from "environments/environment";
-import { BaseResponse } from "app/models/api-models/BaseResponse";
-import { ErrorHandler } from "app/services/catchManager/catchmanger";
-import { LoginWithPassword } from "app/models/interfaces/login.interface";
-import { Indent_API } from "app/services/apiurls/indent.api";
+import { config } from 'environments/environment';
+import { BaseResponse } from 'app/models/api-models/BaseResponse';
+import { ErrorHandler } from 'app/services/catchManager/catchmanger';
+import { LoginWithPassword } from 'app/models/interfaces/login.interface';
+import { Indent_API } from 'app/services/apiurls/indent.api';
+import { RAW_MATERIAL } from 'app/services/apiurls/rawMaterial.api';
+import { STOCK_UNIT } from 'app/services/apiurls/unitOfMeasurment.api';
+import { PRODUCT_LIST } from 'app/services/apiurls/product.api';
+
+
 
 @Injectable()
 export class IndentService {
@@ -24,14 +29,80 @@ export class IndentService {
 
   }
 
-  public GetIndent(): Observable<BaseResponse<any, any>> {
+  public GetIndent(): any {
     return this._http.get(config.apiUrl + Indent_API.GET).pipe(map((res) => {
-      let data: BaseResponse<any, any> = res;
-      debugger;
+      const data: BaseResponse<any, any> = res;
       // data.request = model;
       // console.log(data);
       return data;
     }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
   }
+
+  public AddIndent(model): any {
+    return this._http.post(config.apiUrl + Indent_API.ADD, model).pipe(map((res) => {
+      const data: BaseResponse<any, any> = res;
+      // data.request = model;
+      // console.log(data);
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+  }
+
+  public GetRawMaterial(): any {
+    return this._http.get(config.apiUrl + RAW_MATERIAL.GET).pipe(map((res) => {
+      const data: BaseResponse<any, any> = res;
+      // data.request = model;
+      // console.log(data);
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+  }
+
+  public AddRawMaterial(categoryName): any {
+    return this._http.post(config.apiUrl + RAW_MATERIAL.ADD, categoryName).pipe(map((res) => {
+      const data: BaseResponse<any, any> = res;
+      // data.request = model;
+      // console.log(data);
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+  }
+
+
+  public GetStockUnit(): any {
+    return this._http.get(config.apiUrl + STOCK_UNIT.GET).pipe(map((res) => {
+      const data: BaseResponse<any, any> = res;
+      // data.request = model;
+      // console.log(data);
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+  }
+
+  public AddStockUnit(unitName): any {
+    return this._http.post(config.apiUrl + STOCK_UNIT.ADD, unitName).pipe(map((res) => {
+      const data: BaseResponse<any, any> = res;
+      // data.request = model;
+      // console.log(data);
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+  }
+
+
+
+  public GetCategory(): any {
+    return this._http.get(config.apiUrl + PRODUCT_LIST.GET).pipe(map((res) => {
+      const data: BaseResponse<any, any> = res;
+      // data.request = model;
+      // console.log(data);
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+  }
+
+  public AddCategory(categoryName): any {
+    return this._http.post(config.apiUrl + PRODUCT_LIST.ADD, categoryName).pipe(map((res) => {
+      const data: BaseResponse<any, any> = res;
+      // data.request = model;
+      // console.log(data);
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+  }
+
 
 }

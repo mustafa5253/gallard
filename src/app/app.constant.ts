@@ -1,4 +1,4 @@
-export const APP_DEFAULT_TITLE = 'Giddh -';
+export const APP_DEFAULT_TITLE = '';
 
 export const DEFAULT_TOASTER_OPTIONS = {
   closeButton: true, // show close button

@@ -43,7 +43,7 @@
                        #table [dataSource]="dataSource"
                        matSort
                        [@animateStagger]="{value:'50'}"
-                       fusePerfectScrollbar>
+                       fusePerfectScrollbar  (matSortChange)="sortData($event)">
 
                 <ng-container matColumnDef="selected">
                     <mat-header-cell *matHeaderCellDef [style.width.percentage]="5"></mat-header-cell>
@@ -54,28 +54,28 @@
                 </ng-container>
 
                 <ng-container matColumnDef="IndentDate">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header [style.width.percentage]="10">Date</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef mat-sort-header="IndentDate" [style.width.percentage]="10">Date</mat-header-cell>
                     <mat-cell *matCellDef="let product" [style.width.percentage]="10">
                         <p class="text-truncate">{{product.IndentDate}}</p>
                     </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="material">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Material</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef mat-sort-header="name">Material</mat-header-cell>
                     <mat-cell *matCellDef="let product">
                        <p class="text-truncate">{{product.material?.name}}</p>
                     </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="category">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Category</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef mat-sort-header="category">Category</mat-header-cell>
                     <mat-cell *matCellDef="let product">
                         <p class="text-truncate">{{product.category}}</p>
                     </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="quantity">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Quantity</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef mat-sort-header="quantity">Quantity</mat-header-cell>
                     <mat-cell *matCellDef="let product">
                         <p class="category text-truncate">
                             {{product.quantity}} ({{ product.unit}})
@@ -84,9 +84,9 @@
                 </ng-container>
 
                 <ng-container matColumnDef="priority">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Priority</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef mat-sort-header="priority">Priority</mat-header-cell>
                     <mat-cell *matCellDef="let product">
-                        <p class="category text-truncate" [ngClass]="{'text-danger': product.priority === 'Urgent'}">
+                        <p class="category text-truncate" [ngClass]="{'text-danger': product.priority === 'Urgent', 'text-success': product.priority === 'Normal'}">
                             {{product.priority}}
                         </p>
                     </mat-cell>
@@ -103,12 +103,12 @@
                             </button>
 
                             <mat-menu #moreMenu="matMenu">
-                                <button mat-menu-item aria-label="Edit">
+                                <button mat-menu-item aria-label="Edit" (click)="editIndent(product)">
                                     <mat-icon>edit</mat-icon>
                                     <span>Edit</span>
                                 </button>
 
-                                <button mat-menu-item aria-label="remove">
+                                <button mat-menu-item aria-label="remove"  (click)="deleteIndent(product)">
                                     <mat-icon>delete</mat-icon>
                                     <span>Remove</span>
                                 </button>
@@ -130,8 +130,7 @@
 
                 <mat-row *matRowDef="let product; columns: displayedColumns;"
                          class="product"
-                         matRipple
-                         [routerLink]="'/apps/e-commerce/products/'+product.id+'/'+product.handle">
+                         matRipple>
                 </mat-row>
 
             </mat-table>

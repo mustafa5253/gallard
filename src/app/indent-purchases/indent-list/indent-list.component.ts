@@ -9,6 +9,8 @@ import { FuseUtils } from '@fuse/utils';
 
 import { EcommerceProductsService } from 'app/main/apps/e-commerce/products/products.service';
 import { takeUntil } from 'rxjs/internal/operators';
+import { IndentService } from 'app/services/indent.service';
+import { ToasterService } from '../../services/toaster.service';
 
 export const IndentList = [
     { selected: false, IndentDate: '08/12/2018', priority: 'Normal', category: 'Production', material: { name: 'Thread Lock', uniqueName: 'threadlock'}, quantity: 100.00, unit: 'kgs'},
@@ -16,7 +18,7 @@ export const IndentList = [
     { selected: false, IndentDate: '04/12/2018', priority: 'Urgent', category: 'Mould Coats', material: { name: 'Black Japan Paints', uniqueName: 'threadlock'}, quantity: 100.00, unit: 'ltr'},
     { selected: false, IndentDate: '02/12/2018', priority: 'Urgent', category: 'Electrical', material: { name: 'Silica Sand', uniqueName: 'threadlock'}, quantity: 25000.00, unit: 'kgs'},
     { selected: false, IndentDate: '01/12/2018', priority: 'Normal', category: 'Production', material: { name: 'Grinding Wheel 2', uniqueName: 'threadlock'}, quantity: 20.00, unit: 'pcs'},
-]
+];
 
 @Component({
     selector     : 'indent-list',
@@ -27,7 +29,7 @@ export const IndentList = [
 })
 export class IndentListComponent implements OnInit
 {
-    dataSource:any[] = IndentList;
+    dataSource: any[] = IndentList;
     displayedColumns = ['selected', 'IndentDate', 'material', 'category', 'quantity', 'priority', 'action'];
 
     @ViewChild(MatPaginator)
@@ -43,7 +45,8 @@ export class IndentListComponent implements OnInit
     private _unsubscribeAll: Subject<any>;
 
     constructor(
-        private _ecommerceProductsService: EcommerceProductsService
+        private _ecommerceProductsService: EcommerceProductsService,
+        private _indentService: IndentService
     )
     {
         // Set the private defaults
@@ -75,7 +78,47 @@ export class IndentListComponent implements OnInit
 
         //         // this.dataSource.filter = this.filter.nativeElement.value;
         //     });
+        this.getIndentList();
     }
+
+    getIndentList(): any {
+        this._indentService.GetIndent().subscribe((a: any[]) => {
+            if (a && a.length) {
+                this.dataSource = a;
+            }
+        });
+    }
+
+    editIndent(obj): any {
+        console.log(obj);
+    }
+
+    deleteIndent(obj): any {
+        console.log(obj);
+    }
+
+    sortData(sort): any {
+        const data = this.dataSource.slice();
+        if (!sort.active || sort.direction === '') {
+          this.dataSource = data;
+          return;
+        }
+    
+        this.dataSource = data.sort((a, b) => {
+          const isAsc = sort.direction === 'asc';
+          switch (sort.active) {
+            case 'IndentDate': return compare(a.IndentDate, b.IndentDate, isAsc);
+            case 'priority': return compare(a.priority, b.priority, isAsc);
+            case 'category': return compare(a.category, b.category, isAsc);
+            case 'quantity': return compare(a.quantity, b.quantity, isAsc);
+            case 'name': return compare(a.material.name, b.material.name, isAsc);
+            default: return 0;
+          }
+        });
+      }
+}
+function compare(a: number | string, b: number | string, isAsc: boolean): any {
+    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }
 
 export class FilesDataSource extends DataSource<any>

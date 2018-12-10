@@ -153,3 +153,25 @@ e-commerce-products {
     border: none;
     outline: 0;
 }
+
+.cdk-column-selected {
+    max-width: 58px;
+}
+.cdk-column-action {
+    max-width: 50px;
+}
+.cdk-column-priority {
+    max-width: 80px;
+}   
+.cdk-column-IndentDate {
+    max-width: 110px;
+}
+.cdk-column-quantity {
+    max-width: 160px;
+}
+.text-danger {
+    color: red;
+}
+.text-success {
+    color: green;
+}

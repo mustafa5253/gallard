@@ -19,10 +19,10 @@ import { EcommerceProductsService } from 'app/main/apps/e-commerce/products/prod
 // import { EcommerceOrdersService } from 'app/main/apps/e-commerce/orders/orders.service';
 // import { EcommerceOrderComponent } from 'app/main/apps/e-commerce/order/order.component';
 // import { EcommerceOrderService } from 'app/main/apps/e-commerce/order/order.service';
-import { IndentListComponent } from "app/indent-purchases/indent-list/indent-list.component";
-import { IndentService } from "app/services/indent.service";
-import { AddIndentComponent } from "app/indent-purchases/create-indent/add-indent.component";
-import { IndentComponent } from "app/indent-purchases/indent.component";
+import { IndentListComponent } from 'app/indent-purchases/indent-list/indent-list.component';
+import { IndentService } from 'app/services/indent.service';
+import { AddIndentComponent } from 'app/indent-purchases/create-indent/add-indent.component';
+import { IndentComponent } from 'app/indent-purchases/indent.component';
 
 const routes: Routes = [
     {

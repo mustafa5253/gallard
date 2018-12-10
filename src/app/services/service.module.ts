@@ -8,7 +8,7 @@ import { AuthenticationService } from './authentication.service';
 
 import { HttpWrapperService } from './httpWrapper.service';
 import { ToasterService } from './toaster.service';
-import { IndentService } from "app/services/indent.service";
+import { IndentService } from 'app/services/indent.service';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -25,7 +25,7 @@ export class ServiceModule {
       ngModule: ServiceModule,
       providers: [
         IndentService,
-        // ToasterService,
+        ToasterService,
         HttpWrapperService,
         ErrorHandler,
         AuthenticationService

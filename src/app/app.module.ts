@@ -19,9 +19,10 @@ import { FakeDbService } from 'app/fake-db/fake-db.service';
 import { AppComponent } from 'app/app.component';
 import { AppStoreModule } from 'app/store/store.module';
 import { LayoutModule } from 'app/layout/layout.module';
-import { APP_RESOLVER_PROVIDERS } from "app/app.resolver";
-import { WindowRef } from "@agm/core/utils/browser-globals";
-import { ServiceModule } from "app/services/service.module";
+import { APP_RESOLVER_PROVIDERS } from 'app/app.resolver';
+import { WindowRef } from '@agm/core/utils/browser-globals';
+import { ServiceModule } from 'app/services/service.module';
+import { ToastrModule } from 'ngx-toastr';
 
 const appRoutes: Routes = [
     {
@@ -88,6 +89,7 @@ const APP_PROVIDERS = [
         FuseSharedModule,
         FuseSidebarModule,
         FuseThemeOptionsModule,
+        ToastrModule.forRoot(),
 
         // App modules
         LayoutModule,
