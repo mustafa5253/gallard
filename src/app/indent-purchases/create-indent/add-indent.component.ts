@@ -130,7 +130,6 @@ export class AddIndentComponent implements OnInit
                 this._toastr.successToast('Indent added succesfully');                
             } else {
                 this._toastr.errorToast(a.status);
-                this._matSnackBar.open(a.status);
             }
         });
     }
