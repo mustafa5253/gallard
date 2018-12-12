@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatPaginator, MatSort, MatSnackBar } from '@angular/material';
 import { DataSource } from '@angular/cdk/collections';
-import { BehaviorSubject, fromEvent, merge, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, fromEvent, merge, Observable, Subject, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, startWith } from 'rxjs/operators';
 
 import { fuseAnimations } from '@fuse/animations';
@@ -16,24 +16,24 @@ import { ToasterService } from '../../services/toaster.service';
 
 
 export const materialList = [
-    { name: 'Material 1', id: 1},
-    { name: 'Material 2', id: 2},
-    { name: 'Material 3', id: 3},
-    { name: 'Material 4', id: 4},
+    { ItemName: 'Fe SI Mg', RawMaterialId: 1},
+    { ItemName: 'Fe Mg', RawMaterialId: 2},
+    { ItemName: 'Sleeve 4X6', RawMaterialId: 3},
+    { ItemName: 'Sleeve 4X8', RawMaterialId: 4},
 ];
 
 export const categoryList = [
-    { name: 'Production', id: 1},
-    { name: 'Consumption', id: 2},
-    { name: 'Maintainance', id: 3},
-    { name: 'Capital Expenditure', id: 4},
+    { CategoryName: 'Production', CategoryId: 1},
+    { CategoryName: 'Consumption', CategoryId: 2},
+    { CategoryName: 'Maintainance', CategoryId: 3},
+    { CategoryName: 'Capital Expenditure', CategoryId: 4},
 ];
 
 export const unitList = [
-    {name: 'piece', uniqueName: 'pcs'},
-    {name: 'number', uniqueName: 'number'},
-    {name: 'kilogram', uniqueName: 'kgs'},
-    {name: 'litre', uniqueName: 'ltr'},
+    {UOM: 'piece', UOMID: 'pcs'},
+    {UOM: 'number', UOMID: 'number'},
+    {UOM: 'kilogram', UOMID: 'kgs'},
+    {UOM: 'litre', UOMID: 'ltr'},
 
 ];
 
@@ -51,14 +51,14 @@ export class AddIndentComponent implements OnInit
 {
     pageType: string;
     indentForm: FormGroup;
-    materialList = materialList;
-    categoryList = categoryList;
-    unitList = unitList;
+    materialList = [];
+    categoryList = [];
+    unitList = [];
     gstList = gstList;
     priority = priority;
-    materialFilter: Observable<any>;
-    categoryFilter: Observable<any>;
-    unitFilter: Observable<any>;
+    materialFilter: Observable<any[]>;
+    categoryFilter: Observable<any[]>;
+    unitFilter: Observable<any[]>;
     public noMaterialFound: boolean = false;
     public noUnitFound: boolean = false;
     
@@ -87,24 +87,31 @@ export class AddIndentComponent implements OnInit
      */
     ngOnInit(): void
     {
-        this.indentForm = this.createProductForm();   
+        this.getRawMaterial();
+        this.getCategory();
+        this.getStockUnit();
+        this.indentForm = this.createProductForm();
+
+
+
         this.materialFilter = this.indentForm.get('rawMaterial').valueChanges
         .pipe(
           startWith(''),
-          map(value => this._filter(value))
+          map(value => this._filter(value, 'material'))
         );
 
         this.categoryFilter = this.indentForm.get('category').valueChanges
         .pipe(
           startWith(''),
-          map(value => this._categoryFilter(value))
+          map(value => this._filter(value, 'category'))
         );
 
         this.unitFilter = this.indentForm.get('unit').valueChanges
         .pipe(
           startWith(''),
-          map(value => this._unitFilter(value))
+          map(value => this._filter(value, 'unit'))
         );
+
     }
 
     createProductForm(): FormGroup
@@ -123,10 +130,9 @@ export class AddIndentComponent implements OnInit
     }
 
     addNewIndent(): any {
-        debugger;
-        const request: any = this.indentForm.value;
-        this._indentService.AddIndent(request).subscribe(a => {
-            if (a && a.status.toLowerCase() === 'success') {
+        const model: any = this.indentForm.value;
+        this._indentService.AddIndent(model).subscribe(a => {
+            if (a && a.Status.toLowerCase() === 'success') {
                 this._toastr.successToast('Indent added succesfully');                
             } else {
                 this._toastr.errorToast(a.status);
@@ -143,72 +149,80 @@ export class AddIndentComponent implements OnInit
     }
 
     getRawMaterial() {
-        this._indentService.GetRawMaterial().subscribe((a: any[]) => {
-            if (a && a.length) {
-                this.materialList = a;
+        this._indentService.GetRawMaterial().subscribe((a: any) => {
+            if (a) {
+                this.materialList = a.Body;
             }
         });
     }
 
     getStockUnit() {
-        this._indentService.GetStockUnit().subscribe((a: any[]) => {
-            if (a && a.length) {
-                this.unitList = a;
+        this._indentService.GetStockUnit().subscribe((a: any) => {
+            if (a) {
+                this.unitList = a.Body;
             }
         });
     }
 
     getCategory() {
-        this._indentService.GetCategory().subscribe((a: any[]) => {
-            if (a && a.length) {
-                this.categoryList = a;
+        this._indentService.GetCategory().subscribe((a: any) => {
+            if (a) {
+                this.categoryList = a.Body;
             }
         });
     }
 
     addRawMaterial() {
-        let val = 'a';
-        console.log(val);
-
-        this._indentService.AddRawMaterial(val).subscribe((a: any[]) => {
-           console.log(a);
+        let val = this.indentForm.get('rawMaterial').value;
+        this._indentService.AddRawMaterial(val).subscribe((a: any) => {
+           // console.log(a);
+           if (a && a.Status.toLowerCase() === 'success') {
+               this._toastr.successToast("Material added succesfully");
+           } else {
+              this._toastr.errorToast(a.status);
+           }
         }); 
     }
 
 
     addUnit() {
-        let val = 'a';
-        console.log(val);
-
-        this._indentService.AddStockUnit(val).subscribe((a: any[]) => {
-           console.log(a);
+        let val = this.indentForm.get('unit').value;
+        this._indentService.AddStockUnit(val).subscribe((a: any) => {
+           if (a && a.Status.toLowerCase() === 'success') {
+               this._toastr.successToast("Stock Unit added succesfully");
+           } else {
+              this._toastr.errorToast(a.status);
+           }
         }); 
     }
 
     addCategory() {
-        let val = 'a';
-        console.log(val);
-
-        this._indentService.AddCategory(val).subscribe((a: any[]) => {
-           console.log(a);
+        let val = this.indentForm.get('category').value;
+        this._indentService.AddCategory(val).subscribe((a: any) => {
+            if (a && a.Status.toLowerCase() === 'success') {
+               this._toastr.successToast("Category added succesfully");
+           } else {
+              this._toastr.errorToast(a.status);
+           }
         }); 
     }
 
-    private _filter(value: string) {
+    private _filter(value: string, type) {
         const filterValue = value.toLowerCase();
-        return this.materialList.filter( (option: any) => option.name.toLowerCase().includes(filterValue));
+        switch(type) {
+            case 'material': {
+                            return this.materialList.filter( (option: any) => option.ItemName.toLowerCase().includes(filterValue));
+                        }
+            case 'category': {
+                            return this.categoryList.filter( (option: any) => option.CategoryName.toLowerCase().includes(filterValue));
+                        }
+            case 'unit': {
+                            return this.unitList.filter( (option: any) => 
+                            option.UOM.toLowerCase().includes(filterValue));
+                        }
+        }
     }
 
-    private _categoryFilter(value: string) {
-        const filterValue = value.toLowerCase();
-        return this.categoryList.filter( (option: any) => option.name.toLowerCase().includes(filterValue));
-    }
-
-    private _unitFilter(value: string) {
-        const filterValue = value.toLowerCase();
-        return this.unitList.filter( (option: any) => option.name.toLowerCase().includes(filterValue));
-    }
-    
     /**
      * On destroy
      */

@@ -39,7 +39,7 @@ export class IndentService {
   }
 
   public AddIndent(model): any {
-    return this._http.post(config.apiUrl + Indent_API.ADD, model).pipe(map((res) => {
+    return this._http.post(config.apiUrl + Indent_API.ADD.replace(':rawMaterialId', model.rawMaterial).replace(':categoryId', model.category).replace(':unitId', model.unit).replace(':qty', model.quantity).replace(':priority', model.priority).replace(':hsn', model.hsnCode).replace(':gst', model.gst).replace(':CreateDate', model.date), '').pipe(map((res) => {
       const data: BaseResponse<any, any> = res;
       // data.request = model;
       // console.log(data);
@@ -56,8 +56,8 @@ export class IndentService {
     }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
   }
 
-  public AddRawMaterial(categoryName): any {
-    return this._http.post(config.apiUrl + RAW_MATERIAL.ADD, categoryName).pipe(map((res) => {
+  public AddRawMaterial(ItemName): any {
+    return this._http.post(config.apiUrl + RAW_MATERIAL.ADD.replace(':name', ItemName), '').pipe(map((res) => {
       const data: BaseResponse<any, any> = res;
       // data.request = model;
       // console.log(data);

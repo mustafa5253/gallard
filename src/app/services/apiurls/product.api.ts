@@ -1,6 +1,6 @@
 export const PRODUCT_LIST = {
-    GET: 'MasterApi/DsiplayProductList',
-    ADD: 'MasterApi/AddProductType?ProductType=:productType',
-    UPDATE: 'MasterApi/EditProduct?Id=:id&ProductType=:productType',
-    DELETE: 'MasterApi/DeleteProductbyId?Id=:id'
+    GET: 'MasterApi/DsiplayCategoryList',
+    ADD: 'MasterApi/AddCategory?CategoryName=:name',
+    UPDATE: 'MasterApi/EditCategory?CategoryId=:id&CategoryName=:name',
+    DELETE: 'MasterApi/DeleteCategorybyId?CategoryId=:id'
 }

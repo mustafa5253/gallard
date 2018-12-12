@@ -14,34 +14,36 @@
 
             <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
 
-                <mat-form-field  fxFlex="50" class="pr-24">
+                <mat-form-field appearance="outline" fxFlex="50" class="pr-24">
                     <mat-label>Date of Requirment</mat-label>
                     <input matInput [matDatepicker]="datePicker" placeholder="Date" formControlName="date">
                     <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
                     <mat-datepicker #datePicker></mat-datepicker>
                 </mat-form-field>
         
-                <mat-form-field  fxFlex="50" class="pr-24">
-                    <input type="text" placeholder="Material Name" matInput formControlName="rawMaterial" [matAutocomplete]="materialList">
+                <mat-form-field  fxFlex="50" class="pr-24" appearance="outline">
+                    <mat-label>Material Name</mat-label>
+                    <input type="text" placeholder="Type to search.." matInput formControlName="rawMaterial" [matAutocomplete]="materialList">
                     <mat-autocomplete #materialList="matAutocomplete">
-                        <mat-option *ngFor="let option of materialFilter | async" [value]="option.name">
-                        {{option.name}}
+                        <mat-option *ngFor="let option of materialFilter | async" [value]="option.ItemName">
+                        {{option.ItemName}}
                         </mat-option>
                     </mat-autocomplete>
-                    <button mat-icon-button [disabled]="!indentForm.get('rawMaterial').value" matSuffix>
+                    <button mat-icon-button *ngIf="(materialFilter | async) && !(materialFilter | async).length" matSuffix>
                     <mat-icon  (click)="addRawMaterial()">add_circle_outline</mat-icon>
                     </button>
                 </mat-form-field>
 
-                <mat-form-field  fxFlex="50" class="pr-24">
-                    <input type="text" placeholder="Category" matInput formControlName="category" [matAutocomplete]="categoryList">
+                <mat-form-field  fxFlex="50" class="pr-24" appearance="outline">
+                    <mat-label>Category</mat-label>
+                    <input type="text" placeholder="Type to search.." matInput formControlName="category" [matAutocomplete]="categoryList">
                     <mat-autocomplete #categoryList="matAutocomplete">
-                        <mat-option *ngFor="let option of categoryFilter | async" [value]="option.name">
-                        {{option.name}}
+                        <mat-option *ngFor="let option of categoryFilter | async" [value]="option.CategoryName">
+                        {{option.CategoryName}}
                         </mat-option>
                     </mat-autocomplete>
 
-                    <button mat-icon-button [disabled]="!indentForm.get('category').value" matSuffix>
+                    <button mat-icon-button *ngIf="(categoryFilter | async) && !(categoryFilter | async).length" matSuffix>
                     <mat-icon  (click)="addCategory()">add_circle_outline</mat-icon>
                     </button>
 
@@ -49,43 +51,48 @@
             </div>
 
             <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
+                <mat-form-field   fxFlex="50" class="pr-24" appearance="outline">
+                    <mat-label>Quantity</mat-label>
 
-                <mat-form-field   fxFlex="50" class="pr-24">
                         <input type="text" placeholder="Quantity" matInput formControlName="quantity">
                 </mat-form-field>
-                <mat-form-field   fxFlex="50" class="pr-24">
-                    <input type="text" placeholder="Stock Unit" matInput formControlName="unit" [matAutocomplete]="unitList">
+                <mat-form-field   fxFlex="50" class="pr-24" appearance="outline">
+                    <mat-label>Stock Unit</mat-label>
+                    <input type="text" placeholder="Type to search.." matInput formControlName="unit" [matAutocomplete]="unitList">
                     <mat-autocomplete #unitList="matAutocomplete">
-                        <mat-option *ngFor="let option of unitFilter | async" [value]="option.name">
-                        {{option.name}}
+                        <mat-option *ngFor="let option of unitFilter | async" [value]="option.UOM">
+                        {{option.UOM}}
                         </mat-option>
                     </mat-autocomplete>
 
-                    <button mat-icon-button [disabled]="!indentForm.get('unit').value" matSuffix>
+                    <button mat-icon-button *ngIf="(unitFilter | async) && !(unitFilter | async).length" matSuffix>
                     <mat-icon  (click)="addUnit()">add_circle_outline</mat-icon>
                     </button>
 
                 </mat-form-field>
 
-                <mat-form-field   fxFlex="50" class="pr-24">
-                        <input type="text" placeholder="HSN Code" matInput formControlName="hsnCode">
+                <mat-form-field   fxFlex="50" class="pr-24" appearance="outline">
+                    <mat-label>HSN Code</mat-label>
+                    <input type="text" placeholder="HSN Code" matInput formControlName="hsnCode">
                 </mat-form-field>
             </div>
                 <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
 
-                <mat-form-field fxFlex="50" class="pr-24">
+                <mat-form-field fxFlex="50" class="pr-24" appearance="outline">
                         <input type="text" placeholder="StkUID" matInput formControlName="stkid" disabled />
                 </mat-form-field>
 
-                <mat-form-field fxFlex="50" class="pr-24">
-                    <mat-select placeholder="GST %" formControlName="gst" name="gst">
+                <mat-form-field fxFlex="50" class="pr-24" appearance="outline">
+                    <mat-label>GST %</mat-label>
+                    <mat-select placeholder="Choose GST" formControlName="gst" name="gst">
                         <mat-option *ngFor="let gst of gstList" [value]="gst">
                         {{gst}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
 
-                <mat-form-field fxFlex="50" class="pr-24">
+                <mat-form-field fxFlex="50" class="pr-24" appearance="outline">
+                    <mat-label>Priority</mat-label>
                         <mat-select placeholder="Priority" formControlName="priority" name="priority">
                             <mat-option *ngFor="let item of priority" [value]="item">
                             {{item}}
