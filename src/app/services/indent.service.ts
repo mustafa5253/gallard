@@ -39,7 +39,16 @@ export class IndentService {
   }
 
   public AddIndent(model): any {
-    return this._http.post(config.apiUrl + Indent_API.ADD.replace(':rawMaterialId', model.rawMaterial).replace(':categoryId', model.category).replace(':unitId', model.unit).replace(':qty', model.quantity).replace(':priority', model.priority).replace(':hsn', model.hsnCode).replace(':gst', model.gst).replace(':CreateDate', model.date), '').pipe(map((res) => {
+    return this._http.post(config.apiUrl + Indent_API.ADD.replace(':rawMaterialId', model.rawMaterial).replace(':categoryId', model.category).replace(':unitId', model.unit).replace(':qty', model.quantity).replace(':priority', model.priority).replace(':hsn', model.hsnCode).replace(':gst', model.gst).replace(':date', model.date), '').pipe(map((res) => {
+      const data: BaseResponse<any, any> = res;
+      // data.request = model;
+      // console.log(data);
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+  }
+
+  public DeleteIndent(indentId): any {
+    return this._http.delete(config.apiUrl + Indent_API.DELETE.replace(':indentId', indentId)).pipe(map((res) => {
       const data: BaseResponse<any, any> = res;
       // data.request = model;
       // console.log(data);

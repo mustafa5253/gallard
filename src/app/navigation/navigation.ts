@@ -11,20 +11,7 @@ export const navigation: FuseNavigation[] = [
                 title: 'Indent',
                 type: 'item',
                 url  : '/indent'
-            },
-            {
-                id: 'inventoy',
-                title: 'Inventory',
-                type: 'item',
-                url  : '/indent/inventory'                
-            },
-            {
-                id: 'material',
-                title: 'Material',
-                type: 'item',
-                url  : '/indent/material'                
-            },
-        ]
+            }        ]
     }
     // {
     //     id       : 'applications',

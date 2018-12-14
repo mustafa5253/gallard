@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import {
     MatButtonModule, MatChipsModule, MatExpansionModule, MatFormFieldModule, MatIconModule, MatInputModule, MatPaginatorModule, MatRippleModule, MatSelectModule, MatSnackBarModule,
     MatSortModule,
-    MatTableModule, MatTabsModule, MatCheckboxModule, MatMenuModule, MatAutocompleteModule, MatDatepickerModule
+    MatTableModule, MatTabsModule, MatCheckboxModule, MatMenuModule, MatAutocompleteModule, MatDatepickerModule, MatDialogModule
 } from '@angular/material';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { AgmCoreModule } from '@agm/core';
@@ -23,6 +23,7 @@ import { IndentListComponent } from 'app/indent-purchases/indent-list/indent-lis
 import { IndentService } from 'app/services/indent.service';
 import { AddIndentComponent } from 'app/indent-purchases/create-indent/add-indent.component';
 import { IndentComponent } from 'app/indent-purchases/indent.component';
+import { GeneratePurchaseOrder } from "app/indent-purchases/generate-order-modal/generate-order.component";
 
 const routes: Routes = [
     {
@@ -38,7 +39,8 @@ const routes: Routes = [
     declarations: [
         IndentComponent,
         IndentListComponent,
-        AddIndentComponent
+        AddIndentComponent,
+        GeneratePurchaseOrder
         // EcommerceProductsComponent,
         // EcommerceProductComponent,
         // EcommerceOrdersComponent,
@@ -65,6 +67,7 @@ const routes: Routes = [
         MatAutocompleteModule,
         MatDatepickerModule,
         NgxChartsModule,
+        MatDialogModule,
         AgmCoreModule.forRoot({
             apiKey: 'AIzaSyD81ecsCj4yYpcXSLFcYU97PvRsE_X8Bx8'
         }),
@@ -78,6 +81,12 @@ const routes: Routes = [
         // EcommerceProductService,
         // EcommerceOrdersService,
         // EcommerceOrderService
+    ],
+    exports: [
+        GeneratePurchaseOrder
+    ],
+    entryComponents: [
+        GeneratePurchaseOrder
     ]
 })
 export class IndentModule

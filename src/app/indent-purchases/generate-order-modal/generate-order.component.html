@@ -1,0 +1,184 @@
+<h2 mat-dialog-title>Purchase Order</h2>
+<mat-dialog-content class="mat-typography">
+
+  <section class="collapse-pane">
+    <div class="collapse-pane-heading" (click)="showSupplierDetail = !showSupplierDetail">
+      <div class="ico-box-wrap">
+          <div class="ico-box">
+              <!-- <span [ngClass]="isGenDtlCollapsed ? 'icon-add' : 'icon-minus'" aria-hidden="true"></span> -->
+          </div>
+      </div>
+      <div class="ico-head"><h3>Supplier Details</h3></div>
+    </div>
+
+
+            <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
+                <mat-form-field  fxFlex="50" class="pr-24" appearance="outline">
+                    <mat-label>Full Name</mat-label>
+                    <input type="text" placeholder="Supplier Name" matInput />
+                </mat-form-field>
+            </div>
+            <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
+              <mat-form-field  fxFlex="20" class="pr-24" appearance="outline">
+                  <mat-label>Supplier ID</mat-label>
+                  <input type="text" placeholder="Supplier ID" matInput />
+              </mat-form-field>
+              <mat-form-field  fxFlex="20" class="pr-24" appearance="outline">
+                  <mat-label>Email ID</mat-label>
+                  <input type="text" placeholder="Email ID" matInput />
+              </mat-form-field>
+
+              <mat-form-field  fxFlex="20" class="pr-24" appearance="outline">
+                  <mat-label>Mobile No.</mat-label>
+                  <input type="text" placeholder="Mobile No." matInput />
+              </mat-form-field>
+
+              <mat-form-field  fxFlex="20" class="pr-24" appearance="outline">
+                  <mat-label>PAN</mat-label>
+                  <input type="text" placeholder="PAN" matInput />
+              </mat-form-field>              
+              <mat-form-field  fxFlex="20" class="pr-24" appearance="outline">
+                  <mat-label>Pincode</mat-label>
+                  <input type="text" placeholder="Pincode" matInput />
+              </mat-form-field>              
+            </div>
+
+
+            <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
+              <mat-form-field  fxFlex="40" class="pr-24" appearance="outline">
+                  <mat-label>Address</mat-label>
+                  <textarea placeholder="Address" matInput cols="2"></textarea>
+              </mat-form-field>
+              <mat-form-field  fxFlex="20" class="pr-24" appearance="outline">
+                  <mat-label>City</mat-label>
+                  <input type="text" placeholder="City" matInput />
+              </mat-form-field>
+              <mat-form-field  fxFlex="20" class="pr-24" appearance="outline">
+                  <mat-label>GSTIN</mat-label>
+                  <input type="text" placeholder="GSTIN" matInput />
+              </mat-form-field>
+
+              <mat-form-field  fxFlex="20" class="pr-24" appearance="outline">
+                  <mat-label>State</mat-label>
+                  <input type="text" placeholder="State" matInput />
+              </mat-form-field>
+            </div>
+
+  </section>
+
+
+  <section class="collapse-pane">
+    <div class="collapse-pane-heading" (click)="showSupplierDetail = !showSupplierDetail">
+      <div class="ico-box-wrap">
+          <div class="ico-box">
+              <!-- <span [ngClass]="isGenDtlCollapsed ? 'icon-add' : 'icon-minus'" aria-hidden="true"></span> -->
+          </div>
+      </div>
+      <div class="ico-head">Purchase Order Details</div>
+    </div>
+
+
+
+            <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
+              <mat-form-field  fxFlex="20" class="pr-24" appearance="outline">
+                  <mat-label>PO Date</mat-label>
+                  <input type="text" placeholder="PO Date" matInput />
+              </mat-form-field>
+              <mat-form-field  fxFlex="20" class="pr-24" appearance="outline">
+                  <mat-label>PO Number</mat-label>
+                  <input type="text" placeholder="PO Number" matInput />
+              </mat-form-field>
+
+              <mat-form-field  fxFlex="30" class="pr-24" appearance="outline">
+                  <mat-label>Suppliers Ref. / Order No. </mat-label>
+                  <input type="text" placeholder="Suppliers Ref. / Order No." matInput />
+              </mat-form-field>
+
+              <mat-form-field  fxFlex="30" class="pr-24" appearance="outline">
+                  <mat-label>Dipatch Through</mat-label>
+                  <input type="text" placeholder="Dipatch Through" matInput />
+              </mat-form-field>
+            </div>
+            <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
+              <mat-form-field  fxFlex="40" class="pr-24" appearance="outline">
+                  <mat-label>Terms of Delivery</mat-label>
+                  <textarea placeholder="Terms of delivery" matInput cols="2"></textarea>
+              </mat-form-field>              
+            </div>
+  </section>
+
+ <section>
+  
+              <mat-table class="products-table mat-elevation-z8 mb-48"
+                       #table [dataSource]="data.indentList"
+                       matSort
+                       [@animateStagger]="{value:'50'}"
+                       fusePerfectScrollbar>
+
+                <ng-container matColumnDef="serial">
+                    <mat-header-cell *matHeaderCellDef [style.width.percentage]="10">S no.</mat-header-cell>
+                    <mat-cell *matCellDef="let indent; let index = i" [style.width.percentage]="10">
+                        <p class="text-truncate">{{i}}</p>
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="date">
+                    <mat-header-cell *matHeaderCellDef  [style.width.percentage]="10">PO Date</mat-header-cell>
+                    <mat-cell *matCellDef="let indent" [style.width.percentage]="10">
+                        <p class="text-truncate">{{indent.CreateDate}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="number">
+                    <mat-header-cell *matHeaderCellDef>PO Number</mat-header-cell>
+                    <mat-cell *matCellDef="let indent">
+                       <p class="text-truncate">{{indent.IndentId}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="supplier">
+                    <mat-header-cell *matHeaderCellDef>Supplier</mat-header-cell>
+                    <mat-cell *matCellDef="let indent">
+                        <p class="text-truncate">Supplier Name</p>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="action" >
+                    <mat-header-cell *matHeaderCellDef [style.width.px]="50"></mat-header-cell>
+                    <mat-cell *matCellDef="let indent" [style.width.px]="50">
+                        <div fxFlex="row" fxLayoutAlign="end center">
+                            <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
+                                    (click)="$event.stopPropagation();">
+                                <mat-icon class="secondary-text">more_vert</mat-icon>
+                            </button>
+
+                            <mat-menu #moreMenu="matMenu">
+                                <button mat-menu-item aria-label="Edit">
+                                    <mat-icon>edit</mat-icon>
+                                    <span>Edit</span>
+                                </button>
+
+                                <button mat-menu-item aria-label="remove">
+                                    <mat-icon>delete</mat-icon>
+                                    <span>Remove</span>
+                                </button>
+                            </mat-menu>
+                        </div>
+
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
+
+                <mat-row *matRowDef="let indent; columns: displayedColumns;"
+                         class="product"
+                         matRipple>
+                </mat-row>
+
+            </mat-table>
+</section>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial color="accent">Generate</button>
+</mat-dialog-actions>

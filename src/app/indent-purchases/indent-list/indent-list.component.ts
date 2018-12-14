@@ -11,6 +11,10 @@ import { EcommerceProductsService } from 'app/main/apps/e-commerce/products/prod
 import { takeUntil } from 'rxjs/internal/operators';
 import { IndentService } from 'app/services/indent.service';
 import { ToasterService } from '../../services/toaster.service';
+import {MatDialog} from '@angular/material';
+import * as _ from 'lodash';
+import { GeneratePurchaseOrder } from "app/indent-purchases/generate-order-modal/generate-order.component";
+
 
 export const IndentList = [
     { selected: false, IndentDate: '08/12/2018', priority: 'Normal', category: 'Production', material: { name: 'Thread Lock', uniqueName: 'threadlock'}, quantity: 100.00, unit: 'kgs'},
@@ -45,8 +49,10 @@ export class IndentListComponent implements OnInit
     private _unsubscribeAll: Subject<any>;
 
     constructor(
+        public dialog: MatDialog,
         private _ecommerceProductsService: EcommerceProductsService,
-        private _indentService: IndentService
+        private _indentService: IndentService,
+        private _toastr: ToasterService
     )
     {
         // Set the private defaults
@@ -82,9 +88,9 @@ export class IndentListComponent implements OnInit
     }
 
     getIndentList(): any {
-        this._indentService.GetIndent().subscribe((a: any[]) => {
-            if (a && a.length) {
-                this.dataSource = a;
+        this._indentService.GetIndent().subscribe((a: any) => {
+            if (a && a.Body.length) {
+                this.dataSource = a.Body;
             }
         });
     }
@@ -93,8 +99,34 @@ export class IndentListComponent implements OnInit
         console.log(obj);
     }
 
-    deleteIndent(obj): any {
-        console.log(obj);
+    deleteIndent(indentId): any {
+        console.log(indentId);
+        this._indentService.DeleteIndent(indentId).subscribe(a => {
+            if (a && a.Status.toLowerCase() === 'success') {
+                this._toastr.successToast('Indent deleted succesfully');
+                this.getIndentList();                
+            } else {
+                this._toastr.errorToast(a.status);
+            }
+        });
+    }
+
+    generateOrder() {
+        let selectedIndent = _.filter(this.dataSource, (o: any) => o.selected);
+        if(selectedIndent && !selectedIndent.length) {
+            return this._toastr.warningToast('Please select atleast 1 indent');
+        }
+        console.log('selectedIndent', selectedIndent);
+        const dialogRef = this.dialog.open(GeneratePurchaseOrder, {
+            width: "100%",
+            panelClass: 'full-width-modal',
+            data: { indentList: selectedIndent }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+          console.log(`Dialog result: ${result}`);
+        });
+
     }
 
     sortData(sort): any {
@@ -107,11 +139,11 @@ export class IndentListComponent implements OnInit
         this.dataSource = data.sort((a, b) => {
           const isAsc = sort.direction === 'asc';
           switch (sort.active) {
-            case 'IndentDate': return compare(a.IndentDate, b.IndentDate, isAsc);
-            case 'priority': return compare(a.priority, b.priority, isAsc);
-            case 'category': return compare(a.category, b.category, isAsc);
-            case 'quantity': return compare(a.quantity, b.quantity, isAsc);
-            case 'name': return compare(a.material.name, b.material.name, isAsc);
+            case 'IndentDate': return compare(a.CreateDate, b.CreateDate, isAsc);
+            case 'priority': return compare(a.Priority, b.Priority, isAsc);
+            case 'category': return compare(a.CategoryName, b.CategoryName, isAsc);
+            case 'quantity': return compare(a.Quantity, b.Quantity, isAsc);
+            case 'name': return compare(a.ItemName, b.ItemName, isAsc);
             default: return 0;
           }
         });
@@ -134,6 +166,7 @@ export class FilesDataSource extends DataSource<any>
      * @param {MatSort} _matSort
      */
     constructor(
+        public dialog: MatDialog,
         private _ecommerceProductsService: EcommerceProductsService,
         private _matPaginator: MatPaginator,
         private _matSort: MatSort

@@ -13,6 +13,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Product } from 'app/main/apps/e-commerce/product/product.model';
 import { IndentService } from '../../services/indent.service';
 import { ToasterService } from '../../services/toaster.service';
+import * as moment from 'moment';
+import * as _ from 'lodash';
 
 
 export const materialList = [
@@ -61,7 +63,8 @@ export class AddIndentComponent implements OnInit
     unitFilter: Observable<any[]>;
     public noMaterialFound: boolean = false;
     public noUnitFound: boolean = false;
-    
+    public moment = moment;
+
 
     // Private
     private _unsubscribeAll: Subject<any>;
@@ -130,12 +133,19 @@ export class AddIndentComponent implements OnInit
     }
 
     addNewIndent(): any {
-        const model: any = this.indentForm.value;
+        const model: any = _.cloneDeep(this.indentForm.value);
+        model.rawMaterial = _.find(this.materialList, (o) => { return o.ItemName === model.rawMaterial}).RawMaterialId;
+
+        model.category = _.find(this.categoryList, (o) => { return o.CategoryName === model.category}).CategoryId;
+
+        model.unit = _.find(this.unitList, (o) => { return o.UOM === model.unit}).UOMID;
+        model.date = moment(model.date).format('DD/MM/YYYY');
+
         this._indentService.AddIndent(model).subscribe(a => {
             if (a && a.Status.toLowerCase() === 'success') {
                 this._toastr.successToast('Indent added succesfully');                
             } else {
-                this._toastr.errorToast(a.status);
+                this._toastr.errorToast(a.Status);
             }
         });
     }
@@ -174,12 +184,16 @@ export class AddIndentComponent implements OnInit
 
     addRawMaterial() {
         let val = this.indentForm.get('rawMaterial').value;
+        if (!val) {
+            return this._toastr.warningToast("Raw Material can't be blank");
+        }
         this._indentService.AddRawMaterial(val).subscribe((a: any) => {
            // console.log(a);
            if (a && a.Status.toLowerCase() === 'success') {
+               this.materialList.push(a.Body);
                this._toastr.successToast("Material added succesfully");
            } else {
-              this._toastr.errorToast(a.status);
+              this._toastr.errorToast(a.Status);
            }
         }); 
     }
@@ -187,22 +201,31 @@ export class AddIndentComponent implements OnInit
 
     addUnit() {
         let val = this.indentForm.get('unit').value;
+        if (!val) {
+            return this._toastr.warningToast("Unit can't be blank");
+        }
         this._indentService.AddStockUnit(val).subscribe((a: any) => {
            if (a && a.Status.toLowerCase() === 'success') {
+               this.unitList.push(a.Body);
                this._toastr.successToast("Stock Unit added succesfully");
            } else {
-              this._toastr.errorToast(a.status);
+              this._toastr.errorToast(a.Status);
+              this.indentForm.patchValue({unit: ''});
            }
         }); 
     }
 
     addCategory() {
         let val = this.indentForm.get('category').value;
+        if (!val) {
+            return this._toastr.warningToast("Category can't be blank");
+        }
         this._indentService.AddCategory(val).subscribe((a: any) => {
             if (a && a.Status.toLowerCase() === 'success') {
+                this.categoryList.push(a.Body);
                this._toastr.successToast("Category added succesfully");
            } else {
-              this._toastr.errorToast(a.status);
+              this._toastr.errorToast(a.Status);
            }
         }); 
     }

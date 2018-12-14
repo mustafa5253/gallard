@@ -28,7 +28,7 @@
                     <input #filter placeholder="Search Indent">
                 </div>
             </div>
-            <button mat-raised-button type="button">
+            <button mat-raised-button type="button" (click)="generateOrder()">
                     Generate Order
             </button>
             <!-- / SEARCH -->
@@ -47,47 +47,47 @@
 
                 <ng-container matColumnDef="selected">
                     <mat-header-cell *matHeaderCellDef [style.width.percentage]="5"></mat-header-cell>
-                    <mat-cell *matCellDef="let product" [style.width.percentage]="5">
-                        <mat-checkbox [(ngModel)]="product.selected">
+                    <mat-cell *matCellDef="let indent" [style.width.percentage]="5">
+                        <mat-checkbox [(ngModel)]="indent.selected">
                         </mat-checkbox>
                     </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="IndentDate">
                     <mat-header-cell *matHeaderCellDef mat-sort-header="IndentDate" [style.width.percentage]="10">Date</mat-header-cell>
-                    <mat-cell *matCellDef="let product" [style.width.percentage]="10">
-                        <p class="text-truncate">{{product.IndentDate}}</p>
+                    <mat-cell *matCellDef="let indent" [style.width.percentage]="10">
+                        <p class="text-truncate">{{indent.CreateDate}}</p>
                     </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="material">
                     <mat-header-cell *matHeaderCellDef mat-sort-header="name">Material</mat-header-cell>
-                    <mat-cell *matCellDef="let product">
-                       <p class="text-truncate">{{product.material?.name}}</p>
+                    <mat-cell *matCellDef="let indent">
+                       <p class="text-truncate">{{indent.ItemName}}</p>
                     </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="category">
                     <mat-header-cell *matHeaderCellDef mat-sort-header="category">Category</mat-header-cell>
-                    <mat-cell *matCellDef="let product">
-                        <p class="text-truncate">{{product.category}}</p>
+                    <mat-cell *matCellDef="let indent">
+                        <p class="text-truncate">{{indent.CategoryName}}</p>
                     </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="quantity">
                     <mat-header-cell *matHeaderCellDef mat-sort-header="quantity">Quantity</mat-header-cell>
-                    <mat-cell *matCellDef="let product">
+                    <mat-cell *matCellDef="let indent">
                         <p class="category text-truncate">
-                            {{product.quantity}} ({{ product.unit}})
+                            {{indent.Quantity}} ({{ indent.UOM}})
                         </p>
                     </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="priority">
                     <mat-header-cell *matHeaderCellDef mat-sort-header="priority">Priority</mat-header-cell>
-                    <mat-cell *matCellDef="let product">
-                        <p class="category text-truncate" [ngClass]="{'text-danger': product.priority === 'Urgent', 'text-success': product.priority === 'Normal'}">
-                            {{product.priority}}
+                    <mat-cell *matCellDef="let indent">
+                        <p class="category text-truncate" [ngClass]="{'text-danger': indent.Priority === 'Urgent', 'text-success': indent.Priority === 'Normal'}">
+                            {{indent.Priority}}
                         </p>
                     </mat-cell>
                 </ng-container>
@@ -95,7 +95,7 @@
 
                 <ng-container matColumnDef="action" >
                     <mat-header-cell *matHeaderCellDef [style.width.px]="50"></mat-header-cell>
-                    <mat-cell *matCellDef="let product" [style.width.px]="50">
+                    <mat-cell *matCellDef="let indent" [style.width.px]="50">
                         <div fxFlex="row" fxLayoutAlign="end center">
                             <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
                                     (click)="$event.stopPropagation();">
@@ -103,12 +103,12 @@
                             </button>
 
                             <mat-menu #moreMenu="matMenu">
-                                <button mat-menu-item aria-label="Edit" (click)="editIndent(product)">
+                                <button mat-menu-item aria-label="Edit" (click)="editIndent(indent)">
                                     <mat-icon>edit</mat-icon>
                                     <span>Edit</span>
                                 </button>
 
-                                <button mat-menu-item aria-label="remove"  (click)="deleteIndent(product)">
+                                <button mat-menu-item aria-label="remove"  (click)="deleteIndent(indent.IndentId)">
                                     <mat-icon>delete</mat-icon>
                                     <span>Remove</span>
                                 </button>
@@ -128,7 +128,7 @@
 
                 <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
 
-                <mat-row *matRowDef="let product; columns: displayedColumns;"
+                <mat-row *matRowDef="let indent; columns: displayedColumns;"
                          class="product"
                          matRipple>
                 </mat-row>

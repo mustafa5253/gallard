@@ -29,7 +29,7 @@
                         {{option.ItemName}}
                         </mat-option>
                     </mat-autocomplete>
-                    <button mat-icon-button *ngIf="(materialFilter | async) && !(materialFilter | async).length" matSuffix>
+                    <button type="button" mat-icon-button *ngIf="(materialFilter | async) && !(materialFilter | async).length && indentForm.get('rawMaterial').value" matSuffix>
                     <mat-icon  (click)="addRawMaterial()">add_circle_outline</mat-icon>
                     </button>
                 </mat-form-field>
@@ -43,7 +43,7 @@
                         </mat-option>
                     </mat-autocomplete>
 
-                    <button mat-icon-button *ngIf="(categoryFilter | async) && !(categoryFilter | async).length" matSuffix>
+                    <button type="button" mat-icon-button *ngIf="(categoryFilter | async) && !(categoryFilter | async).length && indentForm.get('category').value" matSuffix>
                     <mat-icon  (click)="addCategory()">add_circle_outline</mat-icon>
                     </button>
 
@@ -58,6 +58,7 @@
                 </mat-form-field>
                 <mat-form-field   fxFlex="50" class="pr-24" appearance="outline">
                     <mat-label>Stock Unit</mat-label>
+
                     <input type="text" placeholder="Type to search.." matInput formControlName="unit" [matAutocomplete]="unitList">
                     <mat-autocomplete #unitList="matAutocomplete">
                         <mat-option *ngFor="let option of unitFilter | async" [value]="option.UOM">
@@ -65,7 +66,7 @@
                         </mat-option>
                     </mat-autocomplete>
 
-                    <button mat-icon-button *ngIf="(unitFilter | async) && !(unitFilter | async).length" matSuffix>
+                    <button type="button" mat-icon-button *ngIf="(unitFilter | async) && !(unitFilter | async).length && indentForm.get('unit').value" matSuffix>
                     <mat-icon  (click)="addUnit()">add_circle_outline</mat-icon>
                     </button>
 

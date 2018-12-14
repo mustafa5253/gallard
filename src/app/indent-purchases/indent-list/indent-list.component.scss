@@ -175,3 +175,12 @@ e-commerce-products {
 .text-success {
     color: green;
 }
+
+.full-width-modal {
+    max-width: 100% !important;
+}
+.full-width-modal mat-dialog-actions {
+    background: #eee !important;
+    margin: 0 -25px;
+    padding: 0 25px;
+}
