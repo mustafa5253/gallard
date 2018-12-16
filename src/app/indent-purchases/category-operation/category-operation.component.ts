@@ -10,31 +10,23 @@ import { FuseUtils } from '@fuse/utils';
 import { EcommerceProductsService } from 'app/main/apps/e-commerce/products/products.service';
 import { takeUntil } from 'rxjs/internal/operators';
 import { IndentService } from 'app/services/indent.service';
-import { ToasterService } from '../../services/toaster.service';
 import {MatDialog} from '@angular/material';
 import * as _ from 'lodash';
 import { GeneratePurchaseOrder } from "app/indent-purchases/generate-order-modal/generate-order.component";
-
-
-export const IndentList = [
-    { selected: false, IndentDate: '08/12/2018', priority: 'Normal', category: 'Production', material: { name: 'Thread Lock', uniqueName: 'threadlock'}, quantity: 100.00, unit: 'kgs'},
-    { selected: false, IndentDate: '07/12/2018', priority: 'Urgent', category: 'Maintenance', material: { name: 'Ferro Manganese HC', uniqueName: 'threadlock'}, quantity: 2000.00, unit: 'kgs'},
-    { selected: false, IndentDate: '04/12/2018', priority: 'Urgent', category: 'Mould Coats', material: { name: 'Black Japan Paints', uniqueName: 'threadlock'}, quantity: 100.00, unit: 'ltr'},
-    { selected: false, IndentDate: '02/12/2018', priority: 'Urgent', category: 'Electrical', material: { name: 'Silica Sand', uniqueName: 'threadlock'}, quantity: 25000.00, unit: 'kgs'},
-    { selected: false, IndentDate: '01/12/2018', priority: 'Normal', category: 'Production', material: { name: 'Grinding Wheel 2', uniqueName: 'threadlock'}, quantity: 20.00, unit: 'pcs'},
-];
+import * as moment from 'moment';
+import { ToasterService } from "app/services/toaster.service";
 
 @Component({
-    selector     : 'indent-list',
-    templateUrl  : './indent-list.component.html',
-    styleUrls    : ['./indent-list.component.scss'],
+    selector     : 'category-list',
+    templateUrl  : './category-operation.component.html',
+    styleUrls    : ['./category-operation.component.scss'],
     animations   : fuseAnimations,
     encapsulation: ViewEncapsulation.None
 })
-export class IndentListComponent implements OnInit
+export class CategoryListComponent implements OnInit
 {
-    dataSource: any[] = IndentList;
-    displayedColumns = ['selected', 'IndentDate', 'material', 'category', 'quantity', 'priority', 'action'];
+    dataSource: any[] = [];
+    displayedColumns = ['Sno', 'name', 'action'];
 
     @ViewChild(MatPaginator)
     paginator: MatPaginator;
@@ -44,7 +36,7 @@ export class IndentListComponent implements OnInit
 
     @ViewChild('filter')
     filter: ElementRef;
-
+    moment = moment;
     // Private
     private _unsubscribeAll: Subject<any>;
 
@@ -68,27 +60,11 @@ export class IndentListComponent implements OnInit
      */
     ngOnInit(): void
     {
-        // this.dataSource = new FilesDataSource(this._ecommerceProductsService, this.paginator, this.sort);
-
-        // fromEvent(this.filter.nativeElement, 'keyup')
-        //     .pipe(
-        //         takeUntil(this._unsubscribeAll),
-        //         debounceTime(150),
-        //         distinctUntilChanged()
-        //     )
-        //     .subscribe(() => {
-        //         if ( !this.dataSource )
-        //         {
-        //             return;
-        //         }
-
-        //         // this.dataSource.filter = this.filter.nativeElement.value;
-        //     });
-        this.getIndentList();
+        this.getCategory();
     }
 
-    getIndentList(): any {
-        this._indentService.GetIndent().subscribe((a: any) => {
+    getCategory(): any {
+        this._indentService.GetCategory().subscribe((a: any) => {
             if (a && a.Body.length) {
                 this.dataSource = a.Body;
             }
@@ -99,34 +75,15 @@ export class IndentListComponent implements OnInit
         console.log(obj);
     }
 
-    deleteIndent(indentId): any {
-        console.log(indentId);
-        this._indentService.DeleteIndent(indentId).subscribe(a => {
+    deleteCategory(id): any {
+        this._indentService.DeleteCategory(id).subscribe(a => {
             if (a && a.Status.toLowerCase() === 'success') {
-                this._toastr.successToast('Indent deleted succesfully');
-                this.getIndentList();                
+                this._toastr.successToast('Category deleted succesfully');
+                this.getCategory();                
             } else {
                 this._toastr.errorToast(a.status);
             }
         });
-    }
-
-    generateOrder() {
-        let selectedIndent = _.filter(this.dataSource, (o: any) => o.selected);
-        if(selectedIndent && !selectedIndent.length) {
-            return this._toastr.warningToast('Please select atleast 1 indent');
-        }
-        console.log('selectedIndent', selectedIndent);
-        const dialogRef = this.dialog.open(GeneratePurchaseOrder, {
-            width: "100%",
-            panelClass: 'full-width-modal',
-            data: { indentList: selectedIndent }
-        });
-
-        dialogRef.afterClosed().subscribe(result => {
-          console.log(`Dialog result: ${result}`);
-        });
-
     }
 
     sortData(sort): any {
@@ -139,11 +96,10 @@ export class IndentListComponent implements OnInit
         this.dataSource = data.sort((a, b) => {
           const isAsc = sort.direction === 'asc';
           switch (sort.active) {
-            case 'IndentDate': return compare(a.CreateDate, b.CreateDate, isAsc);
-            case 'priority': return compare(a.Priority, b.Priority, isAsc);
-            case 'category': return compare(a.CategoryName, b.CategoryName, isAsc);
-            case 'quantity': return compare(a.Quantity, b.Quantity, isAsc);
-            case 'name': return compare(a.ItemName, b.ItemName, isAsc);
+            case 'number': return compare(a.PONumber, b.PONumber, isAsc);
+            case 'supplier': return compare(a.VendorName, b.VendorName, isAsc);
+            case 'date': return compare(a.PODate, b.PODate, isAsc);
+            case 'dispatch': return compare(a.Despatchhrough, b.Despatchhrough, isAsc);
             default: return 0;
           }
         });
@@ -262,34 +218,22 @@ export class FilesDataSource extends DataSource<any>
      */
     sortData(data): any[]
     {
-        if ( !this._matSort.active || this._matSort.direction === '' )
-        {
-            return data;
-        }
-
         return data.sort((a, b) => {
             let propertyA: number | string = '';
             let propertyB: number | string = '';
-
             switch ( this._matSort.active )
             {
-                case 'id':
-                    [propertyA, propertyB] = [a.id, b.id];
+                case 'date':
+                    [propertyA, propertyB] = [a.PODate, b.PODate];
                     break;
-                case 'name':
-                    [propertyA, propertyB] = [a.name, b.name];
+                case 'number':
+                    [propertyA, propertyB] = [a.PONumber, b.PONumber];
                     break;
-                case 'categories':
-                    [propertyA, propertyB] = [a.categories[0], b.categories[0]];
+                case 'supplier':
+                    [propertyA, propertyB] = [a.VendorName, b.VendorName];
                     break;
-                case 'price':
-                    [propertyA, propertyB] = [a.priceTaxIncl, b.priceTaxIncl];
-                    break;
-                case 'quantity':
-                    [propertyA, propertyB] = [a.quantity, b.quantity];
-                    break;
-                case 'active':
-                    [propertyA, propertyB] = [a.active, b.active];
+                case 'dispatch':
+                    [propertyA, propertyB] = [a.Despatchhrough, b.Despatchhrough];
                     break;
             }
 

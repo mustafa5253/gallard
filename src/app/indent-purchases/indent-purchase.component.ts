@@ -13,13 +13,13 @@ import { takeUntil } from 'rxjs/internal/operators';
 
 
 @Component({
-    selector     : 'indent',
-    templateUrl  : './indent.component.html',
-    styleUrls    : ['./indent.component.scss'],
+    selector     : 'indent-purchase',
+    templateUrl  : './indent-purchase.component.html',
+    styleUrls    : ['./indent-purchase.component.scss'],
     animations   : fuseAnimations,
     encapsulation: ViewEncapsulation.None
 })
-export class IndentComponent implements OnInit
+export class IndentPurchaseComponent implements OnInit
 {
     constructor(
 

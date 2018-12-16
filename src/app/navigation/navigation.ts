@@ -10,8 +10,41 @@ export const navigation: FuseNavigation[] = [
                 id: 'indent',
                 title: 'Indent',
                 type: 'item',
-                url  : '/indent'
-            }        ]
+                url  : '/indent',
+                exactMatch: true
+            },
+            {
+                id: 'generatedIndent',
+                title: 'Generated Indent',
+                type: 'item',
+                url  : '/indent/generated'
+            },
+            {
+                id: 'goodsReceipt',
+                title: 'Goods Receipt Note',
+                type: 'item',
+                url  : '/indent/grn'
+            },
+            {
+                id: 'material',
+                title: 'Material',
+                type: 'item',
+                url  : '/indent/materials'
+            },
+            {
+                id: 'category',
+                title: 'Category',
+                type: 'item',
+                url  : '/indent/category'
+            },
+            {
+                id: 'unit',
+                title: 'Unit',
+                type: 'item',
+                url  : '/indent/units'
+            }
+
+        ]
     }
     // {
     //     id       : 'applications',

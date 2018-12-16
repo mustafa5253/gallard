@@ -50,8 +50,8 @@ const appRoutes: Routes = [
     //     redirectTo: 'apps/dashboards/analytics'
     // },
     {
-        path        : '**',
-        loadChildren: './indent-purchases/indent.module#IndentModule'
+        path        : 'indent',
+        loadChildren: './indent-purchases/indent-purchase.module#IndentPurchaseModule'
     },
 ];
 

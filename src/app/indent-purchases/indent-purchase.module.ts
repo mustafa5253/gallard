@@ -19,16 +19,34 @@ import { EcommerceProductsService } from 'app/main/apps/e-commerce/products/prod
 // import { EcommerceOrdersService } from 'app/main/apps/e-commerce/orders/orders.service';
 // import { EcommerceOrderComponent } from 'app/main/apps/e-commerce/order/order.component';
 // import { EcommerceOrderService } from 'app/main/apps/e-commerce/order/order.service';
-import { IndentListComponent } from 'app/indent-purchases/indent-list/indent-list.component';
+import { IndentListComponent } from 'app/indent-purchases/indent/indent-list/indent-list.component';
 import { IndentService } from 'app/services/indent.service';
-import { AddIndentComponent } from 'app/indent-purchases/create-indent/add-indent.component';
-import { IndentComponent } from 'app/indent-purchases/indent.component';
+import { AddIndentComponent } from 'app/indent-purchases/indent/create-indent/add-indent.component';
+import { IndentPurchaseComponent } from 'app/indent-purchases/indent-purchase.component';
 import { GeneratePurchaseOrder } from "app/indent-purchases/generate-order-modal/generate-order.component";
+import { IndentComponent } from 'app/indent-purchases/indent/indent.component';
+import { GeneratedIndentList } from "app/indent-purchases/purchase-order/purchase-order-list.component";
+import { GoodsReceiptNote } from "app/indent-purchases/goods-note/goods-note.component";
+import { MaterialListComponent } from "app/indent-purchases/materials-operation/materials-operation.component";
+import { UnitListComponent } from "app/indent-purchases/units-operation/units-operation.component";
+import { CategoryListComponent } from "app/indent-purchases/category-operation/category-operation.component";
+import { FuseSidebarModule } from '@fuse/components/sidebar/sidebar.module';
+
 
 const routes: Routes = [
     {
         path     : '',
-        component: IndentComponent,
+        component: IndentPurchaseComponent,
+        children: [
+          {path: '', pathMatch: 'full', redirectTo: 'create'},
+          {path: 'create', component: IndentComponent},
+          {path: 'generated', component: GeneratedIndentList},
+          {path: 'grn', component: GoodsReceiptNote},
+          {path: 'materials', component: MaterialListComponent},
+          {path: 'units', component: UnitListComponent},
+          {path: 'category', component: CategoryListComponent},
+
+        ]
         // resolve  : {
         //     data: EcommerceProductsService
         // }
@@ -37,10 +55,16 @@ const routes: Routes = [
 
 @NgModule({
     declarations: [
-        IndentComponent,
+        IndentPurchaseComponent,
         IndentListComponent,
         AddIndentComponent,
-        GeneratePurchaseOrder
+        GeneratePurchaseOrder,
+        GeneratedIndentList,
+        IndentComponent,
+        GoodsReceiptNote,
+        MaterialListComponent,
+        UnitListComponent,
+        CategoryListComponent
         // EcommerceProductsComponent,
         // EcommerceProductComponent,
         // EcommerceOrdersComponent,
@@ -73,7 +97,8 @@ const routes: Routes = [
         }),
 
         FuseSharedModule,
-        FuseWidgetModule
+        FuseWidgetModule,
+        FuseSidebarModule
     ],
     providers   : [
         IndentService,
@@ -89,6 +114,6 @@ const routes: Routes = [
         GeneratePurchaseOrder
     ]
 })
-export class IndentModule
+export class IndentPurchaseModule
 {
 }

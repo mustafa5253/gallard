@@ -1,13 +1,14 @@
-import {Component, Input, Inject} from '@angular/core';
+import {Component, Input, Inject, OnInit} from '@angular/core';
 import {MatDialog, MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import { ToasterService } from '../../services/toaster.service';
 import { BehaviorSubject, fromEvent, merge, Observable, Subject } from 'rxjs';
-
+import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IndentService } from '../../services/indent.service';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseUtils } from '@fuse/utils';
-
+import * as moment from 'moment';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'generate-purchase-order',
@@ -15,10 +16,19 @@ import { FuseUtils } from '@fuse/utils';
   templateUrl: './generate-order.component.html',
   animations   : fuseAnimations,
 })
-export class GeneratePurchaseOrder {
-	showSupplierDetail: boolean = true;
+export class GeneratePurchaseOrder implements OnInit {
+  	showSupplierDetail: boolean = true;
+    stateList = [];
+    cityList = [];
+    vendorList = [];
+    vendorFilter = [];
+    createOrderForm: FormGroup;
+    vendorDetails = {};
+    public moment = moment;
+    isVendorDetailShown;
+
     @Input() dataSource: any[] = [];
-    displayedColumns = ['serial','date', 'number', 'supplier', 'action'];
+    displayedColumns = ['serial','date', 'number', 'name','category', 'qty', 'unit', 'price', 'action'];
 
     // Private
     private _unsubscribeAll: Subject<any>;
@@ -26,11 +36,106 @@ export class GeneratePurchaseOrder {
 	    @Inject(MAT_DIALOG_DATA) public data: any,
         private _formBuilder: FormBuilder,
         private _indentService: IndentService,
-        private _toastr: ToasterService,   
+        private _toastr: ToasterService,
+        private _fuseSidebarService: FuseSidebarService
     )
     {
-
         // Set the private defaults
         this._unsubscribeAll = new Subject();
+
+
+    }
+
+    /**
+     * On init
+     */
+    ngOnInit(): void
+    {
+        this.createOrderForm = this.initCreateOrderForm();
+        this.getAllVendor();
+        this.getState();
+    }
+
+    initCreateOrderForm() {
+        return this._formBuilder.group({
+            SupplierId: ['', [Validators.required]],
+            PONumber: [{value: this.GenerateUniqueID(), disabled: true}],
+            PODate: ['', [Validators.required]],
+            SupplierRef: [''],
+            Despatchhrough: [''],
+            TermsofDelivery: [''],
+            PinCode: [''],
+            IndentKey: ['']
+        });
+    }
+
+    getState() {
+      this._indentService.GetState().subscribe((a: any) => {
+        if (a) {
+            this.stateList = a.Body;
+        }
+      });
+    }
+
+    getCity(stateId) {
+      this._indentService.GetCity(stateId).subscribe((a: any) => {
+        if (a) {
+            this.cityList = a.Body;
+        }
+      });
+    }
+
+
+    getAllVendor() {
+      this._indentService.GetAllVendor().subscribe((a: any) => {
+        if (a) {
+            this.vendorList = a.Body;
+        }
+      });
+    }
+
+    onSelectVendor(vendor) {
+      this.vendorDetails = vendor;
+      this.createOrderForm.controls['SupplierId'].patchValue(vendor.VendorId);
+      this.createOrderForm.controls['PinCode'].patchValue(vendor.PinCode);
+
+      console.log(vendor);
+    }
+
+    generateOrder() {
+      this.createOrderForm.get('PONumber').enable(); 
+      let requestObj = this.createOrderForm.value;
+      this.createOrderForm.get('PONumber').disable();
+
+      let indentKeys = [];
+      _.forEach(this.data.indentList, function(o) {
+          return indentKeys.push(o.IndentId);
+      });
+
+      if(indentKeys.length) {
+        requestObj.IndentKey = String(indentKeys);
+      }
+
+      requestObj.PODate = moment(requestObj.PODate).format('MM/DD/YYYY');
+      requestObj.ID = requestObj.PONumber;
+
+     this._indentService.GeneratePurchaseOrder(requestObj).subscribe((a: any) => {
+        if (a && a.Status.toLowerCase() === 'success') {
+            this._toastr.successToast('Purchase order generated succesfully');  
+            this.createOrderForm.reset();              
+        } else {
+            this._toastr.errorToast(a.Status);
+        }
+      });
+     
+    }
+
+    GenerateUniqueID() {
+      return (Math.random() * (105000 - 784001) + 784001)|0;
+    }
+
+
+    showVendorDetail() {
+      this._fuseSidebarService.getSidebar('vendorDetailsAside').toggleOpen();
     }
 }

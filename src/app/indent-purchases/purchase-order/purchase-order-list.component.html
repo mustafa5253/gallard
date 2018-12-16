@@ -16,7 +16,7 @@
             <div class="logo mb-24 mb-md-0"
                  fxLayout="row" fxLayoutAlign="start center">
                 <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-                    Indent List
+                    Generated Order List
                 </span>
             </div>
             <!-- / APP TITLE -->
@@ -25,12 +25,9 @@
             <div class="search-wrapper mx-32 mx-md-0">
                 <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
                     <mat-icon>search</mat-icon>
-                    <input #filter placeholder="Search Indent">
+                    <input #filter placeholder="Search order">
                 </div>
             </div>
-            <button mat-raised-button type="button" (click)="generateOrder()">
-                    Generate Order
-            </button>
             <!-- / SEARCH -->
 
         </div>
@@ -45,55 +42,37 @@
                        [@animateStagger]="{value:'50'}"
                        fusePerfectScrollbar  (matSortChange)="sortData($event)">
 
-                <ng-container matColumnDef="selected">
-                    <mat-header-cell *matHeaderCellDef [style.width.percentage]="5"></mat-header-cell>
-                    <mat-cell *matCellDef="let indent" [style.width.percentage]="5">
-                        <mat-checkbox [(ngModel)]="indent.selected">
-                        </mat-checkbox>
-                    </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="IndentDate">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header="IndentDate" [style.width.percentage]="10">Date</mat-header-cell>
+                <ng-container matColumnDef="date">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header="date" [style.width.percentage]="10">PO Date</mat-header-cell>
                     <mat-cell *matCellDef="let indent" [style.width.percentage]="10">
-                        <p class="text-truncate">{{indent.CreateDate}}</p>
+                        <p class="text-truncate">{{moment(indent.PODate).format('MM/DD/YYYY')}}</p>
                     </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="material">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header="name">Material</mat-header-cell>
+                <ng-container matColumnDef="number">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header="number">PO NUmber</mat-header-cell>
                     <mat-cell *matCellDef="let indent">
-                       <p class="text-truncate">{{indent.ItemName}}</p>
+                       <p class="text-truncate">{{indent.PONumber}}</p>
                     </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="category">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header="category">Category</mat-header-cell>
+                <ng-container matColumnDef="supplier">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header="supplier">Supplier</mat-header-cell>
                     <mat-cell *matCellDef="let indent">
-                        <p class="text-truncate">{{indent.CategoryName}}</p>
+                        <p class="text-truncate">{{indent.VendorName}}</p>
                     </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="quantity">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header="quantity">Quantity</mat-header-cell>
+
+                <ng-container matColumnDef="dispatch">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header="dispatch">Dispatch</mat-header-cell>
                     <mat-cell *matCellDef="let indent">
-                        <p class="category text-truncate">
-                            {{indent.Quantity}} ({{ indent.UOM}})
-                        </p>
-                    </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="priority">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header="priority">Priority</mat-header-cell>
-                    <mat-cell *matCellDef="let indent">
-                        <p class="category text-truncate" [ngClass]="{'text-danger': indent.Priority === 'Urgent', 'text-success': indent.Priority === 'Normal'}">
-                            {{indent.Priority}}
-                        </p>
+                        <p class="text-truncate">{{indent.Despatchhrough}}</p>
                     </mat-cell>
                 </ng-container>
 
 
-                <ng-container matColumnDef="action" >
+<!--                 <ng-container matColumnDef="action" >
                     <mat-header-cell *matHeaderCellDef [style.width.px]="50"></mat-header-cell>
                     <mat-cell *matCellDef="let indent" [style.width.px]="50">
                         <div fxFlex="row" fxLayoutAlign="end center">
@@ -116,7 +95,7 @@
                         </div>
 
                     </mat-cell>
-                </ng-container>
+                </ng-container> -->
                 <!-- Active Column -->
                 <!-- <ng-container matColumnDef="active">
                     <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Active</mat-header-cell>

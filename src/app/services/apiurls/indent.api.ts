@@ -1,5 +1,10 @@
 export const Indent_API = {
-    ADD : 'MasterApi/AddIndent?RawMaterialId=:rawMaterialId&CategoryId=:categoryId&UOMID=:unitId&Quantity=:qty&Priority=:priority&HsnCode=:hsn&Gst=:gst&CreateDate=:date',
+    ADD : 'MasterApi/AddIndent',
     GET: 'MasterApi/DisplayIndentList',
-    DELETE: 'MasterApi/DeleteIndent?IndentId=:indentId'
+    DELETE: 'MasterApi/DeleteIndent?IndentId=:indentId',
+    GENERATE_PO: 'MasterApi/CreatePO',
+    GET_PO: 'MasterApi/DisplayPOList',
+    CREATE_GRN: 'MasterApi/CreateGRN',
+    SEARCH_PO_NUMBER: 'MasterApi/SearchPoNumber?PoNumber=:number',
+    GENERATE_GRN: 'MasterApi/CreateGRN'
 };

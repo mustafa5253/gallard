@@ -15,7 +15,8 @@ import { Indent_API } from 'app/services/apiurls/indent.api';
 import { RAW_MATERIAL } from 'app/services/apiurls/rawMaterial.api';
 import { STOCK_UNIT } from 'app/services/apiurls/unitOfMeasurment.api';
 import { PRODUCT_LIST } from 'app/services/apiurls/product.api';
-
+import { GENERAL_API } from 'app/services/apiurls/general.api';
+import { VENDOR_API } from 'app/services/apiurls/vendor.api';
 
 
 @Injectable()
@@ -39,7 +40,7 @@ export class IndentService {
   }
 
   public AddIndent(model): any {
-    return this._http.post(config.apiUrl + Indent_API.ADD.replace(':rawMaterialId', model.rawMaterial).replace(':categoryId', model.category).replace(':unitId', model.unit).replace(':qty', model.quantity).replace(':priority', model.priority).replace(':hsn', model.hsnCode).replace(':gst', model.gst).replace(':date', model.date), '').pipe(map((res) => {
+    return this._http.post(config.apiUrl + Indent_API.ADD, model).pipe(map((res) => {
       const data: BaseResponse<any, any> = res;
       // data.request = model;
       // console.log(data);
@@ -65,8 +66,17 @@ export class IndentService {
     }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
   }
 
-  public AddRawMaterial(ItemName): any {
-    return this._http.post(config.apiUrl + RAW_MATERIAL.ADD.replace(':name', ItemName), '').pipe(map((res) => {
+  public AddRawMaterial(model): any {
+    return this._http.post(config.apiUrl + RAW_MATERIAL.ADD, model).pipe(map((res) => {
+      const data: BaseResponse<any, any> = res;
+      // data.request = model;
+      // console.log(data);
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+  }
+
+  public DeleteMaterial(id): any {
+    return this._http.delete(config.apiUrl + RAW_MATERIAL.DELETE.replace(':id', id)).pipe(map((res) => {
       const data: BaseResponse<any, any> = res;
       // data.request = model;
       // console.log(data);
@@ -85,7 +95,7 @@ export class IndentService {
   }
 
   public AddStockUnit(unitName): any {
-    return this._http.post(config.apiUrl + STOCK_UNIT.ADD, unitName).pipe(map((res) => {
+    return this._http.post(config.apiUrl + STOCK_UNIT.ADD.replace(':unit', unitName), '').pipe(map((res) => {
       const data: BaseResponse<any, any> = res;
       // data.request = model;
       // console.log(data);
@@ -93,7 +103,14 @@ export class IndentService {
     }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
   }
 
-
+  public DeleteStockUnit(id): any {
+    return this._http.delete(config.apiUrl + STOCK_UNIT.DELETE.replace(':id', id)).pipe(map((res) => {
+      const data: BaseResponse<any, any> = res;
+      // data.request = model;
+      // console.log(data);
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+  }
 
   public GetCategory(): any {
     return this._http.get(config.apiUrl + PRODUCT_LIST.GET).pipe(map((res) => {
@@ -105,7 +122,7 @@ export class IndentService {
   }
 
   public AddCategory(categoryName): any {
-    return this._http.post(config.apiUrl + PRODUCT_LIST.ADD, categoryName).pipe(map((res) => {
+    return this._http.post(config.apiUrl + PRODUCT_LIST.ADD.replace(":name", categoryName), '').pipe(map((res) => {
       const data: BaseResponse<any, any> = res;
       // data.request = model;
       // console.log(data);
@@ -113,5 +130,77 @@ export class IndentService {
     }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
   }
 
+
+  public DeleteCategory(id): any {
+    return this._http.delete(config.apiUrl + PRODUCT_LIST.DELETE.replace(":id", id)).pipe(map((res) => {
+      const data: BaseResponse<any, any> = res;
+      // data.request = model;
+      // console.log(data);
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+  }
+
+  public GetState(): any {
+    return this._http.get(config.apiUrl + GENERAL_API.GET_STATE).pipe(map((res) => {
+      const data: BaseResponse<any, any> = res;
+      // data.request = model;
+      // console.log(data);
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+  }
+
+  public GetCity(stateId): any {
+    return this._http.get(config.apiUrl + GENERAL_API.GET_CITY.replace(':stateId', stateId)).pipe(map((res) => {
+      const data: BaseResponse<any, any> = res;
+      // data.request = model;
+      // console.log(data);
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+  }
+
+  public GetAllVendor(): any {
+    return this._http.get(config.apiUrl + VENDOR_API.GET).pipe(map((res) => {
+      const data: BaseResponse<any, any> = res;
+      // data.request = model;
+      // console.log(data);
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+  }
+
+  public GeneratePurchaseOrder(model): any {
+    return this._http.post(config.apiUrl + Indent_API.GENERATE_PO, model).pipe(map((res) => {
+      const data: BaseResponse<any, any> = res;
+      // data.request = model;
+      // console.log(data);
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+  }
+
+  public GetPurchaseOrders(): any {
+    return this._http.get(config.apiUrl + Indent_API.GET_PO).pipe(map((res) => {
+      const data: BaseResponse<any, any> = res;
+      // data.request = model;
+      // console.log(data);
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+  }
+
+  public GetOrderByNumber(number): any {
+    return this._http.get(config.apiUrl + Indent_API.SEARCH_PO_NUMBER.replace(':number', number)).pipe(map((res) => {
+      const data: BaseResponse<any, any> = res;
+      // data.request = model;
+      // console.log(data);
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+  }
+
+  public GenerateGRN(model): any {
+    return this._http.post(config.apiUrl + Indent_API.GENERATE_GRN, model).pipe(map((res) => {
+      const data: BaseResponse<any, any> = res;
+      // data.request = model;
+      // console.log(data);
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+  }
 
 }

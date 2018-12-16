@@ -1,0 +1,177 @@
+<div id="products" class="page-layout carded fullwidth inner-scroll mb-48">
+
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg accent"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+
+        <!-- HEADER -->
+        <div class="header accent"
+             fxLayout="column" fxLayoutAlign="center center"
+             fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between center">
+
+            <!-- APP TITLE -->
+            <div class="logo mb-24 mb-md-0"
+                 fxLayout="row" fxLayoutAlign="start center">
+                <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    Goods / Receipt Note
+                </span>
+            </div>
+            <!-- / APP TITLE -->
+
+            <!-- SEARCH -->
+            <div class="search-wrapper mx-32 mx-md-0">
+                <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
+                    <mat-icon>search</mat-icon>
+                     <input type="text" placeholder="Enter PO Number" matInput [(ngModel)]="searchNumber"  [ngModelOptions]="{standalone: true}" (keydown.Enter)="getOrderByNumber(searchNumber)">
+                </div>
+            </div>
+            <!-- / SEARCH -->
+
+        </div>
+        <!-- / HEADER -->
+
+
+
+        <!-- CONTENT CARD -->
+        <div class="content-card">
+
+<!--        <form class="example-form mat-card content p-24 mb-24">
+            <div class="h2 mb-12">Search by PO Number</div>
+
+            <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
+                <mat-form-field   fxFlex="30" class="pr-24" appearance="outline">
+                    <mat-label>PO Number</mat-label>
+                        <input type="text" placeholder="Enter PO Number" matInput [(ngModel)]="searchNumber"  [ngModelOptions]="{standalone: true}">
+                </mat-form-field>
+            </div>
+
+                <button mat-raised-button type="button" color="accent" [disabled]="!searchNumber" (click)="getOrderByNumber(searchNumber)">
+                    Search
+                </button>
+        </form> -->
+
+            <mat-table class="products-table mb-12"
+                       #table [dataSource]="dataSource"
+                       matSort
+                       [@animateStagger]="{value:'50'}"
+                       fusePerfectScrollbar  (matSortChange)="sortData($event)">
+
+                <ng-container matColumnDef="CreateDate">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header="CreateDate" [style.width.percentage]="10">Date</mat-header-cell>
+                    <mat-cell *matCellDef="let indent" [style.width.percentage]="10">
+                        <p class="text-truncate">{{moment(indent.CreateDate).format('MM/DD/YYYY')}}</p>
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="IndentId">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header="IndentId" [style.width.percentage]="10">Indent ID</mat-header-cell>
+                    <mat-cell *matCellDef="let indent" [style.width.percentage]="10">
+                        <p class="text-truncate">{{indent.IndentId}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="ItemName">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header="ItemName">Material</mat-header-cell>
+                    <mat-cell *matCellDef="let indent">
+                       <p class="text-truncate">{{indent.ItemName}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="CategoryName">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header="CategoryName">Category</mat-header-cell>
+                    <mat-cell *matCellDef="let indent">
+                        <p class="text-truncate">{{indent.CategoryName}}</p>
+                    </mat-cell>
+                </ng-container>
+
+
+                <ng-container matColumnDef="Quantity">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header="Quantity">Quantity Ordered</mat-header-cell>
+                    <mat-cell *matCellDef="let indent">
+                        <p class="text-truncate">{{indent.Quantity}} ({{indent.UOM}})</p>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="ReceivedQty">
+                    <mat-header-cell *matHeaderCellDef>Received Quantity</mat-header-cell>
+                    <mat-cell *matCellDef="let indent">
+                            <input type="text" name="{{indent.IndentId}}" [(ngModel)]="indent.ReceivedQuantity"  [ngModelOptions]="{standalone: true}" class="table_input">
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="Priority">
+                    <mat-header-cell *matHeaderCellDef>Priority</mat-header-cell>
+                    <mat-cell *matCellDef="let indent">
+                        <p class="text-truncate" [ngClass]="{'text-danger': indent.Priority === 'urgent', 'text-success': indent.Priority === 'normal'}">
+                           {{indent.Priority}}
+                        </p>
+                    </mat-cell>
+                </ng-container>
+
+
+<!--            <ng-container matColumnDef="action" >
+                    <mat-header-cell *matHeaderCellDef [style.width.px]="50"></mat-header-cell>
+                    <mat-cell *matCellDef="let indent" [style.width.px]="50">
+                        <div fxFlex="row" fxLayoutAlign="end center">
+                            <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
+                                    (click)="$event.stopPropagation();">
+                                <mat-icon class="secondary-text">more_vert</mat-icon>
+                            </button>
+
+                            <mat-menu #moreMenu="matMenu">
+                                <button mat-menu-item aria-label="Edit" (click)="editIndent(indent)">
+                                    <mat-icon>edit</mat-icon>
+                                    <span>Edit</span>
+                                </button>
+
+                                <button mat-menu-item aria-label="remove"  (click)="deleteIndent(indent.IndentId)">
+                                    <mat-icon>delete</mat-icon>
+                                    <span>Remove</span>
+                                </button>
+                            </mat-menu>
+                        </div>
+
+                    </mat-cell>
+                </ng-container> -->
+                <!-- Active Column -->
+                <!-- <ng-container matColumnDef="active">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Active</mat-header-cell>
+                    <mat-cell *matCellDef="let product" fxHide fxShow.gt-xs>
+                        <mat-icon *ngIf="product.active" class="active-icon green-600 s-16">check</mat-icon>
+                        <mat-icon *ngIf="!product.active" class="active-icon red-500 s-16">close</mat-icon>
+                    </mat-cell>
+                </ng-container> -->
+
+                <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
+
+                <mat-row *matRowDef="let indent; columns: displayedColumns;"
+                         class="product"
+                         matRipple>
+                </mat-row>
+
+
+
+            </mat-table>
+
+                <!-- <h1 *ngIf="dataSource && !dataSource.length">No Result Found</h1> -->
+            <!-- <mat-paginator #paginator
+                           [length]="dataSource.filteredData.length"
+                           [pageIndex]="0"
+                           [pageSize]="10"
+                           [pageSizeOptions]="[5, 10, 25, 100]">
+            </mat-paginator> -->
+
+        </div>
+        <!-- / CONTENT CARD -->
+    </div>
+    <!-- / CENTER -->
+</div>
+<div class="p-24">
+                <button *ngIf="dataSource && dataSource.length" mat-raised-button type="button" color="accent" (click)="generateGRN()">
+                    Save
+                </button>
+</div>

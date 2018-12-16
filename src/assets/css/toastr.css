@@ -196,3 +196,19 @@
     }
   }
   
+
+  .table_input {
+    border: 1px solid #ddd;
+    width: 74%;
+    padding: 10px;
+    margin: 0 15px 0 0;
+}
+
+
+.width-400 {
+    width: 400px; 
+    max-width: 400px;
+}
+.bg-white {
+  background: #fff !important;
+}
