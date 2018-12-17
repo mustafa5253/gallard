@@ -1,0 +1,128 @@
+<div class="page-layout simple fullwidth">
+
+    <!-- HEADER -->
+    <div class="header accent p-24" fxLayout="row" fxLayoutAlign="space-between center">
+        <h2>Inventory</h2>
+
+            <button mat-raised-button type="button" [routerLink]="['/indent/inventory/manage-stock']">
+                    Manage Inventory
+            </button>
+    </div>
+    <!-- / HEADER
+
+    <!-- CONTENT -->
+    <div class="content p-24">
+       <form class="example-form mat-card content p-24" [formGroup]="IssueStockForm">
+            <div class="h2 mb-12" *ngIf="!isUpdate">Issue Stock</div>
+            <div class="h2 mb-12" *ngIf="isUpdate">Update Indent</div>
+
+
+
+            <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
+
+                <mat-form-field appearance="outline" fxFlex="50" class="pr-24">
+                    <mat-label>Issue Date</mat-label>
+                    <input matInput [matDatepicker]="datePicker" placeholder="Date" formControlName="IssueDate">
+                    <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #datePicker></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field   fxFlex="50" class="pr-24" appearance="outline">
+                    <mat-label>Issued To</mat-label>
+
+                        <input type="text" placeholder="Name" matInput formControlName="Name">
+                </mat-form-field>
+        
+            </div>
+
+            <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
+
+                <mat-form-field  fxFlex="50" class="pr-24" appearance="outline">
+                    <mat-label>Material Name</mat-label>
+                    <input type="text" placeholder="Type to search.." matInput formControlName="RawMaterialId" [matAutocomplete]="materialList">
+                    <mat-autocomplete #materialList="matAutocomplete">
+                        <mat-option *ngFor="let option of materialFilter | async" [value]="option.ItemName" (onSelectionChange)="onSelectMaterial(option)">
+                        {{option.ItemName}}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <button type="button" mat-icon-button *ngIf="(materialFilter | async) && !(materialFilter | async).length && indentForm.get('RawMaterialId').value" matSuffix>
+                    <mat-icon  (click)="openRawMaterialForm()">add_circle_outline</mat-icon>
+                    </button>
+                </mat-form-field>
+
+                <mat-form-field   fxFlex="50" class="pr-24" appearance="outline">
+                    <mat-label>Quantity</mat-label>
+
+                        <input type="text" placeholder="Quantity" matInput formControlName="Quantity">
+                </mat-form-field>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="start center">
+                <button mat-raised-button type="button" color="accent" (click)="IssueStock()" [disabled]="!IssueStockForm.valid"  *ngIf="!isUpdate">
+                    Save
+                </button>
+            </div>
+
+        </form>
+        
+    </div>
+    <!-- / CONTENT -->
+
+</div>
+
+
+
+<fuse-sidebar name="rawMaterialForm" position="right" class="width-400 p-24">
+  
+       <form class="" [formGroup]="addMaterialForm">
+            <div class="h2 mb-12">Add Material</div>
+
+            
+            <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
+              <mat-form-field  fxFlex="70" appearance="outline">
+                  <mat-label>Name</mat-label>
+                  <input type="text" placeholder="Raw Material Name" matInput formControlName="ItemName" />
+              </mat-form-field>
+            </div>
+            <!--
+            <div class="" fxflex="1 0 auto" fxlayout="column" fxlayoutalign="start center">
+              <mat-form-field  fxFlex="100" appearance="outline">
+                  <mat-label>Category</mat-label>
+
+                 <input type="text" placeholder="Category" matInput formControlName="CategoryId"> 
+                     <mat-autocomplete #categoryList="matAutocomplete">
+                        <mat-option *ngFor="let option of categoryFilter | async" [value]="option.CategoryName">
+                        {{option.CategoryName}}
+                        </mat-option>
+                    </mat-autocomplete>
+
+                    <button type="button" mat-icon-button *ngIf="(categoryFilter | async) && !(categoryFilter | async).length && addMaterialForm.get('CategoryId').value" matSuffix>
+                    <mat-icon  (click)="addCategory()">add_circle_outline</mat-icon>
+                    </button>
+               </mat-form-field>
+            </div>
+            <div class="" fxflex="1 0 auto" fxlayout="column" fxlayoutalign="start center">
+              <mat-form-field  fxFlex="100" appearance="outline">
+                  <mat-label>Unit</mat-label>
+
+                    <input type="text" placeholder="Unit of measurment" matInput formControlName="UOMID">
+                    <mat-autocomplete #unitList="matAutocomplete">
+                        <mat-option *ngFor="let option of unitFilter | async" [value]="option.UOM">
+                        {{option.UOM}}
+                        </mat-option>
+                    </mat-autocomplete>
+
+                    <button type="button" mat-icon-button *ngIf="(unitFilter | async) && !(unitFilter | async).length && addMaterialForm.get('UOMID').value" matSuffix>
+                    <mat-icon  (click)="addUnit()">add_circle_outline</mat-icon>
+                    </button>
+
+              </mat-form-field> 
+            </div> -->
+            <div fxLayout="row" fxLayoutAlign="start center">
+                <button mat-raised-button type="button" color="accent" (click)="addRawMaterial()" [disabled]="addMaterialForm.invalid">
+                    Save
+                </button>
+            </div>
+
+</form>
+
+</fuse-sidebar>

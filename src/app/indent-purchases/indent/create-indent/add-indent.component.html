@@ -145,14 +145,15 @@
                   <input type="text" placeholder="Raw Material Name" matInput formControlName="ItemName" />
               </mat-form-field>
             </div>
+            {{ (categoryFilter | async) | json }}
+            
             <div class="" fxflex="1 0 auto" fxlayout="column" fxlayoutalign="start center">
-
               <mat-form-field  fxFlex="100" appearance="outline">
                   <mat-label>Category</mat-label>
 
                  <input type="text" placeholder="Category" matInput formControlName="CategoryId"> 
-                     <mat-autocomplete #categoryList="matAutocomplete">
-                        <mat-option *ngFor="let option of categoryFilter | async" [value]="option.CategoryName">
+                     <mat-autocomplete #category="matAutocomplete">
+                        <mat-option *ngFor="let option of categoryFilter | async" [value]="option">
                         {{option.CategoryName}}
                         </mat-option>
                     </mat-autocomplete>
@@ -161,13 +162,14 @@
                     <mat-icon  (click)="addCategory()">add_circle_outline</mat-icon>
                     </button>
                </mat-form-field>
-                </div>
+            </div>
+            
             <div class="" fxflex="1 0 auto" fxlayout="column" fxlayoutalign="start center">
               <mat-form-field  fxFlex="100" appearance="outline">
                   <mat-label>Unit</mat-label>
 
                     <input type="text" placeholder="Unit of measurment" matInput formControlName="UOMID">
-                    <mat-autocomplete #unitList="matAutocomplete">
+                    <mat-autocomplete #unit="matAutocomplete">
                         <mat-option *ngFor="let option of unitFilter | async" [value]="option.UOM">
                         {{option.UOM}}
                         </mat-option>
@@ -178,7 +180,7 @@
                     </button>
 
               </mat-form-field> 
-            </div>
+            </div> 
             <div fxLayout="row" fxLayoutAlign="start center">
                 <button mat-raised-button type="button" color="accent" (click)="addRawMaterial()" [disabled]="addMaterialForm.invalid">
                     Save

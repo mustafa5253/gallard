@@ -44,8 +44,8 @@
 
                 <ng-container matColumnDef="Sno">
                     <mat-header-cell *matHeaderCellDef [style.width.percentage]="10">S no.</mat-header-cell>
-                    <mat-cell *matCellDef="let material" [style.width.percentage]="10">
-                        <p class="text-truncate">1</p>
+                    <mat-cell *matCellDef="let material;let i = index" [style.width.percentage]="10">
+                        <p class="text-truncate">{{i+1}}</p>
                     </mat-cell>
                 </ng-container>
 
@@ -122,7 +122,7 @@
 
                 <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
 
-                <mat-row *matRowDef="let indent; columns: displayedColumns;"
+                <mat-row *matRowDef="let indent; columns: displayedColumns;let i = index"
                          class="product"
                          matRipple>
                 </mat-row>

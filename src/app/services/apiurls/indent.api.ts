@@ -8,3 +8,9 @@ export const Indent_API = {
     SEARCH_PO_NUMBER: 'MasterApi/SearchPoNumber?PoNumber=:number',
     GENERATE_GRN: 'MasterApi/CreateGRN'
 };
+
+export const Inventory_API = {
+	ISSUE_ITEM: 'MasterApi/IssueItem',
+	GET_ISSUED_ITEM: 'MasterApi/DisplayIssueList',
+	GET_STOCK_LIST: 'MasterApi/DisplayStockList'
+}

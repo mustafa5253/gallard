@@ -11,7 +11,7 @@ import { config } from 'environments/environment';
 import { BaseResponse } from 'app/models/api-models/BaseResponse';
 import { ErrorHandler } from 'app/services/catchManager/catchmanger';
 import { LoginWithPassword } from 'app/models/interfaces/login.interface';
-import { Indent_API } from 'app/services/apiurls/indent.api';
+import { Indent_API, Inventory_API } from 'app/services/apiurls/indent.api';
 import { RAW_MATERIAL } from 'app/services/apiurls/rawMaterial.api';
 import { STOCK_UNIT } from 'app/services/apiurls/unitOfMeasurment.api';
 import { PRODUCT_LIST } from 'app/services/apiurls/product.api';
@@ -203,4 +203,31 @@ export class IndentService {
     }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
   }
 
+  public IssueStock(model): any {
+    return this._http.post(config.apiUrl + Inventory_API.ISSUE_ITEM, model).pipe(map((res) => {
+      const data: BaseResponse<any, any> = res;
+      // data.request = model;
+      // console.log(data);
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+  }
+
+  public GetIssuedItemList(): any {
+    return this._http.get(config.apiUrl + Inventory_API.GET_ISSUED_ITEM).pipe(map((res) => {
+      const data: BaseResponse<any, any> = res;
+      // data.request = model;
+      // console.log(data);
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+  }
+
+
+  public GetStockList(): any {
+    return this._http.get(config.apiUrl + Inventory_API.GET_STOCK_LIST).pipe(map((res) => {
+      const data: BaseResponse<any, any> = res;
+      // data.request = model;
+      // console.log(data);
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+  }
 }

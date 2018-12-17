@@ -23,7 +23,7 @@ export class GeneratePurchaseOrder implements OnInit {
     vendorList = [];
     vendorFilter = [];
     createOrderForm: FormGroup;
-    vendorDetails = {};
+    vendorDetails: any = {};
     public moment = moment;
     isVendorDetailShown;
 

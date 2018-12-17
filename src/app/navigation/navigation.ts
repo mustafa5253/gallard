@@ -26,6 +26,12 @@ export const navigation: FuseNavigation[] = [
                 url  : '/indent/grn'
             },
             {
+                id: 'inventory',
+                title: 'Inventory',
+                type: 'item',
+                url  : '/indent/inventory'
+            },
+            {
                 id: 'material',
                 title: 'Material',
                 type: 'item',
@@ -43,7 +49,6 @@ export const navigation: FuseNavigation[] = [
                 type: 'item',
                 url  : '/indent/units'
             }
-
         ]
     }
     // {

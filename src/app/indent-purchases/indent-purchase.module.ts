@@ -31,6 +31,11 @@ import { MaterialListComponent } from "app/indent-purchases/materials-operation/
 import { UnitListComponent } from "app/indent-purchases/units-operation/units-operation.component";
 import { CategoryListComponent } from "app/indent-purchases/category-operation/category-operation.component";
 import { FuseSidebarModule } from '@fuse/components/sidebar/sidebar.module';
+import { InventoryComponent } from 'app/indent-purchases/inventory/inventory.component';
+import { IssueStockComponent } from 'app/indent-purchases/inventory/issue-stock/issue-stock.component';
+import { IssueStockListComponent } from 'app/indent-purchases/inventory/issue-stock-list/issue-stock-list.component';
+import { StockListComponent } from 'app/indent-purchases/inventory/stock-list/stock-list.component';
+
 
 
 const routes: Routes = [
@@ -45,7 +50,8 @@ const routes: Routes = [
           {path: 'materials', component: MaterialListComponent},
           {path: 'units', component: UnitListComponent},
           {path: 'category', component: CategoryListComponent},
-
+          {path: 'inventory', component: InventoryComponent},
+          {path: 'manage-stock', component: StockListComponent},
         ]
         // resolve  : {
         //     data: EcommerceProductsService
@@ -64,7 +70,11 @@ const routes: Routes = [
         GoodsReceiptNote,
         MaterialListComponent,
         UnitListComponent,
-        CategoryListComponent
+        CategoryListComponent,
+        IssueStockComponent,
+        IssueStockListComponent,
+        InventoryComponent,
+        StockListComponent
         // EcommerceProductsComponent,
         // EcommerceProductComponent,
         // EcommerceOrdersComponent,

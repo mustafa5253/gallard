@@ -16,7 +16,7 @@
             <div class="logo mb-24 mb-md-0"
                  fxLayout="row" fxLayoutAlign="start center">
                 <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-                    Unit of Measurment
+                    Item Issued
                 </span>
             </div>
             <!-- / APP TITLE -->
@@ -25,10 +25,13 @@
             <div class="search-wrapper mx-32 mx-md-0">
                 <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
                     <mat-icon>search</mat-icon>
-                    <input #filter placeholder="Search units">
+                    <input #filter placeholder="Search Item">
                 </div>
             </div>
-            <!-- / SEARCH -->
+<!--             <button mat-raised-button type="button" (click)="generateOrder()">
+                    Generate Order
+            </button>
+ -->            <!-- / SEARCH -->
 
         </div>
         <!-- / HEADER -->
@@ -42,35 +45,41 @@
                        [@animateStagger]="{value:'50'}"
                        fusePerfectScrollbar  (matSortChange)="sortData($event)">
 
-                <ng-container matColumnDef="Sno">
-                    <mat-header-cell *matHeaderCellDef  [style.width.percentage]="10">S no.</mat-header-cell>
-                    <mat-cell *matCellDef="let unit;let i = index" [style.width.percentage]="10">
-                        <p class="text-truncate">{{i+1}}</p>
+                <ng-container matColumnDef="IssuedDate">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header="IssuedDate" [style.width.percentage]="10">Issued Date</mat-header-cell>
+                    <mat-cell *matCellDef="let indent" [style.width.percentage]="10">
+                        <p class="text-truncate">{{moment(indent.IssuedDate).format('MM/DD/YYYY')}}</p>
                     </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="name">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header="name">Name</mat-header-cell>
-                    <mat-cell *matCellDef="let unit">
-                       <p class="text-truncate">{{unit.UOM}}</p>
+                <ng-container matColumnDef="IssuedTo">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header="IssuedTo" [style.width.percentage]="10">Issued To</mat-header-cell>
+                    <mat-cell *matCellDef="let indent">
+                        <p class="text-truncate">{{indent.Name}}</p>
                     </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="action">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header="action">Action</mat-header-cell>
-                    <mat-cell *matCellDef="let unit">
-                        <div fxFlex="row" fxLayoutAlign="end center">
-<!--                             <button  aria-label="Edit" (click)="editMaterial(indent)">
-                                <mat-icon>edit</mat-icon>
-                            </button>
- -->
-                            <button  aria-label="Delete" (click)="deleteUnit(unit.UOMID)" mat-icon-button>
-                                <mat-icon>delete</mat-icon>
-                            </button>
-                        </div>
+                <ng-container matColumnDef="material">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header="name">Material</mat-header-cell>
+                    <mat-cell *matCellDef="let indent">
+                       <p class="text-truncate">{{indent.ItemName}}</p>
                     </mat-cell>
                 </ng-container>
 
+                <ng-container matColumnDef="quantity">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header="quantity">Quantity</mat-header-cell>
+                    <mat-cell *matCellDef="let indent">
+                        <p class="category text-truncate">
+                            {{indent.Quantity}} ({{ indent.UOM}})
+                        </p>
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="category">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header="category">Category</mat-header-cell>
+                    <mat-cell *matCellDef="let indent">
+                        <p class="text-truncate">{{indent.CategoryName}}</p>
+                    </mat-cell>
+                </ng-container>
 
 <!--                 <ng-container matColumnDef="action" >
                     <mat-header-cell *matHeaderCellDef [style.width.px]="50"></mat-header-cell>
@@ -95,8 +104,8 @@
                         </div>
 
                     </mat-cell>
-                </ng-container> -->
-                <!-- Active Column -->
+                </ng-container>
+ -->                <!-- Active Column -->
                 <!-- <ng-container matColumnDef="active">
                     <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Active</mat-header-cell>
                     <mat-cell *matCellDef="let product" fxHide fxShow.gt-xs>
@@ -107,7 +116,7 @@
 
                 <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
 
-                <mat-row *matRowDef="let indent; columns: displayedColumns;let i = index"
+                <mat-row *matRowDef="let indent; columns: displayedColumns;"
                          class="product"
                          matRipple>
                 </mat-row>

@@ -16,7 +16,7 @@
             <div class="logo mb-24 mb-md-0"
                  fxLayout="row" fxLayoutAlign="start center">
                 <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-                    Unit of Measurment
+                    Stock List
                 </span>
             </div>
             <!-- / APP TITLE -->
@@ -25,7 +25,7 @@
             <div class="search-wrapper mx-32 mx-md-0">
                 <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
                     <mat-icon>search</mat-icon>
-                    <input #filter placeholder="Search units">
+                    <input #filter placeholder="Search stock">
                 </div>
             </div>
             <!-- / SEARCH -->
@@ -43,28 +43,43 @@
                        fusePerfectScrollbar  (matSortChange)="sortData($event)">
 
                 <ng-container matColumnDef="Sno">
-                    <mat-header-cell *matHeaderCellDef  [style.width.percentage]="10">S no.</mat-header-cell>
-                    <mat-cell *matCellDef="let unit;let i = index" [style.width.percentage]="10">
+                    <mat-header-cell *matHeaderCellDef [style.width.percentage]="10">S no.</mat-header-cell>
+                    <mat-cell *matCellDef="let material;let i = index" [style.width.percentage]="10">
                         <p class="text-truncate">{{i+1}}</p>
                     </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="name">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header="name">Name</mat-header-cell>
-                    <mat-cell *matCellDef="let unit">
-                       <p class="text-truncate">{{unit.UOM}}</p>
+                <ng-container matColumnDef="material">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header="material">Material</mat-header-cell>
+                    <mat-cell *matCellDef="let material">
+                       <p class="text-truncate">{{material.ItemName}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="category">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header="category">Category</mat-header-cell>
+                    <mat-cell *matCellDef="let material">
+                        <p class="text-truncate">{{material.CategoryName}}</p>
+                    </mat-cell>
+                </ng-container>
+
+
+                <ng-container matColumnDef="quantity">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header="quantity">Quantity</mat-header-cell>
+                    <mat-cell *matCellDef="let material">
+                        <p class="text-truncate">{{material.Quantity}} ({{material.UOM}})</p>
                     </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="action">
                     <mat-header-cell *matHeaderCellDef mat-sort-header="action">Action</mat-header-cell>
-                    <mat-cell *matCellDef="let unit">
+                    <mat-cell *matCellDef="let material">
                         <div fxFlex="row" fxLayoutAlign="end center">
 <!--                             <button  aria-label="Edit" (click)="editMaterial(indent)">
                                 <mat-icon>edit</mat-icon>
                             </button>
  -->
-                            <button  aria-label="Delete" (click)="deleteUnit(unit.UOMID)" mat-icon-button>
+                            <button  aria-label="Delete" (click)="deleteMaterial(material.RawMaterialId)" mat-icon-button>
                                 <mat-icon>delete</mat-icon>
                             </button>
                         </div>
