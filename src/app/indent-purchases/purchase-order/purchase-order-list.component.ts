@@ -4,10 +4,10 @@ import { MatDialog, MatPaginator, MatSort } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
 import { Router } from '@angular/router';
 import { FuseUtils } from '@fuse/utils';
-import { GeneratePurchaseOrder } from "app/indent-purchases/generate-order-modal/generate-order.component";
+import { GeneratePurchaseOrder } from 'app/indent-purchases/generate-order-modal/generate-order.component';
 import { EcommerceProductsService } from 'app/main/apps/e-commerce/products/products.service';
 import { IndentService } from 'app/services/indent.service';
-import { ToasterService } from "app/services/toaster.service";
+import { ToasterService } from 'app/services/toaster.service';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { BehaviorSubject, merge, Observable, Subject } from 'rxjs';
@@ -88,8 +88,10 @@ export class GeneratedIndentList implements OnInit
 
     getPurchaseOrders(): any {
         this._indentService.GetPurchaseOrders(this.poNumber, this.supplierId).subscribe((a: any) => {
-            if (a && a.Body.length) {
+            if (a && a.Body && a.Body.length) {
                 this.dataSource = a.Body;
+            } else {
+                this._toastr.errorToast('No Order Found');
             }
         });
     }
@@ -111,13 +113,13 @@ export class GeneratedIndentList implements OnInit
     }
 
     generateOrder() {
-        let selectedIndent = _.filter(this.dataSource, (o: any) => o.selected);
-        if(selectedIndent && !selectedIndent.length) {
+        const selectedIndent = _.filter(this.dataSource, (o: any) => o.selected);
+        if (selectedIndent && !selectedIndent.length) {
             return this._toastr.warningToast('Please select atleast 1 indent');
         }
         console.log('selectedIndent', selectedIndent);
         const dialogRef = this.dialog.open(GeneratePurchaseOrder, {
-            width: "100%",
+            width: '100%',
             panelClass: 'full-width-modal',
             data: { indentList: selectedIndent }
         });

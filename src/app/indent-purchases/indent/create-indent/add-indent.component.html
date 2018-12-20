@@ -13,8 +13,6 @@
             <div class="h2 mb-12" *ngIf="isUpdate">Update Indent</div>
 
 
-            {{ (materialFilter | async) | json }}
-
 
             <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
 
@@ -124,7 +122,6 @@
                   <input type="text" placeholder="Raw Material Name" matInput formControlName="ItemName" />
               </mat-form-field>
             </div>
-            {{ (categoryFilter | async) | json }}
             
             <div class="" fxflex="1 0 auto" fxlayout="column" fxlayoutalign="start center">
               <mat-form-field  fxFlex="100" appearance="outline">
@@ -132,7 +129,7 @@
 
                  <input type="text" placeholder="Category" matInput formControlName="CategoryId"> 
                      <mat-autocomplete #category="matAutocomplete">
-                        <mat-option *ngFor="let option of categoryFilter | async" [value]="option">
+                        <mat-option *ngFor="let option of (categoryFilter | async)" [value]="option.CategoryName">
                         {{option.CategoryName}}
                         </mat-option>
                     </mat-autocomplete>
@@ -149,7 +146,7 @@
 
                     <input type="text" placeholder="Unit of measurment" matInput formControlName="UOMID">
                     <mat-autocomplete #unit="matAutocomplete">
-                        <mat-option *ngFor="let option of unitFilter | async" [value]="option.UOM">
+                        <mat-option *ngFor="let option of (unitFilter | async)" [value]="option.UOM">
                         {{option.UOM}}
                         </mat-option>
                     </mat-autocomplete>

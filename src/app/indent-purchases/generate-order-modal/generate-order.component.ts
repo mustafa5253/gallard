@@ -18,7 +18,7 @@ import * as _ from 'lodash';
   animations   : fuseAnimations,
 })
 export class GeneratePurchaseOrder implements OnInit {
-  	showSupplierDetail: boolean = true;
+  	showSupplierDetail = true;
     stateList = [];
     cityList = [];
     vendorList = [];
@@ -29,7 +29,7 @@ export class GeneratePurchaseOrder implements OnInit {
     isVendorDetailShown;
 
     @Input() dataSource: any[] = [];
-    displayedColumns = ['serial','date', 'number', 'name','category', 'qty', 'unit', 'price', 'action'];
+    displayedColumns = ['serial', 'date', 'number', 'name', 'category', 'qty', 'unit', 'price', 'action'];
 
     // Private
     private _unsubscribeAll: Subject<any>;
@@ -57,8 +57,9 @@ export class GeneratePurchaseOrder implements OnInit {
         this.getState();
 
         _.map(this.data.indentList, (o) => {
+          o.CreateDate = moment(o.CreateDate).format('MM/DD/YYYY');
           return o.OrderQuantity = o.Quantity;  
-        })
+        });
     }
 
     initCreateOrderForm() {
@@ -109,7 +110,7 @@ export class GeneratePurchaseOrder implements OnInit {
 
     generateOrder() {
       this.createOrderForm.get('PONumber').enable(); 
-      let requestObj = this.createOrderForm.value;
+      const requestObj = this.createOrderForm.value;
       this.createOrderForm.get('PONumber').disable();
 
       // _.forEach(this.data.indentList, function(o) {
@@ -134,7 +135,7 @@ export class GeneratePurchaseOrder implements OnInit {
     }
 
     GenerateUniqueID() {
-      return (Math.random() * (105000 - 784001) + 784001)|0;
+      return (Math.random() * (105000 - 784001) + 784001) | 0;
     }
 
 
@@ -144,12 +145,17 @@ export class GeneratePurchaseOrder implements OnInit {
 
     getMaterialHistory(id) {
       this._indentService.GetMaterialHistory(id).subscribe((a) => {
+        if (a && a.Body.length) {
+
+        } else {
+          this._toastr.errorToast('No history found');
+        }
         console.log(a);
       });
     }
 
     removeIndent(idx) {
-      if(idx) {
+      if (idx) {
         this.data.indentList.splice(idx, 1);        
       } else {
         this._toastr.warningToast('Atleast 1 indent required');

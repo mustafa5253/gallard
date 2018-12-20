@@ -178,9 +178,16 @@ e-commerce-products {
 
 .full-width-modal {
     max-width: 100% !important;
+    height: 100%;
 }
 .full-width-modal mat-dialog-actions {
     background: #eee !important;
     margin: 0 -25px;
     padding: 0 25px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+.mat-dialog-container {
+    padding-bottom: 100px;
 }
