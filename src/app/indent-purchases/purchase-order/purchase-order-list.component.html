@@ -84,7 +84,7 @@
 
                 <mat-row *matRowDef="let indent; columns: displayedColumns;"
                          class="product"
-                         matRipple>
+                         matRipple (click)="createToGrn(indent.PONumber)">
                 </mat-row>
 
             </mat-table>

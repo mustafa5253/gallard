@@ -5,7 +5,7 @@ export const Indent_API = {
     GENERATE_PO: 'MasterApi/CreatePO',
     GET_PO: 'MasterApi/DisplayPOList',
     CREATE_GRN: 'MasterApi/CreateGRN',
-    SEARCH_PO_NUMBER: 'MasterApi/SearchPoNumber?PoNumber=:number',
+    SEARCH_PO_NUMBER: 'MasterApi/DisplayPOListbyPoNumber?PoNumber=:number',
     GENERATE_GRN: 'MasterApi/CreateGRN',
     GET_MATERIAL_HISTORY: 'MasterApi/GetPriceHistory?RawMaterialId=:id'
 

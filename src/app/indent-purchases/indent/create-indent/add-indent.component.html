@@ -13,8 +13,6 @@
             <div class="h2 mb-12" *ngIf="isUpdate">Update Indent</div>
 
 
-            {{ materialList | json }}
-
             {{ (materialFilter | async) | json }}
 
 
@@ -114,7 +112,7 @@
 
 
 
-<fuse-sidebar name="rawMaterialForm" position="right" class="width-400 p-24">
+<fuse-sidebar name="rawMaterialForm" position="right" class="width-400 p-24 bg-white">
   
        <form class="" [formGroup]="addMaterialForm">
             <div class="h2 mb-12">Add Material</div>

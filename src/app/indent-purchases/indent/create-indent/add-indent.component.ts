@@ -72,17 +72,17 @@ export class AddIndentComponent implements OnInit, OnDestroy {
             }
         });
 
-        // this.addMaterialForm.controls['CategoryId'].valueChanges.subscribe((value) => {
-        //     if (value) {
-        //          this.categoryFilter = of(this._filter(value, 'category'));
-        //       }
-        // });
+        this.addMaterialForm.controls['CategoryId'].valueChanges.subscribe((value) => {
+            if (value) {
+                 this.categoryFilter = of(this._filter(value, 'category'));
+              }
+        });
 
-        // this.addMaterialForm.controls['UOMID'].valueChanges.subscribe((value) => {
-        //    if (value) {
-        //         this.unitFilter = of(this._filter(value, 'unit'));
-        //     }
-        // });
+        this.addMaterialForm.controls['UOMID'].valueChanges.subscribe((value) => {
+           if (value) {
+                this.unitFilter = of(this._filter(value, 'unit'));
+            }
+        });
 
     }
 
@@ -129,7 +129,7 @@ export class AddIndentComponent implements OnInit, OnDestroy {
             if (a && a.Status.toLowerCase() === 'success') {
                 this._toastr.successToast('Indent added succesfully');
                 this.indentCreated.emit(true);
-                this.indentForm =  this.createIndentForm();
+                this.indentForm.reset();
                 this.materialFilter = of(this.materialList);
             } else {
                 this._toastr.errorToast(a.Status);
@@ -142,6 +142,7 @@ export class AddIndentComponent implements OnInit, OnDestroy {
         this._indentService.GetRawMaterial().subscribe((a: any) => {
             if (a) {
                 this.materialList = a.Body;
+                this.materialFilter = of(a.Body);
             }
         });
     }

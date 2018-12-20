@@ -49,6 +49,7 @@ export class GoodsReceiptNote implements OnInit
     moment = moment;
 
     searchNumber = null;
+    poID = null;
     // Private
     private _unsubscribeAll: Subject<any>;
 
@@ -57,7 +58,8 @@ export class GoodsReceiptNote implements OnInit
         private _ecommerceProductsService: EcommerceProductsService,
         private _indentService: IndentService,
         private _toastr: ToasterService,
-        private _route: Router
+        private _route: Router,
+        private _activatedRoute: ActivatedRoute
     )
     {
         // Set the private defaults
@@ -89,9 +91,16 @@ export class GoodsReceiptNote implements OnInit
 
         //         // this.dataSource.filter = this.filter.nativeElement.value;
         //     });
+        this._activatedRoute.queryParams.subscribe(params => {
+             if (params['poNumber']) {
+                 this.poID = params['poNumber'];
+                 this.getOrderByNumber(params['poNumber']);
+             }
+        });
     }
 
     getOrderByNumber(poNumber): any {
+        this.poID = _.cloneDeep(poNumber);
         this._indentService.GetOrderByNumber(poNumber).subscribe((a: any) => {
             if (a && a.Body && a.Body.length) {
                 this.dataSource = a.Body;
@@ -134,7 +143,7 @@ export class GoodsReceiptNote implements OnInit
 
     generateGRN() {
     let requestObj = {
-        POID: this.searchNumber,
+        POID: this.poID,
         PoList: this.dataSource
     };
          this._indentService.GenerateGRN(requestObj).subscribe((a: any) => {
@@ -157,6 +166,7 @@ export class GoodsReceiptNote implements OnInit
         this.dataSource = data.sort((a, b) => {
           const isAsc = sort.direction === 'asc';
           switch (sort.active) {
+            case 'IndentId': return compare(a.IndentId, b.IndentId, isAsc);
             case 'CategoryName': return compare(a.CategoryName, b.CategoryName, isAsc);
             case 'ItemName': return compare(a.ItemName, b.ItemName, isAsc);
             case 'CreateDate': return compare(a.CreateDate, b.CreateDate, isAsc);

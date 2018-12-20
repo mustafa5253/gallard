@@ -2,6 +2,7 @@ import { DataSource } from '@angular/cdk/collections';
 import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatDialog, MatPaginator, MatSort } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
+import { Router } from '@angular/router';
 import { FuseUtils } from '@fuse/utils';
 import { GeneratePurchaseOrder } from "app/indent-purchases/generate-order-modal/generate-order.component";
 import { EcommerceProductsService } from 'app/main/apps/e-commerce/products/products.service';
@@ -49,7 +50,8 @@ export class GeneratedIndentList implements OnInit
         public dialog: MatDialog,
         private _ecommerceProductsService: EcommerceProductsService,
         private _indentService: IndentService,
-        private _toastr: ToasterService
+        private _toastr: ToasterService,
+        private _route: Router
     )
     {
         // Set the private defaults
@@ -145,6 +147,11 @@ export class GeneratedIndentList implements OnInit
           }
         });
       }
+
+    createToGrn(poNumber) {
+      this._route.navigate(['indent', 'grn'], { queryParams: {poNumber}});
+    }
+
 }
 function compare(a: number | string, b: number | string, isAsc: boolean): any {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);

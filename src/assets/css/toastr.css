@@ -197,22 +197,29 @@
   }
   
 
-  .table_input {
-    border: 1px solid #ddd;
-    width: 74%;
-    padding: 10px;
-    margin: 0 15px 0 0;
+.table_input {
+  border: 1px solid #ddd;
+  width: 74%;
+  padding: 10px;
+  margin: 0 15px 0 0;
 }
 
 
 .width-400 {
-    width: 400px; 
-    max-width: 400px;
+  width: 400px; 
+  max-width: 400px;
 }
 .bg-white {
   background: #fff !important;
 }
 
 .mat-form-field-appearance-outline .mat-form-field-infix {
-      padding: 10px 0 !important;
+  padding: 10px 0 !important;
+  top: -5px !important;
 }
+
+.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label, .mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus + .mat-form-field-label-wrapper .mat-form-field-label {
+  -webkit-transform: translateY(-22px) scale(0.75) !important;
+  transform: translateY(-22px) scale(0.75) !important;
+}
+

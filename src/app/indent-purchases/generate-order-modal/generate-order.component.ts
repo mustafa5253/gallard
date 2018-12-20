@@ -1,6 +1,7 @@
 import {Component, Input, Inject, OnInit} from '@angular/core';
 import {MatDialog, MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import { ToasterService } from '../../services/toaster.service';
+import { Router } from '@angular/router';
 import { BehaviorSubject, fromEvent, merge, Observable, Subject } from 'rxjs';
 import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -37,7 +38,7 @@ export class GeneratePurchaseOrder implements OnInit {
         private _formBuilder: FormBuilder,
         private _indentService: IndentService,
         private _toastr: ToasterService,
-        private _fuseSidebarService: FuseSidebarService
+        private _fuseSidebarService: FuseSidebarService,
     )
     {
         // Set the private defaults
