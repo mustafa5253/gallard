@@ -13,6 +13,10 @@
             <div class="h2 mb-12" *ngIf="isUpdate">Update Indent</div>
 
 
+            {{ materialList | json }}
+
+            {{ (materialFilter | async) | json }}
+
 
             <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
 
@@ -25,8 +29,8 @@
         
                 <mat-form-field  fxFlex="50" class="pr-24" appearance="outline">
                     <mat-label>Material Name</mat-label>
-                    <input type="text" placeholder="Type to search.." matInput formControlName="RawMaterialId" [matAutocomplete]="materialList">
-                    <mat-autocomplete #materialList="matAutocomplete">
+                    <input type="text" placeholder="Type to search.." matInput formControlName="RawMaterialId" [matAutocomplete]="materialDD">
+                    <mat-autocomplete #materialDD="matAutocomplete">
                         <mat-option *ngFor="let option of materialFilter | async" [value]="option.ItemName" (onSelectionChange)="onSelectMaterial(option)">
                         {{option.ItemName}}
                         </mat-option>
@@ -43,17 +47,6 @@
                         {{item.CategoryName}}
                         </mat-option>
                     </mat-select>
-                    <!-- <input type="text" placeholder="Category" matInput formControlName="CategoryId"> -->
-                    <!-- <mat-autocomplete #categoryList="matAutocomplete">
-                        <mat-option *ngFor="let option of categoryFilter | async" [value]="option.CategoryName">
-                        {{option.CategoryName}}
-                        </mat-option>
-                    </mat-autocomplete>
-
-                    <button type="button" mat-icon-button *ngIf="(categoryFilter | async) && !(categoryFilter | async).length && indentForm.get('CategoryId').value" matSuffix>
-                    <mat-icon  (click)="addCategory()">add_circle_outline</mat-icon>
-                    </button>
- -->
                 </mat-form-field>
             </div>
 
@@ -70,18 +63,6 @@
                         {{item.UOM}}
                         </mat-option>
                     </mat-select>
-
-<!--                     <input type="text" placeholder="Unit of measurment" matInput formControlName="UOMID"> -->
-<!--                     <mat-autocomplete #unitList="matAutocomplete">
-                        <mat-option *ngFor="let option of unitFilter | async" [value]="option.UOM">
-                        {{option.UOM}}
-                        </mat-option>
-                    </mat-autocomplete>
-
-                    <button type="button" mat-icon-button *ngIf="(unitFilter | async) && !(unitFilter | async).length && indentForm.get('UOMID').value" matSuffix>
-                    <mat-icon  (click)="addUnit()">add_circle_outline</mat-icon>
-                    </button>
- -->
                 </mat-form-field>
 
                 <mat-form-field   fxFlex="50" class="pr-24" appearance="outline">

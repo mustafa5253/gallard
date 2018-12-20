@@ -5,7 +5,7 @@
     <h3 class="mb-0"><strong>Supplier Details</strong></h3>
 
             <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
-                <mat-form-field  fxFlex="30" class="pr-24" appearance="outline">
+                <mat-form-field  fxFlex="30" class="pr-12" appearance="outline">
                   <mat-label>Full Name</mat-label>
                   <mat-select placeholder="Select Vendor" (selectionChange)="onSelectVendor($event.value)">
                     <mat-option *ngFor="let vendor of vendorList" [value]="vendor">
@@ -13,7 +13,7 @@
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
-                <button mat-icon-button (click)="showVendorDetail()" *ngIf="vendorDetails.VendorName">
+                <button mat-icon-button (click)="showVendorDetail()" class="mt-8" *ngIf="vendorDetails.VendorName">
                   <mat-icon>remove_red_eye</mat-icon>                  
                 </button>
             </div>
@@ -123,14 +123,14 @@
 
  <section>
   
-              <mat-table class="products-table mat-elevation-z8 mb-48"
+              <mat-table class="products-table mat-elevation-z8 mb-48 pb-24"
                        #table [dataSource]="data.indentList"
                        fusePerfectScrollbar>
 
                 <ng-container matColumnDef="serial">
                     <mat-header-cell *matHeaderCellDef [style.width.percentage]="10">S no.</mat-header-cell>
                     <mat-cell *matCellDef="let indent; let i = index" [style.width.percentage]="10">
-                        <p class="text-truncate">{{i}}</p>
+                        <p class="text-truncate">{{i + 1}}</p>
                     </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="date">
@@ -172,7 +172,7 @@
                 <ng-container matColumnDef="qty">
                     <mat-header-cell *matHeaderCellDef>Quantity</mat-header-cell>
                     <mat-cell *matCellDef="let indent">
-                      <input type="text" name="{{indent.IndentId}}" [(ngModel)]="indent.Quantity" class="table_input" />
+                      <input type="text" name="{{indent.IndentId}}" [(ngModel)]="indent.OrderQuantity" class="table_input" />
                     </mat-cell>
                 </ng-container>
 
@@ -186,31 +186,23 @@
                 <ng-container matColumnDef="price">
                     <mat-header-cell *matHeaderCellDef>Price</mat-header-cell>
                     <mat-cell *matCellDef="let indent">
-                      <input type="text" name="{{indent.price}}" class="table_input" [(ngModel)]="indent.price" />
+                      <input type="text" name="{{indent.price}}" class="table_input" [(ngModel)]="indent.Price" />
                     </mat-cell>
                 </ng-container>
 
 
                 <ng-container matColumnDef="action" >
-                    <mat-header-cell *matHeaderCellDef [style.width.px]="50"></mat-header-cell>
-                    <mat-cell *matCellDef="let indent" [style.width.px]="50">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let indent;let i = index">
                         <div fxFlex="row" fxLayoutAlign="end center">
-                            <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
-                                    (click)="$event.stopPropagation();">
-                                <mat-icon class="secondary-text">more_vert</mat-icon>
-                            </button>
+                        <button mat-icon-button (click)="getMaterialHistory(indent.RawMaterialId)">
+                          <mat-icon>history</mat-icon>                  
+                        </button>
 
-                            <mat-menu #moreMenu="matMenu">
-                                <button mat-menu-item aria-label="Edit">
-                                    <mat-icon>edit</mat-icon>
-                                    <span>Edit</span>
-                                </button>
+                        <button mat-icon-button (click)="removeIndent(i)">
+                          <mat-icon>delete</mat-icon>                  
+                        </button>
 
-                                <button mat-menu-item aria-label="remove">
-                                    <mat-icon>delete</mat-icon>
-                                    <span>Remove</span>
-                                </button>
-                            </mat-menu>
                         </div>
 
                     </mat-cell>

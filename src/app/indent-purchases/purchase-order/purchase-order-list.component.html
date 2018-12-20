@@ -1,37 +1,12 @@
-<div id="products" class="page-layout carded fullwidth inner-scroll mb-48">
 
-    <!-- TOP BACKGROUND -->
-    <div class="top-bg accent"></div>
-    <!-- / TOP BACKGROUND -->
+<div class="page-layout simple fullwidth">
 
-    <!-- CENTER -->
-    <div class="center">
+    <!-- HEADER -->
+    <div class="header accent p-24" fxLayout="row" fxLayoutAlign="start center">
+        <h2>Generated Order List</h2>
+    </div>
 
-        <!-- HEADER -->
-        <div class="header accent"
-             fxLayout="column" fxLayoutAlign="center center"
-             fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between center">
 
-            <!-- APP TITLE -->
-            <div class="logo mb-24 mb-md-0"
-                 fxLayout="row" fxLayoutAlign="start center">
-                <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-                    Generated Order List
-                </span>
-            </div>
-            <!-- / APP TITLE -->
-
-            <!-- SEARCH -->
-            <div class="search-wrapper mx-32 mx-md-0">
-                <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
-                    <mat-icon>search</mat-icon>
-                    <input #filter placeholder="Search order">
-                </div>
-            </div>
-            <!-- / SEARCH -->
-
-        </div>
-        <!-- / HEADER -->
 
         <!-- CONTENT CARD -->
         <div class="content-card">
@@ -123,6 +98,4 @@
 
         </div>
         <!-- / CONTENT CARD -->
-    </div>
-    <!-- / CENTER -->
 </div>

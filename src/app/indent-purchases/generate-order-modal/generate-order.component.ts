@@ -54,6 +54,10 @@ export class GeneratePurchaseOrder implements OnInit {
         this.createOrderForm = this.initCreateOrderForm();
         this.getAllVendor();
         this.getState();
+
+        _.map(this.data.indentList, (o) => {
+          return o.OrderQuantity = o.Quantity;  
+        })
     }
 
     initCreateOrderForm() {
@@ -65,7 +69,7 @@ export class GeneratePurchaseOrder implements OnInit {
             Despatchhrough: [''],
             TermsofDelivery: [''],
             PinCode: [''],
-            IndentKey: ['']
+            // IndentKey: ['']
         });
     }
 
@@ -107,17 +111,16 @@ export class GeneratePurchaseOrder implements OnInit {
       let requestObj = this.createOrderForm.value;
       this.createOrderForm.get('PONumber').disable();
 
-      let indentKeys = [];
-      _.forEach(this.data.indentList, function(o) {
-          return indentKeys.push(o.IndentId);
-      });
+      // _.forEach(this.data.indentList, function(o) {
+      //     return indentKeys.push(o.IndentId);
+      // });
 
-      if(indentKeys.length) {
-        requestObj.IndentKey = String(indentKeys);
-      }
-
+      // if(indentKeys.length) {
+      //   requestObj.IndentKey = String(indentKeys);
+      // }
+      requestObj.PoList = this.data.indentList;
       requestObj.PODate = moment(requestObj.PODate).format('MM/DD/YYYY');
-      requestObj.ID = requestObj.PONumber;
+      // requestObj.ID = requestObj.PONumber;
 
      this._indentService.GeneratePurchaseOrder(requestObj).subscribe((a: any) => {
         if (a && a.Status.toLowerCase() === 'success') {
@@ -127,7 +130,6 @@ export class GeneratePurchaseOrder implements OnInit {
             this._toastr.errorToast(a.Status);
         }
       });
-     
     }
 
     GenerateUniqueID() {
@@ -137,5 +139,19 @@ export class GeneratePurchaseOrder implements OnInit {
 
     showVendorDetail() {
       this._fuseSidebarService.getSidebar('vendorDetailsAside').toggleOpen();
+    }
+
+    getMaterialHistory(id) {
+      this._indentService.GetMaterialHistory(id).subscribe((a) => {
+        console.log(a);
+      });
+    }
+
+    removeIndent(idx) {
+      if(idx) {
+        this.data.indentList.splice(idx, 1);        
+      } else {
+        this._toastr.warningToast('Atleast 1 indent required');
+      }
     }
 }

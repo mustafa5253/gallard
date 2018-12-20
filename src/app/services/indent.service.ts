@@ -176,8 +176,19 @@ export class IndentService {
     }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
   }
 
-  public GetPurchaseOrders(): any {
-    return this._http.get(config.apiUrl + Indent_API.GET_PO).pipe(map((res) => {
+  public GetPurchaseOrders(poNumber, supplierId): any {
+    if (!poNumber) {
+      poNumber = 0;
+    }
+    if (!supplierId) {
+      supplierId = 0;
+    }
+
+    let query = '?PoNumber=' + poNumber + '&SupplierId=' + supplierId;
+
+ 
+
+    return this._http.get(config.apiUrl + Indent_API.GET_PO + query).pipe(map((res) => {
       const data: BaseResponse<any, any> = res;
       // data.request = model;
       // console.log(data);
@@ -224,6 +235,15 @@ export class IndentService {
 
   public GetStockList(): any {
     return this._http.get(config.apiUrl + Inventory_API.GET_STOCK_LIST).pipe(map((res) => {
+      const data: BaseResponse<any, any> = res;
+      // data.request = model;
+      // console.log(data);
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+  }
+
+  public GetMaterialHistory(id): any {
+    return this._http.get(config.apiUrl + Indent_API.GET_MATERIAL_HISTORY.replace(':id', id)).pipe(map((res) => {
       const data: BaseResponse<any, any> = res;
       // data.request = model;
       // console.log(data);

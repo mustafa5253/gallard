@@ -4,6 +4,7 @@
 /dist
 /tmp
 /out-tsc
+/public
 
 # dependencies
 /node_modules
@@ -33,6 +34,10 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+/.firebaserc
+.firebase/
+firebase.json
+storage.rules
 
 # System Files
 .DS_Store

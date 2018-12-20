@@ -148,7 +148,7 @@ export class FuseThemeOptionsComponent implements OnInit, OnDestroy
             ]
         };
 
-        this._fuseNavigationService.addNavigationItem(customFunctionNavItem, 'end');
+        // this._fuseNavigationService.addNavigationItem(customFunctionNavItem, 'end');
     }
 
     /**

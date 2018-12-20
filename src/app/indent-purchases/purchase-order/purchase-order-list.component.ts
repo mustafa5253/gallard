@@ -1,29 +1,20 @@
-import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MatPaginator, MatSort } from '@angular/material';
 import { DataSource } from '@angular/cdk/collections';
-import { BehaviorSubject, fromEvent, merge, Observable, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
-
+import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { MatDialog, MatPaginator, MatSort } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseUtils } from '@fuse/utils';
-
-import { EcommerceProductsService } from 'app/main/apps/e-commerce/products/products.service';
-import { takeUntil } from 'rxjs/internal/operators';
-import { IndentService } from 'app/services/indent.service';
-import {MatDialog} from '@angular/material';
-import * as _ from 'lodash';
 import { GeneratePurchaseOrder } from "app/indent-purchases/generate-order-modal/generate-order.component";
-import * as moment from 'moment';
+import { EcommerceProductsService } from 'app/main/apps/e-commerce/products/products.service';
+import { IndentService } from 'app/services/indent.service';
 import { ToasterService } from "app/services/toaster.service";
+import * as _ from 'lodash';
+import * as moment from 'moment';
+import { BehaviorSubject, merge, Observable, Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 
-export const IndentList = [
-    { selected: false, IndentDate: '08/12/2018', priority: 'Normal', category: 'Production', material: { name: 'Thread Lock', uniqueName: 'threadlock'}, quantity: 100.00, unit: 'kgs'},
-    { selected: false, IndentDate: '07/12/2018', priority: 'Urgent', category: 'Maintenance', material: { name: 'Ferro Manganese HC', uniqueName: 'threadlock'}, quantity: 2000.00, unit: 'kgs'},
-    { selected: false, IndentDate: '04/12/2018', priority: 'Urgent', category: 'Mould Coats', material: { name: 'Black Japan Paints', uniqueName: 'threadlock'}, quantity: 100.00, unit: 'ltr'},
-    { selected: false, IndentDate: '02/12/2018', priority: 'Urgent', category: 'Electrical', material: { name: 'Silica Sand', uniqueName: 'threadlock'}, quantity: 25000.00, unit: 'kgs'},
-    { selected: false, IndentDate: '01/12/2018', priority: 'Normal', category: 'Production', material: { name: 'Grinding Wheel 2', uniqueName: 'threadlock'}, quantity: 20.00, unit: 'pcs'},
-];
+
+
 
 @Component({
     selector     : 'purchase-order-list',
@@ -46,6 +37,11 @@ export class GeneratedIndentList implements OnInit
     @ViewChild('filter')
     filter: ElementRef;
     moment = moment;
+
+    poNumber = 0;
+    supplierId = 0;
+
+
     // Private
     private _unsubscribeAll: Subject<any>;
 
@@ -89,7 +85,7 @@ export class GeneratedIndentList implements OnInit
     }
 
     getPurchaseOrders(): any {
-        this._indentService.GetPurchaseOrders().subscribe((a: any) => {
+        this._indentService.GetPurchaseOrders(this.poNumber, this.supplierId).subscribe((a: any) => {
             if (a && a.Body.length) {
                 this.dataSource = a.Body;
             }

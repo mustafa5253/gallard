@@ -1,29 +1,17 @@
-import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation, Input, Output, EventEmitter, OnChanges } from '@angular/core';
-import { MatPaginator, MatSort } from '@angular/material';
 import { DataSource } from '@angular/cdk/collections';
-import { BehaviorSubject, fromEvent, merge, Observable, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
-
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import { MatDialog, MatPaginator, MatSort } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseUtils } from '@fuse/utils';
-
-import { EcommerceProductsService } from 'app/main/apps/e-commerce/products/products.service';
-import { takeUntil } from 'rxjs/internal/operators';
-import { IndentService } from 'app/services/indent.service';
-import {MatDialog} from '@angular/material';
-import * as _ from 'lodash';
 import { GeneratePurchaseOrder } from "app/indent-purchases/generate-order-modal/generate-order.component";
-import * as moment from 'moment';
+import { EcommerceProductsService } from 'app/main/apps/e-commerce/products/products.service';
+import { IndentService } from 'app/services/indent.service';
 import { ToasterService } from "app/services/toaster.service";
+import * as _ from 'lodash';
+import * as moment from 'moment';
+import { BehaviorSubject, merge, Observable, Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
-
-export const IndentList = [
-    { selected: false, IndentDate: '08/12/2018', priority: 'Normal', category: 'Production', material: { name: 'Thread Lock', uniqueName: 'threadlock'}, quantity: 100.00, unit: 'kgs'},
-    { selected: false, IndentDate: '07/12/2018', priority: 'Urgent', category: 'Maintenance', material: { name: 'Ferro Manganese HC', uniqueName: 'threadlock'}, quantity: 2000.00, unit: 'kgs'},
-    { selected: false, IndentDate: '04/12/2018', priority: 'Urgent', category: 'Mould Coats', material: { name: 'Black Japan Paints', uniqueName: 'threadlock'}, quantity: 100.00, unit: 'ltr'},
-    { selected: false, IndentDate: '02/12/2018', priority: 'Urgent', category: 'Electrical', material: { name: 'Silica Sand', uniqueName: 'threadlock'}, quantity: 25000.00, unit: 'kgs'},
-    { selected: false, IndentDate: '01/12/2018', priority: 'Normal', category: 'Production', material: { name: 'Grinding Wheel 2', uniqueName: 'threadlock'}, quantity: 20.00, unit: 'pcs'},
-];
 
 @Component({
     selector     : 'indent-list',
@@ -32,8 +20,8 @@ export const IndentList = [
     animations   : fuseAnimations,
     encapsulation: ViewEncapsulation.None
 })
-export class IndentListComponent implements OnInit, OnChanges
-{
+
+export class IndentListComponent implements OnInit, OnChanges {
     @Input() refreshList: boolean = false;
     @Output() updateIndent: EventEmitter<any> = new EventEmitter(null);
     dataSource: any[] = [];
@@ -61,10 +49,6 @@ export class IndentListComponent implements OnInit, OnChanges
         // Set the private defaults
         this._unsubscribeAll = new Subject();
     }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Lifecycle hooks
-    // -----------------------------------------------------------------------------------------------------
 
     /**
      * On init
@@ -104,7 +88,6 @@ export class IndentListComponent implements OnInit, OnChanges
     }
 
     deleteIndent(indentId): any {
-        console.log(indentId);
         this._indentService.DeleteIndent(indentId).subscribe(a => {
             if (a && a.Status.toLowerCase() === 'success') {
                 this._toastr.successToast('Indent deleted succesfully');
@@ -120,7 +103,6 @@ export class IndentListComponent implements OnInit, OnChanges
         if(selectedIndent && !selectedIndent.length) {
             return this._toastr.warningToast('Please select atleast 1 indent');
         }
-        console.log('selectedIndent', selectedIndent);
         const dialogRef = this.dialog.open(GeneratePurchaseOrder, {
             width: "100%",
             panelClass: 'full-width-modal',
@@ -128,8 +110,7 @@ export class IndentListComponent implements OnInit, OnChanges
         });
 
         dialogRef.afterClosed().subscribe(result => {
-        this.getIndentList();
-          console.log(`Dialog result: ${result}`);
+            this.getIndentList();
         });
 
     }

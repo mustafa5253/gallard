@@ -19,29 +19,18 @@ import { takeUntil } from 'rxjs/internal/operators';
     animations   : fuseAnimations,
     encapsulation: ViewEncapsulation.None
 })
-export class IndentComponent implements OnInit
-{
-    refreshList: boolean = false;
-    constructor(
-
-    )
-    {
+export class IndentComponent implements OnInit {
+    public refreshList: boolean = false;
+    constructor() {
+        // 
     }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Lifecycle hooks
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * On init
-     */
-    ngOnInit(): void
-    {
-        
+    public ngOnInit(): void {
+        // 
     }
 
-    indentCreated(isCreated) {
-        this.refreshList = isCreated
+    public indentCreated(isCreated) {
+        this.refreshList = isCreated;
     }
 }
 
