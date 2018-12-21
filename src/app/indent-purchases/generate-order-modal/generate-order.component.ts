@@ -143,9 +143,14 @@ export class GeneratePurchaseOrder implements OnInit {
       this._fuseSidebarService.getSidebar('vendorDetailsAside').toggleOpen();
     }
 
-    getMaterialHistory(id) {
-      this._indentService.GetMaterialHistory(id).subscribe((a) => {
+    getPriceHistory(id, idx) {
+      this._indentService.GetPriceHistory(id).subscribe((a) => {
         if (a && a.Body.length) {
+            let quantityPerPrice = [];
+            _.forEach(a.Body, (obj) => {
+              return quantityPerPrice.push(obj.Price / obj.Quantity);
+            });
+            console.log(quantityPerPrice);
 
         } else {
           this._toastr.errorToast('No history found');

@@ -242,7 +242,7 @@ export class IndentService {
     }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
   }
 
-  public GetMaterialHistory(id): any {
+  public GetPriceHistory(id): any {
     return this._http.get(config.apiUrl + Indent_API.GET_MATERIAL_HISTORY.replace(':id', id)).pipe(map((res) => {
       const data: BaseResponse<any, any> = res;
       // data.request = model;

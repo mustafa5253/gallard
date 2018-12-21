@@ -33,10 +33,6 @@
                         <input type="text" placeholder="Name" matInput formControlName="Name">
                 </mat-form-field>
         
-            </div>
-
-            <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
-
                 <mat-form-field  fxFlex="50" class="pr-24" appearance="outline">
                     <mat-label>Material Name</mat-label>
                     <input type="text" placeholder="Type to search.." matInput formControlName="RawMaterialId" [matAutocomplete]="materialList">
@@ -45,7 +41,7 @@
                         {{option.ItemName}}
                         </mat-option>
                     </mat-autocomplete>
-                    <button type="button" mat-icon-button *ngIf="(materialFilter | async) && !(materialFilter | async).length && indentForm.get('RawMaterialId').value" matSuffix>
+                    <button type="button" mat-icon-button *ngIf="(materialFilter | async) && !(materialFilter | async).length && IssueStockForm.get('RawMaterialId').value" matSuffix>
                     <mat-icon  (click)="openRawMaterialForm()">add_circle_outline</mat-icon>
                     </button>
                 </mat-form-field>
@@ -56,6 +52,11 @@
                         <input type="text" placeholder="Quantity" matInput formControlName="Quantity">
                 </mat-form-field>
             </div>
+
+<!--             <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
+
+
+            </div> -->
             <div fxLayout="row" fxLayoutAlign="start center">
                 <button mat-raised-button type="button" color="accent" (click)="IssueStock()" [disabled]="!IssueStockForm.valid"  *ngIf="!isUpdate">
                     Save

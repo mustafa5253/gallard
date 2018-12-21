@@ -8,10 +8,51 @@
 
 
 
-        <!-- CONTENT CARD -->
-        <div class="content-card">
+      <form class="p-24 pb-0 purchaseOrderForm">
 
-            <mat-table class="products-table"
+
+
+            <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="end center">
+                <!-- <div class="h2 pr-12"  fxFlexAlign="center">Search by </div> -->
+
+                <mat-form-field   fxFlex="15" class="pr-12" appearance="outline">
+                        <input type="text" placeholder="PO Number" matInput name="PONumber" [(ngModel)]="poNumber">
+                </mat-form-field>
+                
+                <span  fxFlexAlign="center" class="pr-12" >Or</span>
+
+
+
+                <mat-form-field   fxFlex="25" class="pr-24" appearance="outline">
+                    <mat-label>Supplier</mat-label>
+                        <mat-select placeholder="Select Vendor" [(ngModel)]="supplierId" name="supplierId">
+                        <mat-option *ngFor="let vendor of vendorList" [value]="vendor.VendorId">
+                          {{vendor.VendorName}}
+                        </mat-option>
+                    </mat-select>
+                        <!-- <input type="text" placeholder="Supplier ID" matInput name="supplierId" [(ngModel)]="supplierId"> -->
+                </mat-form-field>
+
+                <div fxFlexAlign="center">
+                    <button mat-raised-button type="submit" color="accent" (click)="getPurchaseOrders()">Search</button>
+                </div>
+            </div>
+
+            <!-- <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
+
+
+            </div> -->
+            <div fxLayout="row" fxLayoutAlign="start center">
+                
+            </div>
+
+        </form>
+
+
+        <!-- CONTENT CARD -->
+        <div class="content-card p-24 content">
+
+            <mat-table class="products-table mat-card "
                        #table [dataSource]="dataSource"
                        matSort
                        [@animateStagger]="{value:'50'}"

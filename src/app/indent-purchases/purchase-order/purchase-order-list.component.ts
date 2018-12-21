@@ -39,8 +39,9 @@ export class GeneratedIndentList implements OnInit
     filter: ElementRef;
     moment = moment;
 
-    poNumber = 0;
-    supplierId = 0;
+    poNumber = null;
+    supplierId = null;
+    vendorList = [];
 
 
     // Private
@@ -83,6 +84,7 @@ export class GeneratedIndentList implements OnInit
 
         //         // this.dataSource.filter = this.filter.nativeElement.value;
         //     });
+        this.getAllVendor();
         this.getPurchaseOrders();
     }
 
@@ -91,6 +93,7 @@ export class GeneratedIndentList implements OnInit
             if (a && a.Body && a.Body.length) {
                 this.dataSource = a.Body;
             } else {
+                this.dataSource = [];
                 this._toastr.errorToast('No Order Found');
             }
         });
@@ -152,6 +155,14 @@ export class GeneratedIndentList implements OnInit
 
     createToGrn(poNumber) {
       this._route.navigate(['indent', 'grn'], { queryParams: {poNumber}});
+    }
+
+    getAllVendor() {
+      this._indentService.GetAllVendor().subscribe((a: any) => {
+        if (a) {
+            this.vendorList = a.Body;
+        }
+      });
     }
 
 }

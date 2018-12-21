@@ -82,23 +82,23 @@ export class IssueStockComponent implements OnInit
         this.IssueStockForm = this.IssueNewStock();
 
 
-    this.indentForm.controls['RawMaterialId'].valueChanges.subscribe((value) => {
+    this.IssueStockForm.controls['RawMaterialId'].valueChanges.subscribe((value) => {
         if (value) {
             this.materialFilter = of(this._filter(value, 'material'));
         }
     });
 
-    this.addMaterialForm.controls['CategoryId'].valueChanges.subscribe((value) => {
-        if (value) {
-             this.categoryFilter = of(this._filter(value, 'category'));
-          }
-    });
+    // this.addMaterialForm.controls['CategoryId'].valueChanges.subscribe((value) => {
+    //     if (value) {
+    //          this.categoryFilter = of(this._filter(value, 'category'));
+    //       }
+    // });
 
-    this.addMaterialForm.controls['UOMID'].valueChanges.subscribe((value) => {
-       if (value) {
-            this.unitFilter = of(this._filter(value, 'unit'));
-        }
-    });
+    // this.addMaterialForm.controls['UOMID'].valueChanges.subscribe((value) => {
+    //    if (value) {
+    //         this.unitFilter = of(this._filter(value, 'unit'));
+    //     }
+    // });
 
 
 
@@ -156,7 +156,7 @@ export class IssueStockComponent implements OnInit
             if (a && a.Status.toLowerCase() === 'success') {
                 this._toastr.successToast('Stock issued succesfully');
                 this.indentCreated.emit(true);
-                this.IssueStockForm =  this.IssueNewStock();
+                this.IssueStockForm.reset();
             } else {
                 this._toastr.errorToast(a.Status);
                 this.indentCreated.emit(false); 
