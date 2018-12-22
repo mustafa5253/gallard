@@ -1,6 +1,6 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewEncapsulation, Inject, OnChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 import { IndentService } from "app/services/indent.service";
@@ -8,12 +8,6 @@ import { ToasterService } from "app/services/toaster.service";
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { Observable, of, Subject } from 'rxjs';
-
-
-
-
-
-
 
 export const gstList = [0, 5, 12, 18, 28];
 export const priority = ['normal', 'urgent'];
@@ -25,7 +19,7 @@ export const priority = ['normal', 'urgent'];
     animations   : fuseAnimations,
     encapsulation: ViewEncapsulation.None
 })
-export class AddIndentComponent implements OnInit, OnDestroy {
+export class AddIndentComponent implements OnInit, OnDestroy, OnChanges {
 
     @Output('indentCreated') public indentCreated: EventEmitter<boolean> = new EventEmitter(false);
     public pageType: string;
@@ -47,6 +41,8 @@ export class AddIndentComponent implements OnInit, OnDestroy {
     // Private
     private _unsubscribeAll: Subject<any>;
     constructor(
+        public dialogRef: MatDialogRef<AddIndentComponent>,
+        @Inject(MAT_DIALOG_DATA) public data: any,
         private _formBuilder: FormBuilder,
         private _matSnackBar: MatSnackBar,
         private _indentService: IndentService,
@@ -84,6 +80,15 @@ export class AddIndentComponent implements OnInit, OnDestroy {
             }
         });
 
+        if(this.data && this.data.RawMaterialId) {
+            let objToPatch = _.cloneDeep(this.data);
+            objToPatch.RawMaterialId = objToPatch.ItemName;
+            this.indentForm.patchValue(objToPatch);
+            this.isUpdate = true;
+        } else {
+            this.isUpdate = false;
+        }
+
     }
 
     public createIndentForm(): FormGroup {
@@ -109,28 +114,15 @@ export class AddIndentComponent implements OnInit, OnDestroy {
     }
 
     public addNewIndent(): any {
-        this.indentForm.get('IndentId').enable();
-        const model: any = _.cloneDeep(this.indentForm.value);
-        this.indentForm.get('IndentId').disable();
-
-        let RawMaterial = _.find(this.materialList, (o: any) => {
-                return o.ItemName === model.RawMaterialId;
-        });
-
-        if (RawMaterial) {
-            model.RawMaterialId = RawMaterial.RawMaterialId;
-        } else {
-            return this._toastr.errorToast("Raw Material doesn't exist");
-        }
-
-        model.CreateDate = moment(model.CreateDate).format('MM/DD/YYYY');
-
+        let model = this.prepareRequest();
         this._indentService.AddIndent(model).subscribe(a => {
-            if (a && a.Status.toLowerCase() === 'success') {
+            if (a && a.Status && a.Status.toLowerCase() === 'success') {
                 this._toastr.successToast('Indent added succesfully');
                 this.indentCreated.emit(true);
                 this.indentForm.reset();
+                this.indentForm.get('IndentId').patchValue(this.GenerateUniqueID());
                 this.materialFilter = of(this.materialList);
+                this.dialogRef.close(true);                
             } else {
                 this._toastr.errorToast(a.Status);
                 this.indentCreated.emit(false);
@@ -166,10 +158,10 @@ export class AddIndentComponent implements OnInit, OnDestroy {
     public  addRawMaterial() {
         let obj = this.addMaterialForm.value;
         this._indentService.AddRawMaterial(obj).subscribe((a: any) => {
-           if (a && a.Status.toLowerCase() === 'success') {
+           if (a && a.Status && a.Status.toLowerCase() === 'success') {
                this.materialList.push(a.Body);
                this._toastr.successToast('Material added succesfully');
-                this.addMaterialForm = this.addNewRawMaterial();
+                this.addMaterialForm.reset();
            } else {
               this._toastr.errorToast(a.Status);
            }
@@ -183,8 +175,9 @@ export class AddIndentComponent implements OnInit, OnDestroy {
             return this._toastr.warningToast("Unit can't be blank");
         }
         this._indentService.AddStockUnit(val).subscribe((a: any) => {
-           if (a && a.Status.toLowerCase() === 'success') {
+           if (a && a.Status && a.Status.toLowerCase() === 'success') {
                this.unitList.push(a.Body);
+               this.addMaterialForm.patchValue({UOMID: a.Body.UOMID});
                this._toastr.successToast('Unit added succesfully');
            } else {
               this._toastr.errorToast(a.Status);
@@ -198,8 +191,9 @@ export class AddIndentComponent implements OnInit, OnDestroy {
             return this._toastr.warningToast("Category can't be blank");
         }
         this._indentService.AddCategory(val).subscribe((a: any) => {
-            if (a && a.Status.toLowerCase() === 'success') {
+            if (a && a.Status && a.Status.toLowerCase() === 'success') {
                 this.categoryList.push(a.Body);
+                this.addMaterialForm.patchValue({CategoryId: a.Body.CategoryId});
                this._toastr.successToast('Category added succesfully');
            } else {
               this._toastr.errorToast(a.Status);
@@ -229,13 +223,49 @@ export class AddIndentComponent implements OnInit, OnDestroy {
     }
 
     public updateIndent() {
-        //
+        let model = this.prepareRequest();
+        this._indentService.UpdateIndent(model).subscribe(a => {
+            if (a && a.Status && a.Status.toLowerCase() === 'success') {
+                this._toastr.successToast('Indent updated succesfully');
+                this.materialFilter = of(this.materialList);
+                this.dialogRef.close(true);
+            } else {
+                this._toastr.errorToast(a.Status);
+            }
+        });
+
+    }
+
+    prepareRequest(){
+        this.indentForm.get('IndentId').enable();
+        const model: any = _.cloneDeep(this.indentForm.value);
+        this.indentForm.get('IndentId').disable();
+
+        let RawMaterial = _.find(this.materialList, (o: any) => {
+                return o.ItemName === model.RawMaterialId;
+        });
+
+        if (RawMaterial) {
+            model.RawMaterialId = RawMaterial.RawMaterialId;
+        } else {
+            return this._toastr.errorToast("Raw Material doesn't exist");
+        }
+
+        model.CreateDate = moment(model.CreateDate).format('MM/DD/YYYY');
+        return model;
     }
 
     public ngOnDestroy(): void {
         // Unsubscribe from all subscriptions
         this._unsubscribeAll.next();
         this._unsubscribeAll.complete();
+    }
+
+    /**
+     * ngOnChanges
+     */
+    public ngOnChanges(s) {
+        console.log(s);
     }
 
     private _filter(value: string, type) {

@@ -1,18 +1,6 @@
-<div class="page-layout simple fullwidth">
-
-    <!-- HEADER -->
-    <div class="header accent p-24" fxLayout="row" fxLayoutAlign="start center">
-        <h2>Indent</h2>
-    </div>
-    <!-- / HEADER -->
-
-    <!-- CONTENT -->
-    <div class="content p-24">
-       <form class="example-form mat-card content p-24" [formGroup]="indentForm">
+       <form class="" [formGroup]="indentForm">
             <div class="h2 mb-12" *ngIf="!isUpdate">Add Indent</div>
             <div class="h2 mb-12" *ngIf="isUpdate">Update Indent</div>
-
-
 
             <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
 
@@ -102,17 +90,12 @@
             </div>
 
         </form>
-        
-    </div>
-    <!-- / CONTENT -->
-
-</div>
 
 
 
 <fuse-sidebar name="rawMaterialForm" position="right" class="width-400 p-24 bg-white">
   
-       <form class="" [formGroup]="addMaterialForm">
+       <form class="example-form" [formGroup]="addMaterialForm">
             <div class="h2 mb-12">Add Material</div>
 
             
@@ -122,15 +105,14 @@
                   <input type="text" placeholder="Raw Material Name" matInput formControlName="ItemName" />
               </mat-form-field>
             </div>
-            
+        
             <div class="" fxflex="1 0 auto" fxlayout="column" fxlayoutalign="start center">
               <mat-form-field  fxFlex="100" appearance="outline">
                   <mat-label>Category</mat-label>
-
-                 <input type="text" placeholder="Category" matInput formControlName="CategoryId"> 
+                 <input type="text" placeholder="Category" matInput formControlName="CategoryId" [matAutocomplete]="category"> 
                      <mat-autocomplete #category="matAutocomplete">
-                        <mat-option *ngFor="let option of (categoryFilter | async)" [value]="option.CategoryName">
-                        {{option.CategoryName}}
+                        <mat-option *ngFor="let category of (categoryFilter | async)" [value]="category.CategoryName">
+                        {{ category.CategoryName }}
                         </mat-option>
                     </mat-autocomplete>
 
@@ -144,7 +126,7 @@
               <mat-form-field  fxFlex="100" appearance="outline">
                   <mat-label>Unit</mat-label>
 
-                    <input type="text" placeholder="Unit of measurment" matInput formControlName="UOMID">
+                    <input type="text" placeholder="Unit of measurment" matInput formControlName="UOMID"  [matAutocomplete]="unit">
                     <mat-autocomplete #unit="matAutocomplete">
                         <mat-option *ngFor="let option of (unitFilter | async)" [value]="option.UOM">
                         {{option.UOM}}

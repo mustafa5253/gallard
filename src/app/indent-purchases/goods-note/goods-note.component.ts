@@ -104,6 +104,12 @@ export class GoodsReceiptNote implements OnInit
         this._indentService.GetOrderByNumber(poNumber).subscribe((a: any) => {
             if (a && a.Body && a.Body.length) {
                 this.dataSource = a.Body;
+
+                this.dataSource = _.map(this.dataSource, (o) => {
+                   o.CreateDate = moment(o.CreateDate).format('MM/DD/YYYY');
+                   return o;
+                });
+
             }
         });
     }

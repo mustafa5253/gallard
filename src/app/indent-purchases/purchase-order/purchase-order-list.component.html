@@ -24,7 +24,7 @@
 
 
                 <mat-form-field   fxFlex="25" class="pr-24" appearance="outline">
-                    <mat-label>Supplier</mat-label>
+                    <mat-label>Supplier Name</mat-label>
                         <mat-select placeholder="Select Vendor" [(ngModel)]="supplierId" name="supplierId">
                         <mat-option *ngFor="let vendor of vendorList" [value]="vendor.VendorId">
                           {{vendor.VendorName}}
@@ -73,17 +73,39 @@
                 </ng-container>
 
                 <ng-container matColumnDef="supplier">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header="supplier">Supplier</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef mat-sort-header="supplier">Supplier Name</mat-header-cell>
                     <mat-cell *matCellDef="let indent">
                         <p class="text-truncate">{{indent.VendorName}}</p>
                     </mat-cell>
                 </ng-container>
 
 
+                <ng-container matColumnDef="SupplierRef">
+                    <mat-header-cell *matHeaderCellDef>Supplier Ref.</mat-header-cell>
+                    <mat-cell *matCellDef="let indent">
+                        <p class="text-truncate">{{indent.SupplierRef}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="TermsofDelivery">
+                    <mat-header-cell *matHeaderCellDef>Terms of Delivery</mat-header-cell>
+                    <mat-cell *matCellDef="let indent">
+                        <p class="text-truncate">{{indent.TermsofDelivery}}</p>
+                    </mat-cell>
+                </ng-container>
+
+
                 <ng-container matColumnDef="dispatch">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header="dispatch">Dispatch</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef>Dispatch Through</mat-header-cell>
                     <mat-cell *matCellDef="let indent">
                         <p class="text-truncate">{{indent.Despatchhrough}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="create">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let indent">
+                      <button mat-stroked-button color="primary" (click)="createToGrn(indent.PONumber)">Generate</button>
                     </mat-cell>
                 </ng-container>
 
@@ -124,8 +146,7 @@
                 <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
 
                 <mat-row *matRowDef="let indent; columns: displayedColumns;"
-                         class="product"
-                         matRipple (click)="createToGrn(indent.PONumber)">
+                         class="product">
                 </mat-row>
 
             </mat-table>

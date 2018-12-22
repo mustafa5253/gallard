@@ -56,7 +56,7 @@ export class GeneratePurchaseOrder implements OnInit {
         this.getAllVendor();
         this.getState();
 
-        _.map(this.data.indentList, (o) => {
+        this.data.indentList = _.map(this.data.indentList, (o) => {
           o.CreateDate = moment(o.CreateDate).format('MM/DD/YYYY');
           return o.OrderQuantity = o.Quantity;  
         });
@@ -104,13 +104,11 @@ export class GeneratePurchaseOrder implements OnInit {
       this.vendorDetails = vendor;
       this.createOrderForm.controls['SupplierId'].patchValue(vendor.VendorId);
       this.createOrderForm.controls['PinCode'].patchValue(vendor.PinCode);
-
-      console.log(vendor);
     }
 
     generateOrder() {
       this.createOrderForm.get('PONumber').enable(); 
-      const requestObj = this.createOrderForm.value;
+      let requestObj = this.createOrderForm.value;
       this.createOrderForm.get('PONumber').disable();
 
       // _.forEach(this.data.indentList, function(o) {
@@ -144,18 +142,21 @@ export class GeneratePurchaseOrder implements OnInit {
     }
 
     getPriceHistory(id, idx) {
+      let selectedIdx = this.data.indentList[idx];
+      if(!selectedIdx.Price || !selectedIdx.OrderQuantity) {
+        return;
+      }
+      let selectedIndentPriceQty = this.data.indentList[idx].Price / this.data.indentList[idx].OrderQuantity;
       this._indentService.GetPriceHistory(id).subscribe((a) => {
         if (a && a.Body.length) {
             let quantityPerPrice = [];
             _.forEach(a.Body, (obj) => {
-              return quantityPerPrice.push(obj.Price / obj.Quantity);
+              let pricePerQty = obj.Price / obj.Quantity;
+              if (selectedIndentPriceQty / 10*100 > pricePerQty / 10*100) {
+               return this._toastr.warningToast('Price for material '+ obj.ItemName + ' is more than 10% of the previous order');
+              }
             });
-            console.log(quantityPerPrice);
-
-        } else {
-          this._toastr.errorToast('No history found');
         }
-        console.log(a);
       });
     }
 

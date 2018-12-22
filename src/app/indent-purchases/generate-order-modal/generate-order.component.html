@@ -171,8 +171,8 @@
  -->
                 <ng-container matColumnDef="qty">
                     <mat-header-cell *matHeaderCellDef>Quantity</mat-header-cell>
-                    <mat-cell *matCellDef="let indent">
-                      <input type="text" name="{{indent.IndentId}}" [(ngModel)]="indent.OrderQuantity" class="table_input" />
+                    <mat-cell *matCellDef="let indent;let i = index">
+                      <input type="text" name="{{indent.IndentId}}" [(ngModel)]="indent.OrderQuantity" class="table_input" (blur)="getPriceHistory(indent.RawMaterialId, i)"/>
                     </mat-cell>
                 </ng-container>
 
@@ -195,10 +195,10 @@
                     <mat-header-cell *matHeaderCellDef></mat-header-cell>
                     <mat-cell *matCellDef="let indent;let i = index">
                         <div fxFlex="row" fxLayoutAlign="end center">
-                        <button mat-icon-button (click)="getPriceHistory(indent.RawMaterialId, i)">
+<!--                         <button mat-icon-button (click)="getPriceHistory(indent.RawMaterialId, i)">
                           <mat-icon>history</mat-icon>                  
                         </button>
-
+ -->
                         <button mat-icon-button (click)="removeIndent(i)">
                           <mat-icon>delete</mat-icon>                  
                         </button>
@@ -211,8 +211,7 @@
                 <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
 
                 <mat-row *matRowDef="let indent; columns: displayedColumns;let i = index"
-                         class="product"
-                         matRipple>
+                         class="product">
                 </mat-row>
 
             </mat-table>
@@ -225,7 +224,8 @@
 </mat-dialog-actions>
 
 
-<fuse-sidebar name="vendorDetailsAside" [folded]="isVendorDetailShown" position="right" class="width-400 p-12">
+<fuse-sidebar name="vendorDetailsAside" [folded]="isVendorDetailShown" position="right" class="width-400 p-12 bg-white">
+  <h3><strong>Vendor Details</strong></h3>
             <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
               <mat-form-field  fxFlex="50" class="pr-24" appearance="outline">
                   <mat-label>Supplier ID</mat-label>

@@ -28,6 +28,7 @@ import { InventoryComponent } from 'app/indent-purchases/inventory/inventory.com
 import { IssueStockComponent } from 'app/indent-purchases/inventory/issue-stock/issue-stock.component';
 import { IssueStockListComponent } from 'app/indent-purchases/inventory/issue-stock-list/issue-stock-list.component';
 import { StockListComponent } from 'app/indent-purchases/inventory/stock-list/stock-list.component';
+import { IndentHistoryComponent } from 'app/indent-purchases/indent/indent-history-modal/indent-history.component';
 
 
 
@@ -67,7 +68,8 @@ const routes: Routes = [
         IssueStockComponent,
         IssueStockListComponent,
         InventoryComponent,
-        StockListComponent
+        StockListComponent,
+        IndentHistoryComponent
     ],
     imports     : [
         RouterModule.forChild(routes),
@@ -106,7 +108,9 @@ const routes: Routes = [
         GeneratePurchaseOrder
     ],
     entryComponents: [
-        GeneratePurchaseOrder
+        GeneratePurchaseOrder,
+        IndentHistoryComponent,
+        AddIndentComponent
     ]
 })
 export class IndentPurchaseModule

@@ -223,3 +223,7 @@
   transform: translateY(-22px) scale(0.75) !important;
 }
 
+
+.content {
+  background: #f8f9fa;
+}

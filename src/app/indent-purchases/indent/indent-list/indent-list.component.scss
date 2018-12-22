@@ -153,12 +153,15 @@ e-commerce-products {
     border: none;
     outline: 0;
 }
+.cdk-column-serial {
+    max-width: 58px;
+}
 
 .cdk-column-selected {
     max-width: 58px;
 }
 .cdk-column-action {
-    max-width: 50px;
+    max-width: 85px;
 }
 .cdk-column-priority {
     max-width: 80px;
@@ -190,4 +193,10 @@ e-commerce-products {
 }
 .mat-dialog-container {
     padding-bottom: 100px;
+}
+.medium-modal {
+    min-height: 80vh;
+}
+.max-950 {
+    max-width: 950px !important;
 }

@@ -20,12 +20,6 @@ export const navigation: FuseNavigation[] = [
                 url  : '/indent/generated'
             },
             {
-                id: 'goodsReceipt',
-                title: 'Goods Receipt Note',
-                type: 'item',
-                url  : '/indent/grn'
-            },
-            {
                 id: 'isueStock',
                 title: 'Issue Stock',
                 type: 'item',

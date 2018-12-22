@@ -11,6 +11,8 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 import { BehaviorSubject, merge, Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { IndentHistoryComponent } from 'app/indent-purchases/indent/indent-history-modal/indent-history.component';
+import { AddIndentComponent } from "app/indent-purchases/indent/create-indent/add-indent.component";
 
 
 @Component({
@@ -36,6 +38,8 @@ export class IndentListComponent implements OnInit, OnChanges {
     @ViewChild('filter')
     filter: ElementRef;
     moment = moment;
+
+
     // Private
     private _unsubscribeAll: Subject<any>;
 
@@ -84,7 +88,16 @@ export class IndentListComponent implements OnInit, OnChanges {
     }
 
     editIndent(obj): any {
-        this.updateIndent.emit(obj);
+        const dialogRef = this.dialog.open(AddIndentComponent, {
+            width: '100%',
+            panelClass: 'max-950',
+            data: obj
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            console.log(result);
+        });
+
     }
 
     deleteIndent(indentId): any {
@@ -135,7 +148,27 @@ export class IndentListComponent implements OnInit, OnChanges {
         });
     }
 
+    getIndentHistory(id) {
+        this._indentService.GetIndentHistory(id).subscribe(a => {
+            if(a && a.Body) {
+                this.dialog.open(IndentHistoryComponent, {
+                    width: '100%',
+                    panelClass: 'medium-modal',
+                    data: { indentList: a.Body }
+                });
 
+            } else {
+                this._toastr.errorToast('No history found');
+            }
+        })
+    }
+
+    createIndent() {
+        this.dialog.open(AddIndentComponent, {
+            width: '100%',
+            panelClass: 'max-950',
+        });
+    }
 
     ngOnChanges(s) {
         if (s && s.refreshList.currentValue) {

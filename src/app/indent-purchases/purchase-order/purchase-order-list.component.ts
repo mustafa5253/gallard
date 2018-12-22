@@ -27,7 +27,7 @@ import { map } from 'rxjs/operators';
 export class GeneratedIndentList implements OnInit
 {
     dataSource: any[] = [];
-    displayedColumns = ['date', 'number', 'supplier', 'dispatch'];
+    displayedColumns = ['date', 'number', 'supplier','SupplierRef', 'TermsofDelivery', 'dispatch', 'create'];
 
     @ViewChild(MatPaginator)
     paginator: MatPaginator;

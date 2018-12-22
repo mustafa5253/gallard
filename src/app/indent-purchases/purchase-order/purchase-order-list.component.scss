@@ -188,3 +188,10 @@ e-commerce-products {
 .purchaseOrderForm .mat-form-field-wrapper {
     padding-bottom: 0 !important;
 } 
+
+.mat-column-create, .mat-column-date, .mat-column-number {
+    max-width: 150px;
+}
+.mat-column-dispatch  {
+    max-width: 160px;
+}

@@ -48,6 +48,16 @@ export class IndentService {
     }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
   }
 
+  public UpdateIndent(model): any {
+    return this._http.post(config.apiUrl + Indent_API.UPDATE, model).pipe(map((res) => {
+      const data: BaseResponse<any, any> = res;
+      // data.request = model;
+      // console.log(data);
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+  }
+
+
   public DeleteIndent(indentId): any {
     return this._http.delete(config.apiUrl + Indent_API.DELETE.replace(':indentId', indentId)).pipe(map((res) => {
       const data: BaseResponse<any, any> = res;
@@ -243,11 +253,22 @@ export class IndentService {
   }
 
   public GetPriceHistory(id): any {
-    return this._http.get(config.apiUrl + Indent_API.GET_MATERIAL_HISTORY.replace(':id', id)).pipe(map((res) => {
+    return this._http.get(config.apiUrl + Indent_API.GET_PRICE_HISTORY.replace(':id', id)).pipe(map((res) => {
       const data: BaseResponse<any, any> = res;
       // data.request = model;
       // console.log(data);
       return data;
     }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
   }
+
+  public GetIndentHistory(id): any {
+    return this._http.get(config.apiUrl + Indent_API.GET_INDENT_HISTORY.replace(':id', id)).pipe(map((res) => {
+      const data: BaseResponse<any, any> = res;
+      // data.request = model;
+      // console.log(data);
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+  }
+
+  
 }
