@@ -25,7 +25,7 @@
             <div class="search-wrapper mx-32 mx-md-0">
                 <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
                     <mat-icon>search</mat-icon>
-                    <input #filter placeholder="Search material">
+                    <input (keyup)=search($event) placeholder="Search material">
                 </div>
             </div>
             <!-- / SEARCH -->
@@ -42,7 +42,7 @@
                        [@animateStagger]="{value:'50'}"
                        fusePerfectScrollbar  (matSortChange)="sortData($event)">
 
-                <ng-container matColumnDef="Sno">
+                <ng-container matColumnDef="serial">
                     <mat-header-cell *matHeaderCellDef [style.width.percentage]="10">S no.</mat-header-cell>
                     <mat-cell *matCellDef="let material;let i = index" [style.width.percentage]="10">
                         <p class="text-truncate">{{i+1}}</p>
@@ -74,15 +74,18 @@
                 <ng-container matColumnDef="action">
                     <mat-header-cell *matHeaderCellDef mat-sort-header="action">Action</mat-header-cell>
                     <mat-cell *matCellDef="let material">
-                        <div fxFlex="row" fxLayoutAlign="end center">
-<!--                             <button  aria-label="Edit" (click)="editMaterial(indent)">
-                                <mat-icon>edit</mat-icon>
-                            </button>
- -->
                             <button  aria-label="Delete" (click)="deleteMaterial(material.RawMaterialId)" mat-icon-button>
                                 <mat-icon>delete</mat-icon>
                             </button>
-                        </div>
+
+                        <!-- <div fxFlex="row" fxLayoutAlign="end center">
+                             <button  aria-label="Edit" (click)="editMaterial(indent)">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                             <button  aria-label="Delete" (click)="deleteMaterial(material.RawMaterialId)" mat-icon-button>
+                                <mat-icon>delete</mat-icon>
+                            </button> 
+                        </div> -->
                     </mat-cell>
                 </ng-container>
 

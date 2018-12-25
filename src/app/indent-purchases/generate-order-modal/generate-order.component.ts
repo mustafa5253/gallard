@@ -58,7 +58,8 @@ export class GeneratePurchaseOrder implements OnInit {
 
         this.data.indentList = _.map(this.data.indentList, (o) => {
           o.CreateDate = moment(o.CreateDate).format('MM/DD/YYYY');
-          return o.OrderQuantity = o.Quantity;  
+           o.OrderQuantity = o.Quantity;
+           return o;  
         });
     }
 

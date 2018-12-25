@@ -25,7 +25,7 @@
             <div class="search-wrapper mx-32 mx-md-0">
                 <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
                     <mat-icon>search</mat-icon>
-                    <input #filter placeholder="Search Indent">
+                    <input  name="search" (keyup)="search($event)" placeholder="Search Indent">
                 </div>
             </div>
             <div class="">

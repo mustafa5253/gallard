@@ -7,10 +7,8 @@ import { debounceTime, distinctUntilChanged, map, startWith } from 'rxjs/operato
 import { fuseAnimations } from '@fuse/animations';
 import { FuseUtils } from '@fuse/utils';
 
-import { EcommerceProductsService } from 'app/main/apps/e-commerce/products/products.service';
 import { takeUntil } from 'rxjs/internal/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Product } from 'app/main/apps/e-commerce/product/product.model';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import { IndentService } from "app/services/indent.service";

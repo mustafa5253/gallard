@@ -65,18 +65,24 @@ export class AddIndentComponent implements OnInit, OnDestroy, OnChanges {
         this.indentForm.controls['RawMaterialId'].valueChanges.subscribe((value) => {
             if (value) {
                 this.materialFilter = of(this._filter(value, 'material'));
+            } else {
+                this.materialFilter = of(this.materialList);
             }
         });
 
         this.addMaterialForm.controls['CategoryId'].valueChanges.subscribe((value) => {
             if (value) {
                  this.categoryFilter = of(this._filter(value, 'category'));
+              } else {
+                  this.categoryFilter = of(this.categoryList);
               }
         });
 
         this.addMaterialForm.controls['UOMID'].valueChanges.subscribe((value) => {
            if (value) {
                 this.unitFilter = of(this._filter(value, 'unit'));
+            } else {
+                this.unitFilter = of(this.unitList);
             }
         });
 
@@ -93,7 +99,7 @@ export class AddIndentComponent implements OnInit, OnDestroy, OnChanges {
 
     public createIndentForm(): FormGroup {
         return this._formBuilder.group({
-            CreateDate: ['', [Validators.required]],
+            CreateDate: [moment(), [Validators.required]],
             RawMaterialId: ['', [Validators.required]],
             CategoryId: [{value: '', disabled: true}],
             Quantity: ['', [Validators.required]],
@@ -143,6 +149,7 @@ export class AddIndentComponent implements OnInit, OnDestroy, OnChanges {
         this._indentService.GetStockUnit().subscribe((a: any) => {
             if (a) {
                 this.unitList = a.Body;
+                this.unitFilter = of(this.unitList);                
             }
         });
     }
@@ -151,6 +158,7 @@ export class AddIndentComponent implements OnInit, OnDestroy, OnChanges {
         this._indentService.GetCategory().subscribe((a: any) => {
             if (a) {
                 this.categoryList = a.Body;
+                this.categoryFilter = of(this.categoryList);
             }
         });
     }
@@ -159,9 +167,11 @@ export class AddIndentComponent implements OnInit, OnDestroy, OnChanges {
         let obj = this.addMaterialForm.value;
         this._indentService.AddRawMaterial(obj).subscribe((a: any) => {
            if (a && a.Status && a.Status.toLowerCase() === 'success') {
-               this.materialList.push(a.Body);
-               this._toastr.successToast('Material added succesfully');
-                this.addMaterialForm.reset();
+            this.materialList.push(a.Body);
+            this.materialFilter = of(this.materialList);
+            this._toastr.successToast('Material added succesfully');
+            this.addMaterialForm.reset();
+            this.onSelectMaterial(a.Body);
            } else {
               this._toastr.errorToast(a.Status);
            }
@@ -177,7 +187,9 @@ export class AddIndentComponent implements OnInit, OnDestroy, OnChanges {
         this._indentService.AddStockUnit(val).subscribe((a: any) => {
            if (a && a.Status && a.Status.toLowerCase() === 'success') {
                this.unitList.push(a.Body);
+               this.unitFilter = of(this.unitList);
                this.addMaterialForm.patchValue({UOMID: a.Body.UOMID});
+               this.indentForm.patchValue({CategoryId: a.Body.UOMID});                               
                this._toastr.successToast('Unit added succesfully');
            } else {
               this._toastr.errorToast(a.Status);
@@ -193,7 +205,9 @@ export class AddIndentComponent implements OnInit, OnDestroy, OnChanges {
         this._indentService.AddCategory(val).subscribe((a: any) => {
             if (a && a.Status && a.Status.toLowerCase() === 'success') {
                 this.categoryList.push(a.Body);
+                this.categoryFilter = of(this.categoryList);                
                 this.addMaterialForm.patchValue({CategoryId: a.Body.CategoryId});
+                this.indentForm.patchValue({CategoryId: a.Body.CategoryId});                
                this._toastr.successToast('Category added succesfully');
            } else {
               this._toastr.errorToast(a.Status);
@@ -268,8 +282,32 @@ export class AddIndentComponent implements OnInit, OnDestroy, OnChanges {
         console.log(s);
     }
 
-    private _filter(value: string, type) {
+    public selectCategory(CategoryId) {
+        if (!CategoryId) {
+            return;
+        }
+        let selection = this.categoryList.find(e => e.CategoryId === CategoryId);
+        if (selection) {
+            return selection.CategoryName;
+        }
+    }
 
+    public selectUnit(unitId) {
+        if (!unitId) {
+            return;
+        }
+        let selection = this.unitList.find(e => e.UOMID === unitId);
+        if (selection) {
+            return selection.UOM;
+        }
+    }
+
+
+    private _filter(value: string, type) {
+        
+        if(Number(value)) {
+            return;
+        }
         let filterValue = value.toLowerCase();
         switch (type) {
             case 'material': {

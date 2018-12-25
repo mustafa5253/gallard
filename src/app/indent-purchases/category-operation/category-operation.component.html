@@ -25,7 +25,7 @@
             <div class="search-wrapper mx-32 mx-md-0">
                 <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
                     <mat-icon>search</mat-icon>
-                    <input #filter placeholder="Search category">
+                    <input (keyup)="search($event)" placeholder="Search category">
                 </div>
             </div>
             <!-- / SEARCH -->
@@ -42,8 +42,8 @@
                        [@animateStagger]="{value:'50'}"
                        fusePerfectScrollbar  (matSortChange)="sortData($event)">
 
-                <ng-container matColumnDef="Sno">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header="Sno" [style.width.percentage]="10">S no.</mat-header-cell>
+                <ng-container matColumnDef="serial">
+                    <mat-header-cell *matHeaderCellDef [style.width.percentage]="10">S no.</mat-header-cell>
                     <mat-cell *matCellDef="let category;let i = index" [style.width.percentage]="10">
                         <p class="text-truncate">{{i+1}}</p>
                     </mat-cell>

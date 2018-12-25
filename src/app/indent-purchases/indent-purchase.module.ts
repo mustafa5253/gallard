@@ -11,7 +11,6 @@ import { AgmCoreModule } from '@agm/core';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { FuseWidgetModule } from '@fuse/components/widget/widget.module';
 
-import { EcommerceProductsService } from 'app/main/apps/e-commerce/products/products.service';
 import { IndentListComponent } from 'app/indent-purchases/indent/indent-list/indent-list.component';
 import { IndentService } from 'app/services/indent.service';
 import { AddIndentComponent } from 'app/indent-purchases/indent/create-indent/add-indent.component';
@@ -102,7 +101,6 @@ const routes: Routes = [
     ],
     providers   : [
         IndentService,
-        EcommerceProductsService,
     ],
     exports: [
         GeneratePurchaseOrder
