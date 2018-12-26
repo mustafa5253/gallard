@@ -67,7 +67,7 @@ export class GeneratePurchaseOrder implements OnInit {
         return this._formBuilder.group({
             SupplierId: ['', [Validators.required]],
             PONumber: [{value: this.GenerateUniqueID(), disabled: true}],
-            PODate: ['', [Validators.required]],
+            PODate: [moment(), [Validators.required]],
             SupplierRef: [''],
             Despatchhrough: [''],
             TermsofDelivery: [''],
@@ -162,8 +162,8 @@ export class GeneratePurchaseOrder implements OnInit {
     }
 
     removeIndent(idx) {
-      if (idx) {
-        this.data.indentList.splice(idx, 1);        
+      if (this.data.indentList.length > 1) {
+        this.data.indentList = this.data.indentList.splice(idx, 1);        
       } else {
         this._toastr.warningToast('Atleast 1 indent required');
       }

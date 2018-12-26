@@ -15,7 +15,7 @@ export const navigation: FuseNavigation[] = [
             },
             {
                 id: 'generatedIndent',
-                title: 'Generated Indent',
+                title: 'Generated PO',
                 type: 'item',
                 url  : '/indent/generated'
             },
