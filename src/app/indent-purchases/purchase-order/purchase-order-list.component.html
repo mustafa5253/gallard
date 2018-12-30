@@ -102,6 +102,15 @@
                     </mat-cell>
                 </ng-container>
 
+
+                <ng-container matColumnDef="preview">
+                    <mat-header-cell *matHeaderCellDef>Preview</mat-header-cell>
+                    <mat-cell *matCellDef="let indent">
+                        <a [href]="indent.PdfPath" target="_blank"><img src="/assets/images/misc/pdf.png" class="img-responsive" /></a>
+                    </mat-cell>
+                </ng-container>
+
+
                 <ng-container matColumnDef="create">
                     <mat-header-cell *matHeaderCellDef></mat-header-cell>
                     <mat-cell *matCellDef="let indent">

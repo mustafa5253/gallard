@@ -35,7 +35,7 @@ export const IndentList = [
 export class GoodsReceiptNote implements OnInit
 {
     dataSource: any[] = [];
-    displayedColumns = ['CreateDate', 'IndentId', 'ItemName', 'CategoryName', 'Quantity', 'ReceivedQty', 'Priority' ];
+    displayedColumns = ['CreateDate', 'IndentId', 'ItemName', 'CategoryName', 'Quantity', 'ReceivedQty', 'Price', 'Priority' ];
 
     @ViewChild(MatPaginator)
     paginator: MatPaginator;

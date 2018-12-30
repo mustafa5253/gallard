@@ -229,22 +229,22 @@
             <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
               <mat-form-field  fxFlex="50" class="pr-24" appearance="outline">
                   <mat-label>Supplier ID</mat-label>
-                  <input type="text" placeholder="Supplier ID" matInput [(ngModel)]="vendorDetails.VendorId" name="supplierId" />
+                  <input type="text" placeholder="Supplier ID" matInput [(ngModel)]="vendorDetails.VendorId" name="supplierId" disabled />
               </mat-form-field>
               <mat-form-field  fxFlex="50" appearance="outline">
                   <mat-label>Email ID</mat-label>
-                  <input type="text" placeholder="Email ID" matInput [(ngModel)]="vendorDetails.Email" name="emailId" />
+                  <input type="text" placeholder="Email ID" matInput [(ngModel)]="vendorDetails.Email" name="emailId" disabled />
               </mat-form-field>
             </div>
             <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
               <mat-form-field  fxFlex="50" class="pr-24" appearance="outline">
                   <mat-label>Mobile No.</mat-label>
-                  <input type="text" placeholder="Mobile No." matInput [(ngModel)]="vendorDetails.MobileNumber" name="MobileNumber" />
+                  <input type="text" placeholder="Mobile No." matInput [(ngModel)]="vendorDetails.MobileNumber" name="MobileNumber" disabled />
               </mat-form-field>
 
               <mat-form-field  fxFlex="50" appearance="outline">
                   <mat-label>PAN</mat-label>
-                  <input type="text" placeholder="PAN" matInput name="pan" [(ngModel)]="vendorDetails.PanNo" />
+                  <input type="text" placeholder="PAN" matInput name="pan" [(ngModel)]="vendorDetails.PanNo" disabled />
               </mat-form-field>   
  
             </div>
@@ -254,7 +254,7 @@
               <mat-form-field  fxFlex="50" class="pr-24" appearance="outline">
                   <mat-label>State</mat-label>
 
-                  <mat-select placeholder="Select State" (selectionChange)="getCity($event.value)" [(ngModel)]="vendorDetails.StateId" name="state">
+                  <mat-select placeholder="Select State" (selectionChange)="getCity($event.value)" [(ngModel)]="vendorDetails.StateId" name="state" disabled>
                     <mat-option *ngFor="let state of stateList" [value]="state.ID">
                       {{state.Name}}
                     </mat-option>
@@ -265,7 +265,7 @@
 
               <mat-form-field  fxFlex="50"  appearance="outline">
                   <mat-label>GSTIN</mat-label>
-                  <input type="text" placeholder="GSTIN" matInput name="gst" [(ngModel)]="vendorDetails.GST" />
+                  <input type="text" placeholder="GSTIN" matInput name="gst" [(ngModel)]="vendorDetails.GST" disabled />
               </mat-form-field>
 
             </div>
@@ -274,7 +274,7 @@
 
               <mat-form-field  fxFlex="50" class="pr-24" appearance="outline">
                   <mat-label>City</mat-label>
-                  <mat-select placeholder="Select City" name="city"  [(ngModel)]="vendorDetails.CityId">
+                  <mat-select placeholder="Select City" name="city"  [(ngModel)]="vendorDetails.CityId" disabled>
                     <mat-option *ngFor="let city of cityList" [value]="city.ID">
                       {{city.Name}}
                     </mat-option>
@@ -282,14 +282,14 @@
               </mat-form-field>
               <mat-form-field  fxFlex="50" appearance="outline">
                   <mat-label>Pincode</mat-label>
-                  <input type="text" placeholder="Pincode" name="pincode" matInput  [(ngModel)]="vendorDetails.PinCode" />
+                  <input type="text" placeholder="Pincode" name="pincode" matInput  [(ngModel)]="vendorDetails.PinCode" disabled/>
               </mat-form-field>             
               </div>
             <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
 
               <mat-form-field  fxFlex="100" appearance="outline">
                   <mat-label>Address</mat-label>
-                  <textarea placeholder="Address" matInput cols="2"  [(ngModel)]="vendorDetails.Address" name="Address"></textarea>
+                  <textarea placeholder="Address" matInput cols="2"  [(ngModel)]="vendorDetails.Address" name="Address" disabled></textarea>
               </mat-form-field>
 
 </div>          

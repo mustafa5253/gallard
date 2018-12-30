@@ -102,6 +102,15 @@
                     </mat-cell>
                 </ng-container>
 
+                <ng-container matColumnDef="Price">
+                    <mat-header-cell *matHeaderCellDef>Price</mat-header-cell>
+                    <mat-cell *matCellDef="let indent">
+                            <input type="text" name="{{indent.IndentId}}_Price" [(ngModel)]="indent.Price"  [ngModelOptions]="{standalone: true}" class="table_input">
+                    </mat-cell>
+                </ng-container>
+
+
+
                 <ng-container matColumnDef="Priority">
                     <mat-header-cell *matHeaderCellDef>Priority</mat-header-cell>
                     <mat-cell *matCellDef="let indent">
