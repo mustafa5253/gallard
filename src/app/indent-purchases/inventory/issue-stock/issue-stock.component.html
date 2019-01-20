@@ -1,5 +1,4 @@
-<h2 mat-dialog-title>Issue Stock</h2>
-<mat-dialog-content class="mat-typography">
+<h2>Issue Stock</h2>
 
   <section class="collapse-pane">
     <h3 class="mb-0"><strong>Issued to</strong></h3>
@@ -23,21 +22,17 @@
             </div>
   </section>
  <section>
+
+    {{ data.material | json }}
   
               <mat-table class="products-table mat-elevation-z8 mb-48 pb-24"
-                       #table [dataSource]="data.material"
+                       #table [dataSource]="data?.material"
                        fusePerfectScrollbar>
 
                 <ng-container matColumnDef="serial">
                     <mat-header-cell *matHeaderCellDef [style.width.percentage]="10">S no.</mat-header-cell>
                     <mat-cell *matCellDef="let material; let i = index" [style.width.percentage]="10">
                         <p class="text-truncate">{{i + 1}}</p>
-                    </mat-cell>
-                </ng-container>
-                <ng-container matColumnDef="date">
-                    <mat-header-cell *matHeaderCellDef  [style.width.percentage]="10">PO Date</mat-header-cell>
-                    <mat-cell *matCellDef="let material" [style.width.percentage]="10">
-                        <p class="text-truncate">{{moment(material.CreateDate).format("MM/DD/YYYY")}}</p>
                     </mat-cell>
                 </ng-container>
 
@@ -48,29 +43,16 @@
                     </mat-cell>
                 </ng-container>
 
-                <!-- <ng-container matColumnDef="category">
-                    <mat-header-cell *matHeaderCellDef>Category</mat-header-cell>
-                    <mat-cell *matCellDef="let material">
-                       <p class="text-truncate">{{material.CategoryName}}</p>
-                    </mat-cell>
-                </ng-container>
- -->
-                <ng-container matColumnDef="number">
-                    <mat-header-cell *matHeaderCellDef>material No.</mat-header-cell>
-                    <mat-cell *matCellDef="let material">
-                       <p class="text-truncate">{{material.materialId}}</p>
-                    </mat-cell>
-                </ng-container>
-<!-- 
-                <ng-container matColumnDef="supplier">
-                    <mat-header-cell *matHeaderCellDef>Supplier</mat-header-cell>
-                    <mat-cell *matCellDef="let material">
-                        <p class="text-truncate">{{vendorDetails.VendorName}}</p>
-                    </mat-cell>
-                </ng-container>
- -->
-                <ng-container matColumnDef="qty">
+
+                <ng-container matColumnDef="Orgqty">
                     <mat-header-cell *matHeaderCellDef>Quantity</mat-header-cell>
+                    <mat-cell *matCellDef="let material;let i = index">
+                      <input type="text" name="{{material.materialId}}" [(ngModel)]="material.OrderQuantity" class="table_input" (blur)="getPriceHistory(material.RawMaterialId, i)"/>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="IssuedQty">
+                    <mat-header-cell *matHeaderCellDef>Issued Quantity</mat-header-cell>
                     <mat-cell *matCellDef="let material;let i = index">
                       <input type="text" name="{{material.materialId}}" [(ngModel)]="material.OrderQuantity" class="table_input" (blur)="getPriceHistory(material.RawMaterialId, i)"/>
                     </mat-cell>
@@ -83,30 +65,10 @@
                     </mat-cell>
                 </ng-container>                
 
-                <ng-container matColumnDef="price">
-                    <mat-header-cell *matHeaderCellDef>Price per Item</mat-header-cell>
-                    <mat-cell *matCellDef="let material;let i = index">
-                      <input type="text" name="{{material.price}}" class="table_input" [(ngModel)]="material.Price" (blur)="getPriceHistory(material.RawMaterialId, i)" (ngModelChange)="calculateTotal(material)" />
-                    </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="total">
-                    <mat-header-cell *matHeaderCellDef>Total</mat-header-cell>
-                    <mat-cell *matCellDef="let material;let i = index">
-                        <ng-container *ngIf="material.total">
-                            {{ material.total | number: '1.2-2'}}
-                        </ng-container>
-
-                       <ng-container *ngIf="!material.total">
-                            {{ 0 | number: '1.2-2'}}
-                        </ng-container>
-                    </mat-cell>
-                </ng-container>
-
 
                 <ng-container matColumnDef="action" >
                     <mat-header-cell *matHeaderCellDef></mat-header-cell>
-                    <mat-cell *matCellDef="let indent;let i = index">
+                    <mat-cell *matCellDef="let material;let i = index">
                         <div fxFlex="row" fxLayoutAlign="end center">
 <!--                         <button mat-icon-button (click)="getPriceHistory(indent.RawMaterialId, i)">
                           <mat-icon>history</mat-icon>                  
@@ -123,98 +85,17 @@
 
                 <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
 
-                <mat-row *matRowDef="let indent; columns: displayedColumns;let i = index"
+                <mat-row *matRowDef="let material; columns: displayedColumns;let i = index"
                          class="product">
                 </mat-row>
 
             </mat-table>
 </section>
 
-</mat-dialog-content>
-<mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-button *ngIf="!data.isUpdate" [mat-dialog-close]="true" cdkFocusInitial color="accent" (click)="generateOrder()" [disabled]="createOrderForm.invalid">Generate</button>
-  <button mat-button *ngIf="data.isUpdate" [mat-dialog-close]="true" cdkFocusInitial color="accent" (click)="updateOrder()" [disabled]="createOrderForm.invalid">Update</button>
-  
-</mat-dialog-actions>
+<div fxLayout="row" fxLayoutAlign="start center">
+        <button mat-button>Cancel</button>
+        <button mat-button  cdkFocusInitial color="accent" (click)="IssueStock()">Save</button>
+        
+      
+    </div>
 
-
-<fuse-sidebar name="vendorDetailsAside" [folded]="isVendorDetailShown" position="right" class="width-400 p-12 bg-white">
-  <h3><strong>Vendor Details</strong></h3>
-            <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
-              <mat-form-field  fxFlex="50" class="pr-24" appearance="outline">
-                  <mat-label>Supplier ID</mat-label>
-                  <input type="text" placeholder="Supplier ID" matInput [(ngModel)]="vendorDetails.VendorId" name="supplierId" disabled />
-              </mat-form-field>
-              <mat-form-field  fxFlex="50" appearance="outline">
-                  <mat-label>Email ID</mat-label>
-                  <input type="text" placeholder="Email ID" matInput [(ngModel)]="vendorDetails.Email" name="emailId" disabled />
-              </mat-form-field>
-            </div>
-            <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
-              <mat-form-field  fxFlex="50" class="pr-24" appearance="outline">
-                  <mat-label>Mobile No.</mat-label>
-                  <input type="text" placeholder="Mobile No." matInput [(ngModel)]="vendorDetails.MobileNumber" name="MobileNumber" disabled />
-              </mat-form-field>
-
-              <mat-form-field  fxFlex="50" appearance="outline">
-                  <mat-label>PAN</mat-label>
-                  <input type="text" placeholder="PAN" matInput name="pan" [(ngModel)]="vendorDetails.PanNo" disabled />
-              </mat-form-field>   
- 
-            </div>
-
-
-            <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
-              <mat-form-field  fxFlex="50" class="pr-24" appearance="outline">
-                  <mat-label>State</mat-label>
-
-                  <mat-select placeholder="Select State" (selectionChange)="getCity($event.value)" [(ngModel)]="vendorDetails.StateId" name="state" disabled>
-                    <mat-option *ngFor="let state of stateList" [value]="state.ID">
-                      {{state.Name}}
-                    </mat-option>
-                  </mat-select>
-
-              </mat-form-field>
-
-
-              <mat-form-field  fxFlex="50"  appearance="outline">
-                  <mat-label>GSTIN</mat-label>
-                  <input type="text" placeholder="GSTIN" matInput name="gst" [(ngModel)]="vendorDetails.GST" disabled />
-              </mat-form-field>
-
-            </div>
-
-            <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
-
-              <mat-form-field  fxFlex="50" class="pr-24" appearance="outline">
-                  <mat-label>City</mat-label>
-                  <mat-select placeholder="Select City" name="city"  [(ngModel)]="vendorDetails.CityId" disabled>
-                    <mat-option *ngFor="let city of cityList" [value]="city.ID">
-                      {{city.Name}}
-                    </mat-option>
-                  </mat-select>
-              </mat-form-field>
-              <mat-form-field  fxFlex="50" appearance="outline">
-                  <mat-label>Pincode</mat-label>
-                  <input type="text" placeholder="Pincode" name="pincode" matInput  [(ngModel)]="vendorDetails.PinCode" disabled/>
-              </mat-form-field>             
-              </div>
-            <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
-
-              <mat-form-field  fxFlex="100" appearance="outline">
-                  <mat-label>Address</mat-label>
-                  <textarea placeholder="Address" matInput cols="2"  [(ngModel)]="vendorDetails.Address" name="Address" disabled></textarea>
-              </mat-form-field>
-
-</div>          
-
-</fuse-sidebar>
-
-<fuse-sidebar name="priceHistory" position="right" class="width-400 p-12">
-    <h3 class="mb-0"><strong>Material History</strong></h3>
-    <ul>
-      <li>
-      </li>
-    </ul>
-</fuse-sidebar>

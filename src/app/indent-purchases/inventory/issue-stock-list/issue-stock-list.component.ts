@@ -11,9 +11,9 @@ import { takeUntil } from 'rxjs/internal/operators';
 import { IndentService } from 'app/services/indent.service';
 import {MatDialog} from '@angular/material';
 import * as _ from 'lodash';
-import { GeneratePurchaseOrder } from "app/indent-purchases/generate-order-modal/generate-order.component";
+import { GeneratePurchaseOrder } from 'app/indent-purchases/generate-order-modal/generate-order.component';
 import * as moment from 'moment';
-import { ToasterService } from "app/services/toaster.service";
+import { ToasterService } from 'app/services/toaster.service';
 
 
 
@@ -26,11 +26,11 @@ import { ToasterService } from "app/services/toaster.service";
 })
 export class IssueStockListComponent implements OnInit, OnChanges
 {
-    @Input() refreshList: boolean = false;
+    @Input() refreshList = false;
     @Output() updateIndent: EventEmitter<any> = new EventEmitter(null);
     dataSource: any[] = [];
     stockList: any[] = [];
-    displayedColumns = ['IssuedDate','IssuedTo', 'material', 'category', 'quantity'];
+    displayedColumns = ['IssuedDate', 'IssuedTo', 'material', 'category', 'quantity'];
 
     @ViewChild(MatPaginator)
     paginator: MatPaginator;
@@ -95,13 +95,13 @@ export class IssueStockListComponent implements OnInit, OnChanges
     }
 
     generateOrder() {
-        let selectedIndent = _.filter(this.dataSource, (o: any) => o.selected);
-        if(selectedIndent && !selectedIndent.length) {
+        const selectedIndent = _.filter(this.dataSource, (o: any) => o.selected);
+        if (selectedIndent && !selectedIndent.length) {
             return this._toastr.warningToast('Please select atleast 1 indent');
         }
         console.log('selectedIndent', selectedIndent);
         const dialogRef = this.dialog.open(GeneratePurchaseOrder, {
-            width: "100%",
+            width: '100%',
             panelClass: 'full-width-modal',
             data: { indentList: selectedIndent }
         });
@@ -142,7 +142,7 @@ export class IssueStockListComponent implements OnInit, OnChanges
     }
 
     search(ev) {
-        let searchStr = ev.target.value ? ev.target.value.toLowerCase() : '';
+        const searchStr = ev.target.value ? ev.target.value.toLowerCase() : '';
         this.dataSource = this.stockList.filter((item) => item.ItemName.toLowerCase().includes(searchStr) || item.Name.toLowerCase().includes(searchStr) || item.CategoryName.toLowerCase().includes(searchStr));
     }
 

@@ -1,5 +1,5 @@
-import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
-import { MatPaginator, MatSort, MatSnackBar } from '@angular/material';
+import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation, Output, EventEmitter, Input, OnChanges, Inject } from '@angular/core';
+import { MatPaginator, MatSort, MatSnackBar, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject, fromEvent, merge, Observable, Subject, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, startWith } from 'rxjs/operators';
@@ -11,8 +11,8 @@ import { takeUntil } from 'rxjs/internal/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import * as _ from 'lodash';
-import { IndentService } from "app/services/indent.service";
-import { ToasterService } from "app/services/toaster.service";
+import { IndentService } from 'app/services/indent.service';
+import { ToasterService } from 'app/services/toaster.service';
 import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 
 
@@ -26,10 +26,12 @@ export const priority = ['normal', 'urgent'];
     animations   : fuseAnimations,
     encapsulation: ViewEncapsulation.None
 })
-export class IssueStockComponent implements OnInit
+export class IssueStockComponent implements OnInit, OnChanges
 {
 
     @Output('indentCreated') indentCreated: EventEmitter<boolean> = new EventEmitter(false);
+    @Input() dataSource: any[] = [];
+    
     pageType: string;
     indentForm: FormGroup;
     materialList = [];
@@ -40,22 +42,25 @@ export class IssueStockComponent implements OnInit
     materialFilter: Observable<any[]> = of([]);
     categoryFilter: Observable<any[]> = of([]);
     unitFilter: Observable<any[]> = of([]);
-    public noMaterialFound: boolean = false;
-    public noUnitFound: boolean = false;
+    public noMaterialFound = false;
+    public noUnitFound = false;
     public moment = moment;
     isUpdate = false;
     addMaterialForm: FormGroup;
     IssueStockForm: FormGroup;
+    displayedColumns = ['serial', 'name', 'Orgqty', 'IssuedQty', 'unit', 'action'];
 
     // Private
     private _unsubscribeAll: Subject<any>;
     constructor(
+        // public dialogRef: MatDialogRef<IssueStockComponent>,        
+        @Inject(MAT_DIALOG_DATA) public data: any,        
         private _formBuilder: FormBuilder,
         // private _location: Location,
         private _matSnackBar: MatSnackBar,
         private _indentService: IndentService,
         private _toastr: ToasterService,
-        private _fuseSidebarService: FuseSidebarService
+        private _fuseSidebarService: FuseSidebarService,
     )
     {
 
@@ -78,27 +83,6 @@ export class IssueStockComponent implements OnInit
         this.indentForm = this.createProductForm();
         this.addMaterialForm = this.addNewRawMaterial();
         this.IssueStockForm = this.IssueNewStock();
-
-
-    this.IssueStockForm.controls['RawMaterialId'].valueChanges.subscribe((value) => {
-        if (value) {
-            this.materialFilter = of(this._filter(value, 'material'));
-        }
-    });
-
-    // this.addMaterialForm.controls['CategoryId'].valueChanges.subscribe((value) => {
-    //     if (value) {
-    //          this.categoryFilter = of(this._filter(value, 'category'));
-    //       }
-    // });
-
-    // this.addMaterialForm.controls['UOMID'].valueChanges.subscribe((value) => {
-    //    if (value) {
-    //         this.unitFilter = of(this._filter(value, 'unit'));
-    //     }
-    // });
-
-
 
     }
 
@@ -132,20 +116,20 @@ export class IssueStockComponent implements OnInit
             Name: ['', [Validators.required]],
             Quantity: ['', [Validators.required]],
             IssueDate: ['', [Validators.required]],
-        })
+        });
     }
 
     IssueStock(): any {
         const model: any = _.cloneDeep(this.IssueStockForm.value);
 
-        let RawMaterial = _.find(this.materialList, (o) => { 
-                return o.ItemName === model.RawMaterialId
+        const RawMaterial = _.find(this.materialList, (o) => { 
+                return o.ItemName === model.RawMaterialId;
         });
 
         if (RawMaterial) {
             model.RawMaterialId = RawMaterial.RawMaterialId;
         } else {
-            return this._toastr.errorToast("Raw Material doesn't exist");
+            return this._toastr.errorToast('Raw Material doesn\'t exist');
         }
 
         model.IssueDate = moment(model.IssueDate).format('MM/DD/YYYY');
@@ -195,11 +179,11 @@ export class IssueStockComponent implements OnInit
     }
 
     addRawMaterial() {
-        let obj = this.addMaterialForm.value;
+        const obj = this.addMaterialForm.value;
         this._indentService.AddRawMaterial(obj).subscribe((a: any) => {
            if (a && a.Status.toLowerCase() === 'success') {
                this.materialList.push(a.Body);
-               this._toastr.successToast("Material added succesfully");
+               this._toastr.successToast('Material added succesfully');
                 this.addMaterialForm = this.addNewRawMaterial();
            } else {
               this._toastr.errorToast(a.Status);
@@ -211,14 +195,14 @@ export class IssueStockComponent implements OnInit
 
 
     addUnit() {
-        let val = this.addMaterialForm.get('UOMID').value;
+        const val = this.addMaterialForm.get('UOMID').value;
         if (!val) {
-            return this._toastr.warningToast("Unit can't be blank");
+            return this._toastr.warningToast('Unit can\'t be blank');
         }
         this._indentService.AddStockUnit(val).subscribe((a: any) => {
            if (a && a.Status.toLowerCase() === 'success') {
                this.unitList.push(a.Body);
-               this._toastr.successToast("Stock Unit added succesfully");
+               this._toastr.successToast('Stock Unit added succesfully');
            } else {
               this._toastr.errorToast(a.Status);
               this.indentForm.patchValue({unit: ''});
@@ -228,14 +212,14 @@ export class IssueStockComponent implements OnInit
 
 
     addCategory() {
-        let val = this.addMaterialForm.get('CategoryId').value;
+        const val = this.addMaterialForm.get('CategoryId').value;
         if (!val) {
-            return this._toastr.warningToast("Category can't be blank");
+            return this._toastr.warningToast('Category can\'t be blank');
         }
         this._indentService.AddCategory(val).subscribe((a: any) => {
             if (a && a.Status.toLowerCase() === 'success') {
                 this.categoryList.push(a.Body);
-               this._toastr.successToast("Category added succesfully");
+               this._toastr.successToast('Category added succesfully');
            } else {
               this._toastr.errorToast(a.Status);
            }
@@ -243,12 +227,12 @@ export class IssueStockComponent implements OnInit
     }
 
     GenerateUniqueID() {
-      return (Math.random() * (105000 - 784001) + 784001)|0;
+      return (Math.random() * (105000 - 784001) + 784001) | 0;
     }
 
     onSelectMaterial(value) {
-        if(!value) {
-            return
+        if (!value) {
+            return;
         }
         this.indentForm.get('CategoryId').enable();
         this.indentForm.get('UOMID').enable();
@@ -259,13 +243,17 @@ export class IssueStockComponent implements OnInit
 
 
     openRawMaterialForm() {
-        let newMaterialName = this.indentForm.get('RawMaterialId').value;
+        const newMaterialName = this.indentForm.get('RawMaterialId').value;
         this.addMaterialForm.patchValue({ItemName: newMaterialName});
         this._fuseSidebarService.getSidebar('rawMaterialForm').toggleOpen();
     }
 
     updateIndent() {
         //
+    }
+
+    ngOnChanges(s) {
+        // 
     }
 
 

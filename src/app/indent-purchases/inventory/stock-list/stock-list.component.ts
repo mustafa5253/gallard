@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MatPaginator, MatSort } from '@angular/material';
+import { MatPaginator, MatSort, MatDialogRef } from '@angular/material';
 import { DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject, fromEvent, merge, Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
@@ -11,10 +11,10 @@ import { takeUntil } from 'rxjs/internal/operators';
 import { IndentService } from 'app/services/indent.service';
 import {MatDialog} from '@angular/material';
 import * as _ from 'lodash';
-import { GeneratePurchaseOrder } from "app/indent-purchases/generate-order-modal/generate-order.component";
+import { GeneratePurchaseOrder } from 'app/indent-purchases/generate-order-modal/generate-order.component';
 import * as moment from 'moment';
-import { ToasterService } from "app/services/toaster.service";
-import { IssueStockComponent } from "app/indent-purchases/inventory/issue-stock/issue-stock.component";
+import { ToasterService } from 'app/services/toaster.service';
+import { IssueStockComponent } from 'app/indent-purchases/inventory/issue-stock/issue-stock.component';
 
 
 @Component({
@@ -43,6 +43,7 @@ export class StockListComponent implements OnInit
 
     constructor(
         public dialog: MatDialog,
+        // public dialogRef: MatDialogRef<IssueStockComponent>,                
         private _indentService: IndentService,
         private _toastr: ToasterService
     )
@@ -107,7 +108,7 @@ export class StockListComponent implements OnInit
 
 
     openStockIssueModal(){
-        let selectedItem = _.filter(this.dataSource, (o) => o.selected);
+        const selectedItem = _.filter(this.dataSource, (o) => o.selected);
         if (selectedItem && !selectedItem.length) {
             return this._toastr.errorToast('Please select atleast 1 item');
         }
@@ -119,7 +120,7 @@ export class StockListComponent implements OnInit
         });
 
         dialogRef.afterClosed().subscribe(isSuccess => {
-            if(isSuccess) {
+            if (isSuccess) {
                 dialogRef.close();
             }
         });
