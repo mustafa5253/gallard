@@ -90,8 +90,12 @@ export class AddIndentComponent implements OnInit, OnDestroy, OnChanges {
             let objToPatch = _.cloneDeep(this.data);
             objToPatch.RawMaterialId = objToPatch.ItemName;
             this.indentForm.patchValue(objToPatch);
-            this.isUpdate = true;
+            this.indentForm.disable();
+            this.indentForm.get('Quantity').enable();                        
+            this.isUpdate = true;            
         } else {
+            this.indentForm.enable();
+            this.indentForm.get('IndentId').disable();
             this.isUpdate = false;
         }
 
@@ -103,10 +107,10 @@ export class AddIndentComponent implements OnInit, OnDestroy, OnChanges {
             RawMaterialId: ['', [Validators.required]],
             CategoryId: [{value: '', disabled: true}],
             Quantity: ['', [Validators.required]],
-            IndentId: [{value: this.GenerateUniqueID(), disabled: true}],
+            IndentId: [{value: moment().format('YYYYMMDDHHss'), disabled: true}],
             UOMID: [{value: '', disabled: true}, [Validators.required]],
-            HsnCode: [''],
-            Gst: ['', [Validators.required]],
+            // HsnCode: [''],
+            // Gst: ['', [Validators.required]],
             Priority: ['', [Validators.required]]
         });
     }
@@ -116,6 +120,8 @@ export class AddIndentComponent implements OnInit, OnDestroy, OnChanges {
             ItemName: ['', [Validators.required]],
             CategoryId: ['', [Validators.required]],
             UOMID: ['', [Validators.required]],
+            HsnCode: [''],
+            Gst: ['', [Validators.required]],
         });
     }
 
@@ -237,6 +243,7 @@ export class AddIndentComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public updateIndent() {
+        this.indentForm.enable();
         let model = this.prepareRequest();
         this._indentService.UpdateIndent(model).subscribe(a => {
             if (a && a.Status && a.Status.toLowerCase() === 'success') {

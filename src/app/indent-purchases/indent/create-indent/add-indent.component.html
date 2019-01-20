@@ -35,11 +35,6 @@
 
             <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
                 <mat-form-field   fxFlex="50" class="pr-24" appearance="outline">
-                    <mat-label>Quantity</mat-label>
-
-                        <input type="text" placeholder="Quantity" matInput formControlName="Quantity">
-                </mat-form-field>
-                <mat-form-field   fxFlex="50" class="pr-24" appearance="outline">
                     <mat-label>Stock Unit</mat-label>
                     <mat-select placeholder="Unit" formControlName="UOMID">
                         <mat-option *ngFor="let item of unitList" [value]="item.UOMID">
@@ -47,37 +42,50 @@
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
-
+                
                 <mat-form-field   fxFlex="50" class="pr-24" appearance="outline">
+                    <mat-label>Quantity</mat-label>
+
+                        <input type="text" placeholder="Quantity" matInput formControlName="Quantity">
+                </mat-form-field>
+
+
+                <!-- <mat-form-field   fxFlex="50" class="pr-24" appearance="outline">
                     <mat-label>HSN Code</mat-label>
                     <input type="text" placeholder="HSN Code" matInput formControlName="HsnCode">
-                </mat-form-field>
-            </div>
-                <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
+                </mat-form-field> -->
 
                 <mat-form-field fxFlex="50" class="pr-24" appearance="outline">
                         <input type="text" placeholder="StkUID" matInput formControlName="IndentId" disabled />
                 </mat-form-field>
 
                 <mat-form-field fxFlex="50" class="pr-24" appearance="outline">
+                    <mat-label>Priority</mat-label>
+                    <mat-select placeholder="Priority" formControlName="Priority" name="priority">
+                        <mat-option *ngFor="let item of priority" [value]="item">
+                        {{item}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+                <!-- <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
+
+                 <mat-form-field fxFlex="50" class="pr-24" appearance="outline">
+                        <input type="text" placeholder="StkUID" matInput formControlName="IndentId" disabled />
+                </mat-form-field> 
+
+                 <mat-form-field fxFlex="50" class="pr-24" appearance="outline">
                     <mat-label>GST %</mat-label>
                     <mat-select placeholder="Choose GST" formControlName="Gst">
                         <mat-option *ngFor="let item of gstList" [value]="item">
                         {{item}}
                         </mat-option>
                     </mat-select>
-                </mat-form-field>
+                </mat-form-field> 
 
-                <mat-form-field fxFlex="50" class="pr-24" appearance="outline">
-                    <mat-label>Priority</mat-label>
-                        <mat-select placeholder="Priority" formControlName="Priority" name="priority">
-                            <mat-option *ngFor="let item of priority" [value]="item">
-                            {{item}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
 
-            </div>
+
+            </div> -->
             <div fxLayout="row" fxLayoutAlign="start center">
                 <button mat-raised-button type="button" color="accent" (click)="addNewIndent()" [disabled]="!indentForm.valid"  *ngIf="!isUpdate">
                     Save
@@ -138,6 +146,25 @@
 
               </mat-form-field> 
             </div> 
+
+            <div class="" fxflex="1 0 auto" fxlayout="column" fxlayoutalign="start center">
+
+                 <mat-form-field fxFlex="50" class="pr-24" appearance="outline">
+                    <mat-label>GST %</mat-label>
+                    <mat-select placeholder="Choose GST" formControlName="Gst">
+                        <mat-option *ngFor="let item of gstList" [value]="item">
+                        {{item}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                
+                 <mat-form-field   fxFlex="50" class="pr-24" appearance="outline">
+                    <mat-label>HSN Code</mat-label>
+                    <input type="text" placeholder="HSN Code" matInput formControlName="HsnCode">
+                </mat-form-field> 
+
+
+            </div>
             <div fxLayout="row" fxLayoutAlign="start center">
                 <button mat-raised-button type="button" color="accent" (click)="addRawMaterial()" [disabled]="addMaterialForm.invalid">
                     Save

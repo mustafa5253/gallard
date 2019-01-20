@@ -3,11 +3,10 @@
 
   <section class="collapse-pane">
     <h3 class="mb-0"><strong>Supplier Details</strong></h3>
-
             <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
                 <mat-form-field  fxFlex="30" class="pr-12" appearance="outline">
                   <mat-label>Full Name</mat-label>
-                  <mat-select placeholder="Select Vendor" (selectionChange)="onSelectVendor($event.value)">
+                  <mat-select placeholder="Select Vendor" (selectionChange)="onSelectVendor($event.value)" [(ngModel)]="selectedVendor">
                     <mat-option *ngFor="let vendor of vendorList" [value]="vendor">
                       {{vendor.VendorName}}
                     </mat-option>
@@ -147,14 +146,13 @@
                     </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="category">
+                <!-- <ng-container matColumnDef="category">
                     <mat-header-cell *matHeaderCellDef>Category</mat-header-cell>
                     <mat-cell *matCellDef="let indent">
                        <p class="text-truncate">{{indent.CategoryName}}</p>
                     </mat-cell>
                 </ng-container>
-
-
+ -->
                 <ng-container matColumnDef="number">
                     <mat-header-cell *matHeaderCellDef>Indent No.</mat-header-cell>
                     <mat-cell *matCellDef="let indent">
@@ -184,9 +182,22 @@
                 </ng-container>                
 
                 <ng-container matColumnDef="price">
-                    <mat-header-cell *matHeaderCellDef>Price</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef>Price per Item</mat-header-cell>
                     <mat-cell *matCellDef="let indent;let i = index">
-                      <input type="text" name="{{indent.price}}" class="table_input" [(ngModel)]="indent.Price" (blur)="getPriceHistory(indent.RawMaterialId, i)" />
+                      <input type="text" name="{{indent.price}}" class="table_input" [(ngModel)]="indent.Price" (blur)="getPriceHistory(indent.RawMaterialId, i)" (ngModelChange)="calculateTotal(indent)" />
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="total">
+                    <mat-header-cell *matHeaderCellDef>Total</mat-header-cell>
+                    <mat-cell *matCellDef="let indent;let i = index">
+                        <ng-container *ngIf="indent.total">
+                            {{ indent.total | number: '1.2-2'}}
+                        </ng-container>
+
+                       <ng-container *ngIf="!indent.total">
+                            {{ 0 | number: '1.2-2'}}
+                        </ng-container>
                     </mat-cell>
                 </ng-container>
 
@@ -220,7 +231,9 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-button [mat-dialog-close]="true" cdkFocusInitial color="accent" (click)="generateOrder()" [disabled]="createOrderForm.invalid">Generate</button>
+  <button mat-button *ngIf="!data.isUpdate" [mat-dialog-close]="true" cdkFocusInitial color="accent" (click)="generateOrder()" [disabled]="createOrderForm.invalid">Generate</button>
+  <button mat-button *ngIf="data.isUpdate" [mat-dialog-close]="true" cdkFocusInitial color="accent" (click)="updateOrder()" [disabled]="createOrderForm.invalid">Update</button>
+  
 </mat-dialog-actions>
 
 

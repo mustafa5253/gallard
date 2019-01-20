@@ -70,6 +70,18 @@
                         <p class="text-truncate">{{material.UOM}}</p>
                     </mat-cell>
                 </ng-container>
+                <ng-container matColumnDef="hsn">
+                    <mat-header-cell *matHeaderCellDef>HSN Code</mat-header-cell>
+                    <mat-cell *matCellDef="let material">
+                        <p class="text-truncate">{{material.HsnCode}}</p>
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="gst">
+                    <mat-header-cell *matHeaderCellDef>GST</mat-header-cell>
+                    <mat-cell *matCellDef="let material">
+                        <p class="text-truncate">{{material.Gst}}%</p>
+                    </mat-cell>
+                </ng-container>
 
                 <ng-container matColumnDef="action">
                     <mat-header-cell *matHeaderCellDef mat-sort-header="action">Action</mat-header-cell>

@@ -9,7 +9,10 @@ export const Indent_API = {
     SEARCH_PO_NUMBER: 'MasterApi/DisplayPOListbyPoNumber?PoNumber=:number',
     GENERATE_GRN: 'MasterApi/CreateGRN',
     GET_PRICE_HISTORY: 'MasterApi/GetPriceHistory?RawMaterialId=:id',
-    GET_INDENT_HISTORY: 'MasterApi/DisplayIndentHistoryList?MaterialId=:id'
+    GET_INDENT_HISTORY: 'MasterApi/DisplayIndentHistoryList?MaterialId=:id',
+    DELETE_MULTIPLE_INDENT: 'MasterApi/DeleteMultipleIndentbyId?IndentList=:indentId',
+    GET_PO_BY_NUMBER: 'MasterApi/DisplayPONumber?PoNumber=:number',
+    UPDATE_PO: 'MasterApi/EditPONumber',
 };
 
 export const Inventory_API = {

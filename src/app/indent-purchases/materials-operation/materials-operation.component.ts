@@ -26,7 +26,7 @@ import { ToasterService } from "app/services/toaster.service";
 export class MaterialListComponent implements OnInit
 {
     dataSource: any[] = [];
-    displayedColumns = ['serial', 'material', 'category', 'unit', 'action'];
+    displayedColumns = ['serial', 'material', 'category', 'unit', 'hsn', 'gst', 'action'];
 
     @ViewChild(MatPaginator)
     paginator: MatPaginator;

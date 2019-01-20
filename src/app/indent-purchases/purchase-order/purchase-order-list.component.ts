@@ -10,7 +10,7 @@ import { ToasterService } from 'app/services/toaster.service';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { BehaviorSubject, merge, Observable, Subject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 
 
 @Component({
@@ -39,6 +39,7 @@ export class GeneratedIndentList implements OnInit
     supplierId = null;
     vendorList = [];
 
+   searchTermStream: Subject<string> = new Subject();
 
     // Private
     private _unsubscribeAll: Subject<any>;
@@ -65,10 +66,18 @@ export class GeneratedIndentList implements OnInit
     {
         this.getAllVendor();
         this.getPurchaseOrders();
+
+        this.searchTermStream.pipe(
+        debounceTime(700),
+        distinctUntilChanged())
+        .subscribe(term => {
+            this.getPurchaseOrders();
+        });
+
     }
 
     getPurchaseOrders(): any {
-        this._indentService.GetPurchaseOrders(this.poNumber, this.supplierId).subscribe((a: any) => {
+        this._indentService.GetPurchaseOrders(this.poNumber).subscribe((a: any) => {
             if (a && a.Body && a.Body.length) {
                 this.dataSource = a.Body;
             } else {
@@ -143,6 +152,30 @@ export class GeneratedIndentList implements OnInit
         }
       });
     }
+
+    search(term: string): void {
+        this.searchTermStream.next(term);
+    }
+
+    editPurchaseOrder(poNumber){
+        this._indentService.GetPoByNumber(poNumber).subscribe(a => {
+            if (a.PONumber) {
+                console.log(a);
+                const dialogRef = this.dialog.open(GeneratePurchaseOrder, {
+                    width: "100%",
+                    panelClass: 'full-width-modal',
+                    data: { indentList: a.PoList, isUpdate: true, poDetail: a  }
+                });
+            }
+        });
+
+        // dialogRef.afterClosed().subscribe(result => {
+        //     this.getIndentList();
+        // });
+
+    }
+
+    
 }
 function compare(a: number | string, b: number | string, isAsc: boolean): any {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);

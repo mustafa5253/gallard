@@ -14,6 +14,7 @@ import * as _ from 'lodash';
 import { GeneratePurchaseOrder } from "app/indent-purchases/generate-order-modal/generate-order.component";
 import * as moment from 'moment';
 import { ToasterService } from "app/services/toaster.service";
+import { IssueStockComponent } from "app/indent-purchases/inventory/issue-stock/issue-stock.component";
 
 
 @Component({
@@ -26,7 +27,7 @@ import { ToasterService } from "app/services/toaster.service";
 export class StockListComponent implements OnInit
 {
     dataSource: any[] = [];
-    displayedColumns = ['Sno', 'material', 'category', 'quantity'];
+    displayedColumns = ['checkbox', 'Sno', 'material', 'category', 'quantity'];
 
     @ViewChild(MatPaginator)
     paginator: MatPaginator;
@@ -102,7 +103,27 @@ export class StockListComponent implements OnInit
             default: return 0;
           }
         });
-      }
+    }
+
+
+    openStockIssueModal(){
+        let selectedItem = _.filter(this.dataSource, (o) => o.selected);
+        if (selectedItem && !selectedItem.length) {
+            return this._toastr.errorToast('Please select atleast 1 item');
+        }
+        
+        const dialogRef = this.dialog.open(IssueStockComponent, {
+            width: '100%',
+            panelClass: ['max-950', 'center-align'],
+            data: { material: selectedItem }
+        });
+
+        dialogRef.afterClosed().subscribe(isSuccess => {
+            if(isSuccess) {
+                dialogRef.close();
+            }
+        });
+    }
 }
 function compare(a: number | string, b: number | string, isAsc: boolean): any {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);

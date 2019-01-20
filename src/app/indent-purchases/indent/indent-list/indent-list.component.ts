@@ -79,6 +79,7 @@ export class IndentListComponent implements OnInit, OnChanges {
 
         dialogRef.afterClosed().subscribe(isSuccess => {
             if(isSuccess) {
+                dialogRef.close();
                 this.getIndentList();
             }
         });
@@ -103,7 +104,7 @@ export class IndentListComponent implements OnInit, OnChanges {
         const dialogRef = this.dialog.open(GeneratePurchaseOrder, {
             width: "100%",
             panelClass: 'full-width-modal',
-            data: { indentList: selectedIndent }
+            data: { indentList: selectedIndent, isUpdate: false }
         });
 
         dialogRef.afterClosed().subscribe(result => {
@@ -172,6 +173,28 @@ export class IndentListComponent implements OnInit, OnChanges {
     search(ev) {
         let searchStr = ev.target.value ? ev.target.value.toLowerCase() : '';
         this.dataSource = this.indentList.filter((item) => item.ItemName.toLowerCase().includes(searchStr));
+    }
+
+    deleteMultipleIndent(){
+        let indentId = [];
+        _.forEach(this.dataSource, (o: any) => {
+            if (o.selected) {
+                return indentId.push(o.IndentId);
+            }
+        });
+        if (!indentId.length) {
+            return this._toastr.warningToast('Please select atleast 1 indent');
+        } else {
+            this._indentService.DeleteMultipleIndent(indentId.toString()).subscribe(a => {
+                console.log(a);
+                if (a.Status === 'Success') {
+                    this._toastr.successToast(a.Body);
+                    this.getIndentList();
+                } else {
+                    this._toastr.errorToast(a.Body);
+                }
+            });
+        }
     }
 
 } 

@@ -28,6 +28,9 @@
                     <input #filter placeholder="Search stock">
                 </div>
             </div>
+            <button mat-raised-button type="button" (click)="openStockIssueModal()">
+                    Issue Stock
+            </button>
             <!-- / SEARCH -->
 
         </div>
@@ -41,6 +44,15 @@
                        matSort
                        [@animateStagger]="{value:'50'}"
                        fusePerfectScrollbar  (matSortChange)="sortData($event)">
+
+                <ng-container matColumnDef="checkbox">
+                    <mat-header-cell *matHeaderCellDef [style.width.percentage]="10"></mat-header-cell>
+                    <mat-cell *matCellDef="let material;let i = index" [style.width.percentage]="10">
+                        <!-- <p class="text-truncate">{{i+1}}</p> -->
+                        <mat-checkbox [(ngModel)]="material.selected">
+                        </mat-checkbox>
+                    </mat-cell>
+                </ng-container>
 
                 <ng-container matColumnDef="Sno">
                     <mat-header-cell *matHeaderCellDef [style.width.percentage]="10">S no.</mat-header-cell>

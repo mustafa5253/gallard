@@ -27,9 +27,10 @@ export class GeneratePurchaseOrder implements OnInit {
     vendorDetails: any = {};
     public moment = moment;
     isVendorDetailShown;
+    public selectedVendor = '';
 
     @Input() dataSource: any[] = [];
-    displayedColumns = ['serial', 'date', 'number', 'name', 'category', 'qty', 'unit', 'price', 'action'];
+    displayedColumns = ['serial', 'date', 'number', 'name', 'qty', 'unit', 'price', 'total','action'];
 
     // Private
     private _unsubscribeAll: Subject<any>;
@@ -56,17 +57,22 @@ export class GeneratePurchaseOrder implements OnInit {
         this.getAllVendor();
         this.getState();
 
-        this.data.indentList = _.map(this.data.indentList, (o) => {
+        this.data.indentList = _.map(this.data.indentList, (o: any) => {
           o.CreateDate = moment(o.CreateDate).format('MM/DD/YYYY');
-           o.OrderQuantity = o.Quantity;
+          o.OrderQuantity = o.Quantity;
            return o;  
         });
+        if (this.data.isUpdate) {
+          this.createOrderForm.patchValue(this.data.poDetail);
+          this.createOrderForm.get('PODate').patchValue(moment());
+        }
+        
     }
 
     initCreateOrderForm() {
         return this._formBuilder.group({
             SupplierId: ['', [Validators.required]],
-            PONumber: [{value: this.GenerateUniqueID(), disabled: true}],
+            PONumber: [{value: moment().format('YYYYMMDDHHss'), disabled: true}],
             PODate: [moment(), [Validators.required]],
             SupplierRef: [''],
             Despatchhrough: [''],
@@ -97,6 +103,13 @@ export class GeneratePurchaseOrder implements OnInit {
       this._indentService.GetAllVendor().subscribe((a: any) => {
         if (a) {
             this.vendorList = a.Body;
+            if (this.data.isUpdate) {
+              debugger;
+              let selectedVendor: any = _.find(this.vendorList, (o: any) => o.VendorId === this.data.poDetail.SupplierId);
+              if (selectedVendor) {
+                this.selectedVendor = selectedVendor;
+              }            
+            }
         }
       });
     }
@@ -111,32 +124,17 @@ export class GeneratePurchaseOrder implements OnInit {
       this.createOrderForm.get('PONumber').enable(); 
       let requestObj = this.createOrderForm.value;
       this.createOrderForm.get('PONumber').disable();
-
-      // _.forEach(this.data.indentList, function(o) {
-      //     return indentKeys.push(o.IndentId);
-      // });
-
-      // if(indentKeys.length) {
-      //   requestObj.IndentKey = String(indentKeys);
-      // }
       requestObj.PoList = this.data.indentList;
       requestObj.PODate = moment(requestObj.PODate).format('MM/DD/YYYY');
-      // requestObj.ID = requestObj.PONumber;
-
-     this._indentService.GeneratePurchaseOrder(requestObj).subscribe((a: any) => {
-        if (a && a.Status.toLowerCase() === 'success') {
-            this._toastr.successToast('Purchase order generated succesfully');  
-            this.createOrderForm.reset();              
-        } else {
-            this._toastr.errorToast(a.Status);
-        }
-      });
+      this._indentService.GeneratePurchaseOrder(requestObj).subscribe((a: any) => {
+          if (a && a.Status.toLowerCase() === 'success') {
+              this._toastr.successToast('Purchase order generated succesfully');  
+              this.createOrderForm.reset();              
+          } else {
+              this._toastr.errorToast(a.Status);
+          }
+        });
     }
-
-    GenerateUniqueID() {
-      return (Math.random() * (105000 - 784001) + 784001) | 0;
-    }
-
 
     showVendorDetail() {
       this._fuseSidebarService.getSidebar('vendorDetailsAside').toggleOpen();
@@ -151,7 +149,7 @@ export class GeneratePurchaseOrder implements OnInit {
       this._indentService.GetPriceHistory(id).subscribe((a) => {
         if (a && a.Body.length) {
             let quantityPerPrice = [];
-            _.forEach(a.Body, (obj) => {
+            _.forEach(a.Body, (obj: any) => {
               let pricePerQty = obj.Price / obj.Quantity;
               if (selectedIndentPriceQty / 10*100 > pricePerQty / 10*100) {
                return this._toastr.warningToast('Price for material '+ obj.ItemName + ' is more than 10% of the previous order');
@@ -168,4 +166,24 @@ export class GeneratePurchaseOrder implements OnInit {
         this._toastr.warningToast('Atleast 1 indent required');
       }
     }
+
+    calculateTotal(indent) {
+      indent.total = Number(indent.Price) + (Number(indent.Price) * indent.Gst / 100) * indent.Quantity;
+    }
+
+  updateOrder() {
+    this.createOrderForm.get('PONumber').enable(); 
+    let requestObj = this.createOrderForm.value;
+    this.createOrderForm.get('PONumber').disable();
+    requestObj.PoList = this.data.indentList;
+    requestObj.PODate = moment(requestObj.PODate).format('MM/DD/YYYY');
+    this._indentService.UpdatePurchaseOrder(requestObj).subscribe((a: any) => {
+        if (a && a.Status.toLowerCase() === 'success') {
+            this._toastr.successToast('Purchase order updated succesfully');  
+            this.createOrderForm.reset();              
+        } else {
+            this._toastr.errorToast(a.Status);
+        }
+      });
+  }    
 }

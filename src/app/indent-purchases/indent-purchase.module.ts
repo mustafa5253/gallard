@@ -108,7 +108,8 @@ const routes: Routes = [
     entryComponents: [
         GeneratePurchaseOrder,
         IndentHistoryComponent,
-        AddIndentComponent
+        AddIndentComponent,
+        IssueStockComponent
     ]
 })
 export class IndentPurchaseModule

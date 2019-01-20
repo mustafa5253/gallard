@@ -28,21 +28,30 @@ export const navigation: FuseNavigation[] = [
             {
                 id: 'material',
                 title: 'Material',
-                type: 'item',
-                url  : '/indent/materials'
+                type: 'collapsable',
+                // url  : '/indent/materials'
+                children : [
+                    {
+                        id: 'material',
+                        title: 'Material',
+                        type: 'item',
+                        url  : '/indent/materials'
+                    },
+                    {
+                        id: 'category',
+                        title: 'Category',
+                        type: 'item',
+                        url  : '/indent/category'
+                    },
+                    {
+                        id: 'unit',
+                        title: 'Unit',
+                        type: 'item',
+                        url  : '/indent/units'
+                    }    
+                ]
             },
-            {
-                id: 'category',
-                title: 'Category',
-                type: 'item',
-                url  : '/indent/category'
-            },
-            {
-                id: 'unit',
-                title: 'Unit',
-                type: 'item',
-                url  : '/indent/units'
-            }
+            
         ]
     }
     // {

@@ -67,6 +67,15 @@ export class IndentService {
     }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
   }
 
+  public DeleteMultipleIndent(indentId): any {
+    return this._http.delete(config.apiUrl + Indent_API.DELETE_MULTIPLE_INDENT.replace(':indentId', indentId)).pipe(map((res) => {
+      const data: BaseResponse<any, any> = res;
+      // data.request = model;
+      // console.log(data);
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+  }
+
   public GetRawMaterial(): any {
     return this._http.get(config.apiUrl + RAW_MATERIAL.GET).pipe(map((res) => {
       const data: BaseResponse<any, any> = res;
@@ -186,19 +195,33 @@ export class IndentService {
     }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
   }
 
-  public GetPurchaseOrders(poNumber, supplierId): any {
+  public UpdatePurchaseOrder(model): any {
+    return this._http.post(config.apiUrl + Indent_API.UPDATE_PO, model).pipe(map((res) => {
+      const data: BaseResponse<any, any> = res;
+      // data.request = model;
+      // console.log(data);
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+  }
+
+  public GetPurchaseOrders(poNumber): any {
     if (!poNumber) {
       poNumber = 0;
     }
-    if (!supplierId) {
-      supplierId = 0;
-    }
-
-    let query = '?PoNumber=' + poNumber + '&SupplierId=' + supplierId;
-
- 
-
+    // if (!supplierId) {
+    //   supplierId = 0;
+    // }
+    let query = '?PoNumber=' + poNumber + '&SupplierId=1';
     return this._http.get(config.apiUrl + Indent_API.GET_PO + query).pipe(map((res) => {
+      const data: BaseResponse<any, any> = res;
+      // data.request = model;
+      // console.log(data);
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+  }
+
+public GetPoByNumber(poNumber): any {
+    return this._http.get(config.apiUrl + Indent_API.GET_PO_BY_NUMBER.replace(':number', poNumber)).pipe(map((res) => {
       const data: BaseResponse<any, any> = res;
       // data.request = model;
       // console.log(data);
