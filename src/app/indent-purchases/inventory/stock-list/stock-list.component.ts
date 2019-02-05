@@ -27,7 +27,7 @@ import { IssueStockComponent } from 'app/indent-purchases/inventory/issue-stock/
 export class StockListComponent implements OnInit
 {
     dataSource: any[] = [];
-    displayedColumns = ['checkbox', 'Sno', 'material', 'category', 'quantity'];
+    displayedColumns = ['selected', 'serial', 'material', 'category', 'quantity'];
 
     @ViewChild(MatPaginator)
     paginator: MatPaginator;
@@ -38,6 +38,7 @@ export class StockListComponent implements OnInit
     @ViewChild('filter')
     filter: ElementRef;
     moment = moment;
+    stockList = [];
     // Private
     private _unsubscribeAll: Subject<any>;
 
@@ -68,6 +69,9 @@ export class StockListComponent implements OnInit
         this._indentService.GetStockList().subscribe((a: any) => {
             if (a && a.Body.length) {
                 this.dataSource = a.Body;
+                this.stockList = a.Body;                
+            } else {
+                this.stockList = [];
             }
         });
     }
@@ -121,9 +125,15 @@ export class StockListComponent implements OnInit
 
         dialogRef.afterClosed().subscribe(isSuccess => {
             if (isSuccess) {
-                dialogRef.close();
+                // dialogRef.close();
+                this.getStockList();                
             }
         });
+    }
+
+    search(ev) {
+        const searchStr = ev.target.value ? ev.target.value.toLowerCase() : '';
+        this.dataSource = this.dataSource.filter((item) => item.ItemName.toLowerCase().includes(searchStr));
     }
 }
 function compare(a: number | string, b: number | string, isAsc: boolean): any {

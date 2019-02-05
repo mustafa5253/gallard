@@ -47,16 +47,16 @@ export class IssueStockComponent implements OnInit, OnChanges
     public moment = moment;
     isUpdate = false;
     addMaterialForm: FormGroup;
-    IssueStockForm: FormGroup;
+    IssueStockForm: any = {};
     displayedColumns = ['serial', 'name', 'Orgqty', 'IssuedQty', 'unit', 'action'];
+
 
     // Private
     private _unsubscribeAll: Subject<any>;
     constructor(
-        // public dialogRef: MatDialogRef<IssueStockComponent>,        
+        public dialogRef: MatDialogRef<IssueStockComponent>,        
         @Inject(MAT_DIALOG_DATA) public data: any,        
         private _formBuilder: FormBuilder,
-        // private _location: Location,
         private _matSnackBar: MatSnackBar,
         private _indentService: IndentService,
         private _toastr: ToasterService,
@@ -82,7 +82,7 @@ export class IssueStockComponent implements OnInit, OnChanges
         this.getStockUnit();
         this.indentForm = this.createProductForm();
         this.addMaterialForm = this.addNewRawMaterial();
-        this.IssueStockForm = this.IssueNewStock();
+        // this.IssueStockForm = this.IssueNewStock();
 
     }
 
@@ -120,28 +120,19 @@ export class IssueStockComponent implements OnInit, OnChanges
     }
 
     IssueStock(): any {
-        const model: any = _.cloneDeep(this.IssueStockForm.value);
-
-        const RawMaterial = _.find(this.materialList, (o) => { 
-                return o.ItemName === model.RawMaterialId;
-        });
-
-        if (RawMaterial) {
-            model.RawMaterialId = RawMaterial.RawMaterialId;
-        } else {
-            return this._toastr.errorToast('Raw Material doesn\'t exist');
-        }
-
-        model.IssueDate = moment(model.IssueDate).format('MM/DD/YYYY');
+        const model: any = _.cloneDeep(this.IssueStockForm);
+        model.IssueList = _.cloneDeep(this.data.material);
+        model.IssueDate = moment(model.IssueDate).format('YYYY-MM-DD');
 
         this._indentService.IssueStock(model).subscribe(a => {
             if (a && a.Status.toLowerCase() === 'success') {
                 this._toastr.successToast('Stock issued succesfully');
-                this.indentCreated.emit(true);
-                this.IssueStockForm.reset();
+                this.IssueStockForm = {};
+                // this.IssueStockForm.reset();
+                this.dialogRef.close(true);
             } else {
-                this._toastr.errorToast(a.Status);
-                this.indentCreated.emit(false); 
+                this._toastr.errorToast(a.Body);
+                // this.dialogRef.close(false);                
             }
         });
     }
@@ -248,8 +239,16 @@ export class IssueStockComponent implements OnInit, OnChanges
         this._fuseSidebarService.getSidebar('rawMaterialForm').toggleOpen();
     }
 
-    updateIndent() {
-        //
+    closeModal() {
+        this.dialogRef.close(true);
+    }
+
+    removeItem(idx) {
+      if (this.data.material.length > 1) {
+        this.data.material = this.data.material.splice(idx, 1);        
+      } else {
+        this._toastr.warningToast('Atleast 1 material required');
+      }
     }
 
     ngOnChanges(s) {

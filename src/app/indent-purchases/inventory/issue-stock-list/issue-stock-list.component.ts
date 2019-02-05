@@ -94,24 +94,6 @@ export class IssueStockListComponent implements OnInit, OnChanges
         });
     }
 
-    generateOrder() {
-        const selectedIndent = _.filter(this.dataSource, (o: any) => o.selected);
-        if (selectedIndent && !selectedIndent.length) {
-            return this._toastr.warningToast('Please select atleast 1 indent');
-        }
-        console.log('selectedIndent', selectedIndent);
-        const dialogRef = this.dialog.open(GeneratePurchaseOrder, {
-            width: '100%',
-            panelClass: 'full-width-modal',
-            data: { indentList: selectedIndent }
-        });
-
-        dialogRef.afterClosed().subscribe(result => {
-        this.getIssuedItemList();
-          console.log(`Dialog result: ${result}`);
-        });
-
-    }
 
     sortData(sort): any {
         const data = this.dataSource.slice();
@@ -143,7 +125,9 @@ export class IssueStockListComponent implements OnInit, OnChanges
 
     search(ev) {
         const searchStr = ev.target.value ? ev.target.value.toLowerCase() : '';
-        this.dataSource = this.stockList.filter((item) => item.ItemName.toLowerCase().includes(searchStr) || item.Name.toLowerCase().includes(searchStr) || item.CategoryName.toLowerCase().includes(searchStr));
+        this.dataSource = this.stockList.filter((item) => { 
+            return item.ItemName.toLowerCase().includes(searchStr) || item.Name.toLowerCase().includes(searchStr) || item.CategoryName.toLowerCase().includes(searchStr);
+        });
     }
 
 }

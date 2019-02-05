@@ -15,8 +15,14 @@
             <!-- APP TITLE -->
             <div class="logo mb-24 mb-md-0"
                  fxLayout="row" fxLayoutAlign="start center">
+
+        <button mat-icon-button
+                class="secondary-text"
+                 aria-label="Palette" [routerLink]="['/indent/issue-stock']">
+            <mat-icon class="s-20">arrow_back</mat-icon>
+        </button>
                 <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-                    Stock List
+                Manage Inventory
                 </span>
             </div>
             <!-- / APP TITLE -->
@@ -25,7 +31,7 @@
             <div class="search-wrapper mx-32 mx-md-0">
                 <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
                     <mat-icon>search</mat-icon>
-                    <input #filter placeholder="Search stock">
+                    <input  name="search" (keyup)="search($event)" placeholder="Search stock">
                 </div>
             </div>
             <button mat-raised-button type="button" (click)="openStockIssueModal()">
@@ -45,16 +51,16 @@
                        [@animateStagger]="{value:'50'}"
                        fusePerfectScrollbar  (matSortChange)="sortData($event)">
 
-                <ng-container matColumnDef="checkbox">
-                    <mat-header-cell *matHeaderCellDef [style.width.percentage]="10"></mat-header-cell>
-                    <mat-cell *matCellDef="let material;let i = index" [style.width.percentage]="10">
+                <ng-container matColumnDef="selected">
+                    <mat-header-cell *matHeaderCellDef [style.width.px]="10"></mat-header-cell>
+                    <mat-cell *matCellDef="let material;let i = index" [style.width.px]="10">
                         <!-- <p class="text-truncate">{{i+1}}</p> -->
                         <mat-checkbox [(ngModel)]="material.selected">
                         </mat-checkbox>
                     </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="Sno">
+                <ng-container matColumnDef="serial">
                     <mat-header-cell *matHeaderCellDef [style.width.percentage]="10">S no.</mat-header-cell>
                     <mat-cell *matCellDef="let material;let i = index" [style.width.percentage]="10">
                         <p class="text-truncate">{{i+1}}</p>
@@ -135,8 +141,7 @@
                 <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
 
                 <mat-row *matRowDef="let indent; columns: displayedColumns;let i = index"
-                         class="product"
-                         matRipple>
+                         class="product">
                 </mat-row>
 
             </mat-table>
