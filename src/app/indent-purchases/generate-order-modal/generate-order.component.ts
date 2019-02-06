@@ -182,9 +182,9 @@ export class GeneratePurchaseOrder implements OnInit {
       let price = _.cloneDeep(Number(indent.Price));      
       if (indent.Gst) {
         let taxperItem = price * indent.Gst / 100;
-        indent.total = (price + taxperItem) * indent.Quantity;          
+        indent.total = (price + taxperItem) * Number(indent.OrderQuantity);          
       } else {
-        indent.total = price * indent.Quantity;
+        indent.total = price * Number(indent.OrderQuantity);
       }
     }
 

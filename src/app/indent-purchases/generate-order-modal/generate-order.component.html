@@ -174,7 +174,7 @@
                 <ng-container matColumnDef="qty">
                     <mat-header-cell *matHeaderCellDef>Quantity</mat-header-cell>
                     <mat-cell *matCellDef="let indent;let i = index">
-                      <input type="text" name="{{indent.IndentId}}" [(ngModel)]="indent.OrderQuantity" class="table_input" (blur)="getPriceHistory(indent.RawMaterialId, i)"/>
+                      <input type="text" name="{{indent.IndentId}}" [(ngModel)]="indent.OrderQuantity" class="table_input" (blur)="getPriceHistory(indent.RawMaterialId, i)" (ngModelChange)="calculateTotal(indent)" />
                     </mat-cell>
                 </ng-container>
 
