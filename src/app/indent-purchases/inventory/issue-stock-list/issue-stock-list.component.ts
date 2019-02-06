@@ -124,7 +124,7 @@ export class IssueStockListComponent implements OnInit, OnChanges
     }
 
     search(ev) {
-        const searchStr = ev.target.value ? ev.target.value.toLowerCase() : '';
+        let searchStr = ev.target.value ? ev.target.value.toLowerCase() : '';
         this.dataSource = this.stockList.filter((item) => { 
             return item.ItemName.toLowerCase().includes(searchStr) || item.Name.toLowerCase().includes(searchStr) || item.CategoryName.toLowerCase().includes(searchStr);
         });

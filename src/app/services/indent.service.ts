@@ -211,7 +211,7 @@ export class IndentService {
     // if (!supplierId) {
     //   supplierId = 0;
     // }
-    let query = '?PoNumber=' + poNumber + '&SupplierId=1';
+    let query = '?PoNumber=' + poNumber + '&SupplierId=0';
     return this._http.get(config.apiUrl + Indent_API.GET_PO + query).pipe(map((res) => {
       const data: BaseResponse<any, any> = res;
       // data.request = model;
@@ -293,5 +293,13 @@ public GetPoByNumber(poNumber): any {
     }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
   }
 
+  public DeletePoIndent(indentId): any {
+    return this._http.delete(config.apiUrl + Indent_API.DELETE_PO_INDENT.replace(':indentId', indentId)).pipe(map((res) => {
+      const data: BaseResponse<any, any> = res;
+      // data.request = model;
+      // console.log(data);
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+  }
   
 }

@@ -178,6 +178,7 @@ export class AddIndentComponent implements OnInit, OnDestroy, OnChanges {
             this._toastr.successToast('Material added succesfully');
             this.addMaterialForm.reset();
             this.onSelectMaterial(a.Body);
+            this._fuseSidebarService.getSidebar('rawMaterialForm').close();
            } else {
               this._toastr.errorToast(a.Status);
            }

@@ -78,6 +78,7 @@ export class GeneratePurchaseOrder implements OnInit {
             Despatchhrough: [''],
             TermsofDelivery: [''],
             PinCode: [''],
+            PaymentTerms: ['']
             // IndentKey: ['']
         });
     }
@@ -104,7 +105,6 @@ export class GeneratePurchaseOrder implements OnInit {
         if (a) {
             this.vendorList = a.Body;
             if (this.data.isUpdate) {
-              debugger;
               let selectedVendor: any = _.find(this.vendorList, (o: any) => o.VendorId === this.data.poDetail.SupplierId);
               if (selectedVendor) {
                 this.selectedVendor = selectedVendor;
@@ -161,14 +161,31 @@ export class GeneratePurchaseOrder implements OnInit {
 
     removeIndent(idx) {
       if (this.data.indentList.length > 1) {
-        this.data.indentList = this.data.indentList.splice(idx, 1);        
+        if (this.data.isUpdate) {
+          this._indentService.DeletePoIndent(this.data.indentList[idx].IndentId).subscribe(a => {
+            if (a && a.Status.toLowerCase() === 'success') {
+                this.data.indentList = this.data.indentList.splice(idx, 1);              
+                this._toastr.successToast('Indent Deleted succesfully');
+            } else {
+                this._toastr.errorToast(a.Status);
+            }
+          });
+        } else {
+          this.data.indentList = this.data.indentList.splice(idx, 1);          
+        }        
       } else {
         this._toastr.warningToast('Atleast 1 indent required');
       }
     }
 
     calculateTotal(indent) {
-      indent.total = Number(indent.Price) + (Number(indent.Price) * indent.Gst / 100) * indent.Quantity;
+      let price = _.cloneDeep(Number(indent.Price));      
+      if (indent.Gst) {
+        let taxperItem = price * indent.Gst / 100;
+        indent.total = (price + taxperItem) * indent.Quantity;          
+      } else {
+        indent.total = price * indent.Quantity;
+      }
     }
 
   updateOrder() {

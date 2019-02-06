@@ -13,6 +13,7 @@ export const Indent_API = {
     DELETE_MULTIPLE_INDENT: 'MasterApi/DeleteMultipleIndentbyId?IndentList=:indentId',
     GET_PO_BY_NUMBER: 'MasterApi/DisplayPONumber?PoNumber=:number',
     UPDATE_PO: 'MasterApi/EditPONumber',
+    DELETE_PO_INDENT: 'MasterApi/DeletePOItem?IndentId=:indentId'
 };
 
 export const Inventory_API = {

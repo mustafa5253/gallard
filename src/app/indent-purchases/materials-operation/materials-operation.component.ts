@@ -111,7 +111,7 @@ export class MaterialListComponent implements OnInit
 
     search(ev) {
         let searchStr = ev.target.value ? ev.target.value.toLowerCase() : '';
-        this.dataSource = this.materialList.filter((item) => item.ItemName.toLowerCase().includes(searchStr));
+        this.dataSource = this.materialList.filter((item) => item.ItemName.toLowerCase().includes(searchStr) || item.CategoryName.toLowerCase().includes(searchStr)  || item.Name.toLowerCase().includes(searchStr));
     }
 }
 function compare(a: number | string, b: number | string, isAsc: boolean): any {

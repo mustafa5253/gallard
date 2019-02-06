@@ -97,11 +97,11 @@ export class GoodsReceiptNote implements OnInit
     }
 
     editIndent(obj): any {
-        console.log(obj);
+        // console.log(obj);
     }
 
     deleteIndent(indentId): any {
-        console.log(indentId);
+        // console.log(indentId);
         this._indentService.DeleteIndent(indentId).subscribe(a => {
             if (a && a.Status && a.Status.toLowerCase() === 'success') {
                 this._toastr.successToast('Indent deleted succesfully');             
@@ -116,15 +116,15 @@ export class GoodsReceiptNote implements OnInit
         if(selectedIndent && !selectedIndent.length) {
             return this._toastr.warningToast('Please select atleast 1 indent');
         }
-        console.log('selectedIndent', selectedIndent);
-        const dialogRef = this.dialog.open(GeneratePurchaseOrder, {
+        // console.log('selectedIndent', selectedIndent);
+        let dialogRef = this.dialog.open(GeneratePurchaseOrder, {
             width: "100%",
             panelClass: 'full-width-modal',
             data: { indentList: selectedIndent }
         });
 
         dialogRef.afterClosed().subscribe(result => {
-          console.log(`Dialog result: ${result}`);
+        //   console.log(`Dialog result: ${result}`);
         });
 
     }

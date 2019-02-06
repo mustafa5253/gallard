@@ -112,7 +112,7 @@ export class StockListComponent implements OnInit
 
 
     openStockIssueModal(){
-        const selectedItem = _.filter(this.dataSource, (o) => o.selected);
+        const selectedItem = _.filter(this.dataSource, (o: any) => o.selected);
         if (selectedItem && !selectedItem.length) {
             return this._toastr.errorToast('Please select atleast 1 item');
         }
@@ -132,8 +132,8 @@ export class StockListComponent implements OnInit
     }
 
     search(ev) {
-        const searchStr = ev.target.value ? ev.target.value.toLowerCase() : '';
-        this.dataSource = this.dataSource.filter((item) => item.ItemName.toLowerCase().includes(searchStr));
+        let searchStr = ev.target.value ? ev.target.value.toLowerCase() : '';
+        this.dataSource = this.stockList.filter((item) => item.ItemName.toLowerCase().includes(searchStr) || item.CategoryName.toLowerCase().includes(searchStr));
     }
 }
 function compare(a: number | string, b: number | string, isAsc: boolean): any {
