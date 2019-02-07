@@ -245,7 +245,7 @@ export class IssueStockComponent implements OnInit, OnChanges
 
     removeItem(idx) {
       if (this.data.material.length > 1) {
-        this.data.material = this.data.material.splice(idx, 1);        
+        this.data.material = _.cloneDeep(this.data.material.splice(idx, 1));
       } else {
         this._toastr.warningToast('Atleast 1 material required');
       }
