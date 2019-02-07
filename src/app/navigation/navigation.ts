@@ -54,6 +54,71 @@ export const navigation: FuseNavigation[] = [
             
         ]
     }
+
+//--------------------------------------------------------------------------------------------
+
+
+,
+{
+    id: 'casting&product',
+    title: 'Casting & Product',
+    type: 'collapsable',
+    children: [
+        {
+            id: 'casting',
+            title: 'Casting',
+            type: 'item',
+            url  : '/casting',
+            exactMatch: true
+        },
+        {
+            id: 'product',
+            title: 'Product',
+            type: 'item',
+            url  : '..../....'
+        },
+        {
+            id: 'grade',
+            title: 'Grade',
+            type: 'collapsable',
+            // url  : '/indent/materials'
+            children : [
+                {
+                    id: 'casting',
+                    title: 'Casting',
+                    type: 'item',
+                    url  : '../..'
+                }
+               
+            ]
+        },
+
+        {
+            id: 'specification',
+            title: 'Specification',
+            type: 'collapsable',
+            // url  : '/indent/materials'
+            children : [
+                {
+                    id: 'casting',
+                    title: 'Casting',
+                    type: 'item',
+                    url  : '../..'
+                },
+                {
+                    id: 'chemical',
+                    title: 'Chemical',
+                    type: 'item',
+                    url  : '../..'
+                }
+               
+            ]
+        },
+        
+    ]
+}
+
+
     // {
     //     id       : 'applications',
     //     title    : 'Applications',

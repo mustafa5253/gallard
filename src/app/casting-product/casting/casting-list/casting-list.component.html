@@ -1,0 +1,120 @@
+<div id="products" class="page-layout carded fullwidth inner-scroll mb-48">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg accent"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header accent"
+             fxLayout="column" fxLayoutAlign="center center"
+             fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between center">
+
+            <!-- APP TITLE -->
+            <div class="logo mb-24 mb-md-0"
+                 fxLayout="row" fxLayoutAlign="start center">
+                <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    Casting
+                </span>
+            </div>
+            <!-- / APP TITLE -->
+
+            <!-- SEARCH -->
+            <div class="search-wrapper mx-32 mx-md-0">
+                <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
+                    <mat-icon>search</mat-icon>
+                    <input  name="search" (keyup)="search($event)" placeholder="Search Casting...">
+                </div>
+            </div>
+            <div class="">
+                    <button mat-raised-button type="button" (click)="createCasting()">
+                        New Casting
+                    </button>
+                    &nbsp;
+                <button mat-raised-button type="button" [matMenuTriggerFor]="moreMenu" >
+                        Add
+                        <mat-icon class="">add</mat-icon>
+                </button>
+                <mat-menu #moreMenu="matMenu">
+                    <button mat-menu-item [routerLink]="['/casting/grade-list']">
+                      <span>Grade</span>
+                  </button>
+
+                  <button mat-menu-item>
+                      <span>Specification</span>
+                  </button>
+                  <button mat-menu-item>
+                    <span>Chemical</span>
+                </button>
+                <button mat-menu-item>
+                    <span>Register</span>
+                </button>
+              </mat-menu>
+            </div>
+            <!-- / SEARCH -->
+
+        </div>
+        <!-- / HEADER -->
+       
+        <!-- CONTENT CARD -->
+        <div class="content-card">
+           
+            <mat-table class="products-table"
+                       #table [dataSource]="dataSource"
+                       matSort
+                       [@animateStagger]="{value:'50'}"
+                       fusePerfectScrollbar  (matSortChange)="sortData($event)">
+
+                <!-- <ng-container matColumnDef="selected">
+                    <mat-header-cell *matHeaderCellDef [style.width.percentage]="5"></mat-header-cell>
+                    <mat-cell *matCellDef="let indent" [style.width.percentage]="5">
+                        <mat-checkbox [(ngModel)]="indent.selected">
+                        </mat-checkbox>
+                    </mat-cell>
+                </ng-container> -->
+
+
+                
+
+                <ng-container matColumnDef="S.NO.">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header="S.NO." [style.width.percentage]="10">Index</mat-header-cell>
+                    <mat-cell *matCellDef="let i = index;" [style.width.percentage]="10">
+                        <p class="text-truncate">{{i}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="Casting Base">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header="Casting Base">Casting Base</mat-header-cell>
+                    <mat-cell *matCellDef="let indent">
+                       <p class="text-truncate">{{indent.ItemName}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="Action">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header="Action">Action</mat-header-cell>
+                    <mat-cell *matCellDef="let indent">
+                        <button mat-icon-button>
+                            <mat-icon>delete</mat-icon>                  
+                          </button>
+                    </mat-cell>
+                </ng-container>
+
+                
+
+
+               
+               
+
+                <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
+
+                <mat-row *matRowDef="let indent; columns: displayedColumns;"
+                         class="product">
+                </mat-row>
+
+            </mat-table>
+        </div>
+    </div>
+    
+</div>

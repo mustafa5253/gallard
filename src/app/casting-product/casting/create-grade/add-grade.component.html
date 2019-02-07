@@ -1,0 +1,39 @@
+       <form class="" [formGroup]="indentForm">
+            <div class="h2 mb-12" >Add New Grade</div>
+            
+
+            <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
+                
+                    <mat-form-field  fxFlex="50" class="pr-24" appearance="outline">
+                            <mat-label>Casting Base</mat-label>
+                            <mat-select placeholder="Category" formControlName="CategoryId" >
+                                    <mat-option value="option1">Option 1</mat-option>
+                                    <mat-option value="option2" disabled>Option 2 (disabled)</mat-option>
+                                    <mat-option value="option3">Option 3</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+
+                <mat-form-field  fxFlex="50" class="pr-24" appearance="outline">
+                    <mat-label>Grade</mat-label>
+                    <input type="text" placeholder="Enter Grade" matInput formControlName="RawMaterialId" [matAutocomplete]="materialDD">
+                    
+                   
+                </mat-form-field>
+
+                
+            </div>
+
+           
+               
+            <div fxLayout="row" fxLayoutAlign="start center">
+                <button mat-raised-button type="button" color="accent" (click)="addNewIndent()" [disabled]="!indentForm.valid" >
+                    Save
+                </button>
+
+              
+            </div>
+
+        </form>
+
+

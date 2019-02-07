@@ -23,6 +23,7 @@ import { APP_RESOLVER_PROVIDERS } from 'app/app.resolver';
 import { WindowRef } from '@agm/core/utils/browser-globals';
 import { ServiceModule } from 'app/services/service.module';
 import { ToastrModule } from 'ngx-toastr';
+import { CastingProductModule } from './casting-product/casting-product.module';
 
 const appRoutes: Routes = [
     //{
@@ -52,6 +53,10 @@ const appRoutes: Routes = [
     {
         path        : 'indent',
         loadChildren: './indent-purchases/indent-purchase.module#IndentPurchaseModule'
+    },
+    {
+        path        : 'casting',
+        loadChildren: './casting-product/casting-product.module#CastingProductModule'
     },
 ];
 
@@ -94,7 +99,8 @@ const APP_PROVIDERS = [
         // App modules
         LayoutModule,
         AppStoreModule,
-        ServiceModule.forRoot()
+        ServiceModule.forRoot(),
+        CastingProductModule
     ],
     bootstrap   : [
         AppComponent

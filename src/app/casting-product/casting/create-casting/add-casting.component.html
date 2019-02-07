@@ -1,0 +1,30 @@
+       <form class="" [formGroup]="indentForm">
+            <div class="h2 mb-12" >Add New Casting</div>
+            
+
+            <div class="" fxflex="1 0 auto" fxlayout="row" fxlayoutalign="start center">
+                
+        
+                <mat-form-field  fxFlex="50" class="pr-24" appearance="outline">
+                    <mat-label>Casting Name</mat-label>
+                    <input type="text" placeholder="Enter Casting Base Name" matInput formControlName="RawMaterialId" [matAutocomplete]="materialDD">
+                    
+                   
+                </mat-form-field>
+
+                
+            </div>
+
+           
+               
+            <div fxLayout="row" fxLayoutAlign="start center">
+                <button mat-raised-button type="button" color="accent" (click)="addNewIndent()" [disabled]="!indentForm.valid" >
+                    Save
+                </button>
+
+              
+            </div>
+
+        </form>
+
+
