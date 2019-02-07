@@ -164,15 +164,14 @@ export class GeneratePurchaseOrder implements OnInit {
         if (this.data.isUpdate) {
           this._indentService.DeletePoIndent(this.data.indentList[idx].IndentId).subscribe(a => {
             if (a && a.Status.toLowerCase() === 'success') {
-                this.data.indentList = this.data.indentList.splice(idx, 1);              
                 this._toastr.successToast('Indent Deleted succesfully');
             } else {
                 this._toastr.errorToast(a.Status);
             }
           });
-        } else {
-          this.data.indentList = this.data.indentList.splice(idx, 1);          
-        }        
+        }    
+        this.data.indentList.splice(idx, 1);
+        this.data = _.cloneDeep(this.data);    
       } else {
         this._toastr.warningToast('Atleast 1 indent required');
       }
